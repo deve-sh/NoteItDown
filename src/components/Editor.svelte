@@ -43,6 +43,11 @@
 			editor.destroy();
 		};
 	});
+
+	const getEditorData = async () => {
+		if (editor) return await editor.save();
+		return {};
+	};
 </script>
 
 <div class="editor-wrapper">
