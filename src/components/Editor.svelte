@@ -50,7 +50,4 @@
 </div>
 
 <style>
-	#editorjs {
-		border: 0.1rem solid #efefef;
-	}
 </style>
