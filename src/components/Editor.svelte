@@ -25,13 +25,38 @@
 			placeholder: "Start Typing Here To Edit Document",
 			readOnly,
 			tools: {
-				header: { class: EditorHeader, shortcut: "CMD+SHIFT+H" },
+				header: {
+					class: EditorHeader,
+					inlineToolbar: true,
+					shortcut: "CMD+SHIFT+H",
+					config: {
+						placeholder: "Type Your Heading",
+						levels: [1, 2, 3, 4, 5, 6],
+						defaultLevel: 3,
+					},
+				},
 				image: EditorSimpleImage,
 				inlineCode: EditorInlineCode,
-				code: EditorCodeBlock,
-				table: EditorTable,
+				code: {
+					class: EditorCodeBlock,
+					config: { placeholder: "Type Your Code" },
+				},
+				table: {
+					class: EditorTable,
+					inlineToolbar: true,
+					config: {
+						rows: 2,
+						cols: 2,
+					},
+				},
 				delimiter: EditorDelimiter,
-				warning: EditorWarning,
+				warning: {
+					class: EditorWarning,
+					config: {
+						titlePlaceholder: "Warning Title",
+						messagePlaceholder: "Warning Message",
+					},
+				},
 				list: { class: EditorList, shortcut: "CMD+7" },
 				link: { class: EditorLink, shortcut: "CMD+K" },
 				quote: {
