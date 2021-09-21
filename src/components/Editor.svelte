@@ -15,6 +15,7 @@
 	import EditorList from "@editorjs/list";
 	import EditorWarning from "@editorjs/warning";
 	import EditorDelimiter from "@editorjs/delimiter";
+	import EditorQuote from "@editorjs/quote";
 
 	let editor;
 
@@ -33,6 +34,15 @@
 				warning: EditorWarning,
 				list: { class: EditorList, shortcut: "CMD+7" },
 				link: { class: EditorLink, shortcut: "CMD+K" },
+				quote: {
+					class: EditorQuote,
+					inlineToolbar: true,
+					shortcut: "CMD+SHIFT+O",
+					config: {
+						quotePlaceholder: "Enter a quote",
+						captionPlaceholder: "Quote's author",
+					},
+				},
 			},
 			onReady: () => null,
 			onChange: () => null,
