@@ -1,4 +1,7 @@
 <script>
+	export let readOnly = false; // For preview modes.
+	export let prefilledData = undefined; // For starting from blocks that were already present.
+
 	import { onMount } from "svelte";
 
 	// Editor
@@ -18,6 +21,8 @@
 	onMount(() => {
 		editor = new EditorJS({
 			id: "editorjs",
+			placeholder: "Start Typing Here To Edit Document",
+			readOnly,
 			tools: {
 				header: { class: EditorHeader, shortcut: "CMD+SHIFT+H" },
 				image: EditorSimpleImage,
@@ -29,7 +34,14 @@
 				list: { class: EditorList, shortcut: "CMD+7" },
 				link: { class: EditorLink, shortcut: "CMD+K" },
 			},
+			onReady: () => null,
+			onChange: () => null,
+			data: prefilledData,
 		});
+
+		return () => {
+			editor.destroy();
+		};
 	});
 </script>
 
