@@ -16,6 +16,7 @@
 	import EditorWarning from "@editorjs/warning";
 	import EditorDelimiter from "@editorjs/delimiter";
 	import EditorQuote from "@editorjs/quote";
+	import EditorEmbed from "@editorjs/embed";
 
 	let editor;
 
@@ -35,6 +36,7 @@
 						defaultLevel: 3,
 					},
 				},
+				embed: EditorEmbed,
 				image: EditorSimpleImage,
 				inlineCode: EditorInlineCode,
 				code: {
