@@ -17,6 +17,7 @@
 	import EditorDelimiter from "@editorjs/delimiter";
 	import EditorQuote from "@editorjs/quote";
 	import EditorEmbed from "@editorjs/embed";
+	import EditorMarker from "@@editorjs/marker";
 
 	let editor;
 
@@ -69,6 +70,10 @@
 						quotePlaceholder: "Enter a quote",
 						captionPlaceholder: "Quote's author",
 					},
+				},
+				Marker: {
+					class: EditorMarker,
+					shortcut: "CMD+SHIFT+M",
 				},
 			},
 			onReady: () => null,
