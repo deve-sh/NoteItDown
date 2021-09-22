@@ -4,10 +4,11 @@
 
 	import { onMount } from "svelte";
 
+	import { uploadImage } from "../API/editor";
+
 	// Editor
 	import EditorJS from "@editorjs/editorjs";
 	import EditorHeader from "@editorjs/header";
-	import EditorSimpleImage from "@editorjs/simple-image";
 	import EditorTable from "@editorjs/table";
 	import EditorInlineCode from "@editorjs/inline-code";
 	import EditorCodeBlock from "@editorjs/code";
@@ -17,7 +18,8 @@
 	import EditorDelimiter from "@editorjs/delimiter";
 	import EditorQuote from "@editorjs/quote";
 	import EditorEmbed from "@editorjs/embed";
-	import EditorMarker from "@@editorjs/marker";
+	import EditorMarker from "@editorjs/marker";
+	import EditorImage from "@editorjs/image";
 
 	let editor;
 
@@ -38,7 +40,34 @@
 					},
 				},
 				embed: EditorEmbed,
-				image: EditorSimpleImage,
+				image: {
+					class: EditorImage,
+					config: {
+						uploader: {
+							uploadByFile: (file) =>
+								new Promise(async (resolve, reject) => {
+									const uploadedURL = await uploadImage(file);
+									if (!uploadedURL)
+										return reject("Image could not be uploaded.");
+									return resolve({
+										success: 1,
+										file: {
+											url: uploadedURL,
+											name: file.name || "image.png",
+											size: file.size,
+										},
+									});
+								}),
+							uploadByUrl: (url) =>
+								new Promise((resolve) =>
+									resolve({
+										success: 1,
+										file: { url },
+									})
+								),
+						},
+					},
+				},
 				inlineCode: EditorInlineCode,
 				code: {
 					class: EditorCodeBlock,
