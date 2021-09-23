@@ -20,6 +20,7 @@
 	import EditorEmbed from "@editorjs/embed";
 	import EditorMarker from "@editorjs/marker";
 	import EditorImage from "@editorjs/image";
+	import EditorChecklist from '@editorjs/checklist';
 
 	let editor;
 
@@ -103,6 +104,10 @@
 				Marker: {
 					class: EditorMarker,
 					shortcut: "CMD+SHIFT+M",
+				},
+				checklist: {
+					class: EditorChecklist,
+					inlineToolbar: true,
 				},
 			},
 			onReady: () => null,
