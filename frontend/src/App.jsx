@@ -45,7 +45,7 @@ function App() {
 					email: user.email,
 					uid: user.uid,
 					id: user.uid,
-					providerData: user.providerData,
+					providerData: JSON.parse(JSON.stringify(user.providerData)),
 					lastSignInTime: user.metadata.lastSignInTime,
 					photoURL: user.photoURL,
 					isAnonymous: user.isAnonymous,

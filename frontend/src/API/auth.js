@@ -22,13 +22,14 @@ export async function saveUserDetailsToDB(userDetails) {
 		const userInDB = await userRef.get();
 		if (!userInDB.exists) {
 			const batch = db.batch();
+			console.log(userDetails);
 			batch.set(userRef, {
 				...userDetails,
 				createdAt: serverTimestamp(),
 				updatedAt: serverTimestamp(),
 			});
 			// Create an initial workspace.
-			const workspaceRef = db.collection("workspaces").doc(userRef.id);
+			const workspaceRef = db.collection("workspaces").doc();
 			batch.set(workspaceRef, {
 				users: [userRef.id],
 				nUsers: 1,
