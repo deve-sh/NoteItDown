@@ -17,7 +17,12 @@ const CreateWorkspaceModalBody = styled(ModalBody)`
 	padding-bottom: var(--standard-spacing);
 `;
 
-const CreateWorkspaceModal = ({ isOpen, closeModal, isLoading, onSubmit }) => {
+const CreateWorkspaceModal = ({
+	isOpen,
+	closeModal,
+	isLoading,
+	onSubmit = () => null,
+}) => {
 	const [workspaceInputs, setWorkSpaceInputs] = useState({
 		name: "",
 	});
@@ -31,7 +36,12 @@ const CreateWorkspaceModal = ({ isOpen, closeModal, isLoading, onSubmit }) => {
 		<Modal isOpen={isOpen} onClose={closeModal}>
 			<ModalOverlay />
 			<ModalContent>
-				<form onSubmit={onSubmit}>
+				<form
+					onSubmit={(e) => {
+						e.preventDefault();
+						onSubmit(workspaceInputs);
+					}}
+				>
 					<ModalHeader borderBottom="0.075rem solid var(--backgroundgrey)">
 						Create Workspace
 					</ModalHeader>
@@ -44,6 +54,7 @@ const CreateWorkspaceModal = ({ isOpen, closeModal, isLoading, onSubmit }) => {
 							label="Workspace Name"
 							id="workspace-name"
 							helperText="This name can be changed later of course"
+							disabled={isLoading}
 						/>
 					</CreateWorkspaceModalBody>
 					<ModalFooter>
@@ -60,7 +71,7 @@ const CreateWorkspaceModal = ({ isOpen, closeModal, isLoading, onSubmit }) => {
 							type="submit"
 							variant="solid"
 							colorScheme="teal"
-							disabled={isLoading}
+							isLoading={isLoading}
 						>
 							Create WorkSpace
 						</Button>

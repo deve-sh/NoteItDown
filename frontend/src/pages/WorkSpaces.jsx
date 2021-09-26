@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -18,7 +19,7 @@ import {
 	useDisclosure as useToggleableModal,
 } from "@chakra-ui/react";
 
-import { getUserWorkspaces } from "API/workspaces";
+import { createWorkspace, getUserWorkspaces } from "API/workspaces";
 
 import toasts from "helpers/toasts";
 import useStore from "hooks/useStore";
@@ -45,6 +46,7 @@ const WorkSpaces = () => {
 
 	const [workspaces, setWorkspaces] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const [isCreatingWorkspace, setIsCreatingWorkspace] = useState(false);
 
 	const {
 		isOpen: showWorkspaceCreatorModal,
@@ -52,15 +54,26 @@ const WorkSpaces = () => {
 		onClose: closeWorkspaceCreatorModal,
 	} = useToggleableModal();
 
-	useEffect(() => {
-		const fetchUserWorkspaces = async () => {
-			getUserWorkspaces(user?.id, (err, fetchedWorkspaces) => {
-				setIsLoading(false);
-				if (err) return toasts.generateError(err);
-				setWorkspaces(fetchedWorkspaces);
-			});
-		};
+	const fetchUserWorkspaces = async () => {
+		getUserWorkspaces(user?.id, (err, fetchedWorkspaces) => {
+			setIsLoading(false);
+			if (err) return toasts.generateError(err);
+			setWorkspaces(fetchedWorkspaces);
+		});
+	};
 
+	const createNewUserWorkspace = async (workspaceInputs) => {
+		setIsCreatingWorkspace(true);
+		createWorkspace(workspaceInputs, (err, createdWorkspace) => {
+			setIsCreatingWorkspace(false);
+			if (err) return toasts.generateError(err);
+			setWorkspaces((spaces) => [createdWorkspace, ...spaces]);
+			toasts.generateSuccess("Successfully created workspace.");
+			closeWorkspaceCreatorModal();
+		});
+	};
+
+	useEffect(() => {
 		fetchUserWorkspaces();
 	}, [user]);
 
@@ -73,7 +86,8 @@ const WorkSpaces = () => {
 			<CreateWorkspaceModal
 				isOpen={showWorkspaceCreatorModal}
 				closeModal={closeWorkspaceCreatorModal}
-				onSubmit={(e) => e.preventDefault()}
+				onSubmit={createNewUserWorkspace}
+				isLoading={isCreatingWorkspace}
 			/>
 			<ContentWrapper>
 				<Stack direction="row" alignItems="center">
