@@ -1,6 +1,8 @@
 import db, { firestore } from "../firebase/db";
 import auth, { providers } from "../firebase/authentication";
 
+const serverTimestamp = firestore.FieldValue.serverTimestamp;
+
 export const loginWithGoogle = async (callback) => {
 	try {
 		if (!auth.currentUser) {
@@ -18,16 +20,30 @@ export async function saveUserDetailsToDB(userDetails) {
 	try {
 		const userRef = db.collection("users").doc(userDetails.uid);
 		const userInDB = await userRef.get();
-		if (!userInDB.exists)
-			await userRef.set({
+		if (!userInDB.exists) {
+			const batch = db.batch();
+			batch.set(userRef, {
 				...userDetails,
-				createdAt: firestore.FieldValue.serverTimestamp(),
-				updatedAt: firestore.FieldValue.serverTimestamp(),
+				createdAt: serverTimestamp(),
+				updatedAt: serverTimestamp(),
 			});
-		else
+			// Create an initial workspace.
+			const workspaceRef = db.collection("workspaces").doc(userRef.id);
+			batch.set(workspaceRef, {
+				users: [userRef.id],
+				nUsers: 1,
+				admins: [userRef.id],
+				nAdmins: 1,
+				createdBy: userRef.id,
+				name: "Personal Workspace",
+				createdAt: serverTimestamp(),
+				updatedAt: serverTimestamp(),
+			});
+			await batch.commit();
+		} else
 			await userRef.update({
 				...userDetails,
-				updatedAt: firestore.FieldValue.serverTimestamp(),
+				updatedAt: serverTimestamp(),
 			});
 
 		return true;
