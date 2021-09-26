@@ -53,6 +53,11 @@ const UserProfile = () => {
 					View Your Workspaces
 				</Button>
 			</Link>
+			<br />
+			<Text margin="10px auto" color="gray" fontSize="sm">
+				Please Update Your Details in your Sign-In Provider for them to reflect
+				here.
+			</Text>
 		</UserProfileContainer>
 	);
 };
