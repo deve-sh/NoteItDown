@@ -2,7 +2,7 @@
 
 import firebase from "./index";
 import mainFirebase from "firebase/app";
-import "firebase/auth";
+import "firebase/authentication";
 
 const auth = firebase.auth();
 
