@@ -40,7 +40,7 @@ const Right = styled(Left)`
 	text-align: right;
 `;
 
-const Header = ({ openLoginModal = () => null }) => {
+const Header = ({ openLoginModal = () => null, logoutUser = () => null }) => {
 	const stateUser = useStore((state) => state.user);
 	const isDarkModeActive = useStore((store) => store.isDarkModeActive);
 	const toggleDarkMode = useStore((store) => store.toggleDarkMode);
@@ -76,7 +76,7 @@ const Header = ({ openLoginModal = () => null }) => {
 								Login
 							</Button>
 						) : (
-							<UserProfileOptions />
+							<UserProfileOptions logoutUser={logoutUser} />
 						)}
 					</ButtonGroup>
 				</Right>

@@ -58,6 +58,11 @@ function App() {
 		return () => auth.onAuthStateChanged(() => null);
 	}, [setUser]);
 
+	const logoutUser = async () => {
+		await auth.signOut();
+		setUser(null);
+	};
+
 	return (
 		<Router>
 			{isLoading && <FullPageLoader type={loaderType} />}
@@ -67,7 +72,7 @@ function App() {
 				{!stateUser && (
 					<LoginModal closeModal={closeLoginModal} isOpen={showLoginModal} />
 				)}
-				<Header openLoginModal={openLoginModal} />
+				<Header openLoginModal={openLoginModal} logoutUser={logoutUser} />
 				<AppContentContainer>
 					<Switch>
 						<Route
@@ -75,6 +80,7 @@ function App() {
 							exact
 							component={() => <HomePage loggedIn={stateUser} />}
 						/>
+						<ProtectedRoute path="/profile" component={() => ""} />
 						<ProtectedRoute path="/workspaces" component={WorkSpaces} />
 						<ProtectedRoute
 							path="/workspace/:workspaceId"
