@@ -15,12 +15,13 @@ import FullPageLoader from "components/FullPageLoader";
 import ProtectedRoute from "Wrappers/ProtectedRoute";
 import AppContentContainer from "Wrappers/AppContentContainer";
 import Header from "components/Header";
+import LoginModal from "components/LoginModal";
 
 // Pages
 import HomePage from "pages";
 import WorkSpaces from "pages/WorkSpaces";
 import Documents from "pages/Documents";
-import LoginModal from "components/LoginModal";
+import UserProfile from "pages/Profile";
 
 function App() {
 	const stateUser = useStore((state) => state.user);
@@ -80,7 +81,7 @@ function App() {
 							exact
 							component={() => <HomePage loggedIn={stateUser} />}
 						/>
-						<ProtectedRoute path="/profile" component={() => ""} />
+						<ProtectedRoute path="/profile" component={UserProfile} />
 						<ProtectedRoute path="/workspaces" component={WorkSpaces} />
 						<ProtectedRoute
 							path="/workspace/:workspaceId"

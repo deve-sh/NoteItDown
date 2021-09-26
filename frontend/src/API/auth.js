@@ -26,6 +26,7 @@ export async function saveUserDetailsToDB(userDetails) {
 				...userDetails,
 				createdAt: serverTimestamp(),
 				updatedAt: serverTimestamp(),
+				nWorkspaces: 1,
 			});
 			// Create an initial workspace.
 			const workspaceRef = db.collection("workspaces").doc();
