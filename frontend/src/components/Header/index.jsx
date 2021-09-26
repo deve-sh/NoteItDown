@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import {
 	Box,
 	Stack,
@@ -55,7 +56,9 @@ const Header = ({ openLoginModal = () => null, logoutUser = () => null }) => {
 		<AppHeader w="100%" id="app-header">
 			<Container direction="row">
 				<Left>
-					<Logo src="/logo.png" alt="Note It Down Logo" />
+					<Link to="/">
+						<Logo src="/logo.png" alt="Note It Down Logo" />
+					</Link>
 				</Left>
 				<Right>
 					<ButtonGroup spacing="3">

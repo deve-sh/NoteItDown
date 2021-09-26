@@ -1,5 +1,6 @@
 // Homepage
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import {
 	Container,
 	Heading,
@@ -30,6 +31,9 @@ const HeroSection = styled(HomePageSection)`
 
 const Homepage = ({ loggedIn = false }) => (
 	<HeroSection maxW="container.sm" centerContent>
+		<Helmet>
+			<title>Note It Down</title>
+		</Helmet>
 		<Image
 			style={{ maxHeight: "30vh" }}
 			objectFit="cover"
