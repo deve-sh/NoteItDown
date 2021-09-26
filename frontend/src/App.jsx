@@ -66,8 +66,13 @@ function App() {
 							exact
 							component={() => <HomePage loggedIn={stateUser} />}
 						/>
-						<Route path="/workspaces" component={WorkSpaces} />
+						<ProtectedRoute path="/workspaces" component={WorkSpaces} />
+						<ProtectedRoute
+							path="/workspace/:workspaceId"
+							component={() => ""}
+						/>
 						<ProtectedRoute path="/documents" component={Documents} />
+						<ProtectedRoute path="/document/:documentId" component={() => ""} />
 					</Switch>
 				</AppContentContainer>
 			</ChakraProvider>
