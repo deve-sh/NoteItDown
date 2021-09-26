@@ -9,11 +9,9 @@ import {
 	Button,
 } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import {
-	MdAccountCircle as LoginIcon,
-	MdList as ListIcon,
-} from "react-icons/md";
+import { MdAccountCircle as LoginIcon } from "react-icons/md";
 import { FaGithub as GithubIcon } from "react-icons/fa";
+import { GiBookshelf } from "react-icons/gi";
 
 const HomePageSection = styled(Container)`
 	background: var(--white);
@@ -60,7 +58,7 @@ const Homepage = ({ loggedIn = false }) => (
 					<Button
 						colorScheme="teal"
 						variant="solid"
-						leftIcon={<ListIcon size="1.25rem" />}
+						leftIcon={<GiBookshelf size="1.25rem" />}
 					>
 						View Your Workspaces
 					</Button>
