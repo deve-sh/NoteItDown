@@ -117,10 +117,10 @@ const Editor = ({ readOnly = false, prefilledData = undefined }) => {
 		};
 	}, [prefilledData, readOnly]);
 
-	const getEditorData = async () => {
-		if (editor) return await editor.save();
-		return {};
-	};
+	// const getEditorData = async () => {
+	// 	if (editor) return await editor.save();
+	// 	return {};
+	// };
 
 	return (
 		<div class="editor-wrapper">

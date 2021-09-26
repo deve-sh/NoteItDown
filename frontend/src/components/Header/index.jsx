@@ -64,7 +64,7 @@ const Header = () => {
 							<Button
 								colorScheme="teal"
 								variant="outline"
-								leftIcon={<LoginIcon />}
+								leftIcon={<LoginIcon size="1.375rem" />}
 							>
 								Login
 							</Button>
