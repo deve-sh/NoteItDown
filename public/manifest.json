@@ -1,9 +1,0 @@
-{
-	"name": "NoteItDown",
-	"short_name": "NoteItDown",
-	"lang": "en",
-	"start_url": ".",
-	"display": "standalone",
-	"background_color": "white",
-	"theme_color": "black"
-}
