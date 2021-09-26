@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { FaList, FaPlus } from "react-icons/fa";
 import styled from "@emotion/styled";
@@ -90,7 +91,11 @@ const WorkSpaces = () => {
 						{workspaces?.length ? (
 							workspaces.map((workspace) => (
 								<Tr key={workspace.id}>
-									<Td>{workspace.name}</Td>
+									<Td>
+										<Link to={`/workspace/${workspace.id}`}>
+											{workspace.name}
+										</Link>
+									</Td>
 									<Td>{workspace.nUsers}</Td>
 									<Td>{workspace?.createdAt?.toDate?.()?.toDateString?.()}</Td>
 								</Tr>
