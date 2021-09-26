@@ -44,7 +44,7 @@ const LoginModal = ({ isOpen, closeModal }) => {
 				<LoginModalBody>
 					<Button
 						isLoading={isLoggingIn}
-						width="100%"
+						isFullWidth
 						variant="outline"
 						colorScheme="gray"
 						leftIcon={<FcGoogle size="1.5rem" />}
@@ -55,7 +55,7 @@ const LoginModal = ({ isOpen, closeModal }) => {
 					</Button>
 					<Button
 						isLoading={isLoggingIn}
-						width="100%"
+						isFullWidth
 						variant="outline"
 						colorScheme="gray"
 						leftIcon={<FaGithub size="1.5rem" />}

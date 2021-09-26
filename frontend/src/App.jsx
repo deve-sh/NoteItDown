@@ -22,6 +22,7 @@ import HomePage from "pages";
 import WorkSpaces from "pages/WorkSpaces";
 import Documents from "pages/Documents";
 import UserProfile from "pages/Profile";
+import Login from "pages/Login";
 
 function App() {
 	const stateUser = useStore((state) => state.user);
@@ -80,6 +81,16 @@ function App() {
 							path="/"
 							exact
 							component={() => <HomePage loggedIn={stateUser} />}
+						/>
+						<Route
+							path="/login"
+							component={(prps) => (
+								<Login
+									loggedIn={!!stateUser}
+									openLoginModal={openLoginModal}
+									{...prps}
+								/>
+							)}
 						/>
 						<ProtectedRoute path="/profile" component={UserProfile} />
 						<ProtectedRoute path="/workspaces" component={WorkSpaces} />
