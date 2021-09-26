@@ -70,14 +70,10 @@ const LoginModal = ({ isOpen, closeModal }) => {
 					<Button
 						colorScheme="gray"
 						variant="ghost"
-						mr={3}
 						onClick={closeModal}
 						disabled={isLoggingIn}
 					>
 						Cancel
-					</Button>
-					<Button variant="solid" colorScheme="teal" disabled={isLoggingIn}>
-						Login
 					</Button>
 				</ModalFooter>
 			</ModalContent>
