@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
-import styled from "@emotion/styled";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
