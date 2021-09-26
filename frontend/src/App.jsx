@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
+import { ChakraProvider } from "@chakra-ui/react";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -50,7 +51,7 @@ function App() {
 			{isLoading && <FullPageLoader type={loaderType} />}
 			<ToastContainer />
 			<GlobalStyles />
-			<div className="App">
+			<ChakraProvider>
 				<Switch>
 					<Route
 						path="/"
@@ -58,7 +59,7 @@ function App() {
 						component={() => <HomePage loggedIn={stateUser} />}
 					/>
 				</Switch>
-			</div>
+			</ChakraProvider>
 		</Router>
 	);
 }

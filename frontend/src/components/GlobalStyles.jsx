@@ -15,6 +15,10 @@ const GlobalStyles = () => (
 				--secondary: #00695f;
 
 				--line-height: 1.61;
+
+                --standard-spacing: 1rem;
+                --mid-spacing: 0.875rem;
+                --mini-spacing: 0.75rem;
 			}
 
 			body {
