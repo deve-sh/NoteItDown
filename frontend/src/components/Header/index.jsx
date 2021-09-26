@@ -46,7 +46,7 @@ const Header = () => {
 	const toggleDarkMode = useStore((store) => store.toggleDarkMode);
 
 	return (
-		<AppHeader w="100%">
+		<AppHeader w="100%" id="app-header">
 			<Container direction="row">
 				<Left>
 					<Logo src="/logo.png" alt="Note It Down Logo" />

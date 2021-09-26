@@ -38,6 +38,7 @@ export async function saveUserDetailsToDB(userDetails) {
 				name: "Personal Workspace",
 				createdAt: serverTimestamp(),
 				updatedAt: serverTimestamp(),
+				id: workspaceRef.id
 			});
 			await batch.commit();
 		} else
