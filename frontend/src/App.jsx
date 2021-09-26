@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, useDisclosure } from "@chakra-ui/react";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,6 +20,7 @@ import Header from "components/Header";
 import HomePage from "pages";
 import WorkSpaces from "pages/WorkSpaces";
 import Documents from "pages/Documents";
+import LoginModal from "components/LoginModal";
 
 function App() {
 	const stateUser = useStore((state) => state.user);
@@ -27,6 +28,12 @@ function App() {
 	const isLoading = useStore((store) => store.isLoading);
 	const loaderType = useStore((store) => store.loaderType);
 	const isDarkModeActive = useStore((store) => store.isDarkModeActive);
+
+	const {
+		isOpen: showLoginModal,
+		onOpen: openLoginModal,
+		onClose: closeLoginModal,
+	} = useDisclosure();
 
 	useEffect(() => {
 		auth.onAuthStateChanged((user) => {
@@ -55,9 +62,12 @@ function App() {
 		<Router>
 			{isLoading && <FullPageLoader type={loaderType} />}
 			<ToastContainer />
-			<GlobalStyles darkMode={isDarkModeActive} />
 			<ChakraProvider>
-				<Header />
+				<GlobalStyles darkMode={isDarkModeActive} />
+				{!stateUser && (
+					<LoginModal closeModal={closeLoginModal} isOpen={showLoginModal} />
+				)}
+				<Header openLoginModal={openLoginModal} />
 				<AppContentContainer>
 					<Switch>
 						<Route

@@ -40,7 +40,7 @@ const Right = styled(Left)`
 	text-align: right;
 `;
 
-const Header = ({ toggleLoginModal = () => null }) => {
+const Header = ({ openLoginModal = () => null }) => {
 	const stateUser = useStore((state) => state.user);
 	const isDarkModeActive = useStore((store) => store.isDarkModeActive);
 	const toggleDarkMode = useStore((store) => store.toggleDarkMode);
@@ -71,7 +71,7 @@ const Header = ({ toggleLoginModal = () => null }) => {
 								colorScheme="teal"
 								variant="outline"
 								leftIcon={<LoginIcon size="1.375rem" />}
-								onClick={toggleLoginModal}
+								onClick={openLoginModal}
 							>
 								Login
 							</Button>
