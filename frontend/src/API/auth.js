@@ -26,6 +26,7 @@ export async function saveUserDetailsToDB(userDetails) {
 				...userDetails,
 				createdAt: serverTimestamp(),
 				updatedAt: serverTimestamp(),
+				nWorkspacesCreated: 1,
 				nWorkspaces: 1,
 			});
 			// Create an initial workspace.

@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
-import { ChakraProvider, useDisclosure } from "@chakra-ui/react";
+import {
+	ChakraProvider,
+	useDisclosure as useToggleableModal,
+} from "@chakra-ui/react";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -35,7 +38,7 @@ function App() {
 		isOpen: showLoginModal,
 		onOpen: openLoginModal,
 		onClose: closeLoginModal,
-	} = useDisclosure();
+	} = useToggleableModal();
 
 	useEffect(() => {
 		auth.onAuthStateChanged((user) => {

@@ -15,6 +15,7 @@ import {
 	Button,
 	Stack,
 	Heading,
+	useDisclosure as useToggleableModal,
 } from "@chakra-ui/react";
 
 import { getUserWorkspaces } from "API/workspaces";
@@ -24,6 +25,7 @@ import useStore from "hooks/useStore";
 
 import FullPageLoader from "components/FullPageLoader";
 import ContentWrapper from "Wrappers/ContentWrapper";
+import CreateWorkspaceModal from "components/Workspaces/CreateWorkspace";
 
 const TableContainer = styled(Table)`
 	max-width: 1100px;
@@ -44,6 +46,12 @@ const WorkSpaces = () => {
 	const [workspaces, setWorkspaces] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 
+	const {
+		isOpen: showWorkspaceCreatorModal,
+		onOpen: openWorkspaceCreatorModal,
+		onClose: closeWorkspaceCreatorModal,
+	} = useToggleableModal();
+
 	useEffect(() => {
 		const fetchUserWorkspaces = async () => {
 			getUserWorkspaces(user?.id, (err, fetchedWorkspaces) => {
@@ -62,6 +70,11 @@ const WorkSpaces = () => {
 				<meta charSet="utf-8" />
 				<title>Note It Down - Workspaces</title>
 			</Helmet>
+			<CreateWorkspaceModal
+				isOpen={showWorkspaceCreatorModal}
+				closeModal={closeWorkspaceCreatorModal}
+				onSubmit={(e) => e.preventDefault()}
+			/>
 			<ContentWrapper>
 				<Stack direction="row" alignItems="center">
 					<Left>
@@ -72,7 +85,7 @@ const WorkSpaces = () => {
 					<Right>
 						<Button
 							colorScheme="teal"
-							onClick={() => null}
+							onClick={openWorkspaceCreatorModal}
 							leftIcon={<FaPlus />}
 						>
 							Add WorkSpace
