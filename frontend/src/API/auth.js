@@ -38,7 +38,7 @@ export async function saveUserDetailsToDB(userDetails) {
 				name: "Personal Workspace",
 				createdAt: serverTimestamp(),
 				updatedAt: serverTimestamp(),
-				id: workspaceRef.id
+				id: workspaceRef.id,
 			});
 			await batch.commit();
 		} else
@@ -53,3 +53,15 @@ export async function saveUserDetailsToDB(userDetails) {
 		return false;
 	}
 }
+
+export const loginWithGithub = async (callback) => {
+	try {
+		if (!auth.currentUser) {
+			await auth.signInWithPopup(providers.githubProvider);
+			return callback(null);
+		} else return callback("User already signed in.");
+	} catch (err) {
+		console.log(err);
+		return callback(err.message);
+	}
+};

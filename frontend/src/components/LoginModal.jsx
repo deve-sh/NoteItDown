@@ -6,13 +6,13 @@ import {
 	ModalHeader,
 	ModalFooter,
 	ModalBody,
-	ModalCloseButton,
 	Button,
 } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
 
-import { loginWithGoogle } from "API/auth";
+import { loginWithGoogle, loginWithGithub } from "API/auth";
 import toasts from "helpers/toasts";
 
 const LoginModalBody = styled(ModalBody)`
@@ -31,6 +31,7 @@ const LoginModal = ({ isOpen, closeModal }) => {
 			if (err) return toasts.generateError(err);
 		};
 		if (mode === "google") loginWithGoogle(callback);
+		if (mode === "github") loginWithGithub(callback);
 	};
 
 	return (
@@ -40,7 +41,6 @@ const LoginModal = ({ isOpen, closeModal }) => {
 				<ModalHeader borderBottom="0.075rem solid var(--backgroundgrey)">
 					Login
 				</ModalHeader>
-				<ModalCloseButton disabled={isLoggingIn} />
 				<LoginModalBody>
 					<Button
 						isLoading={isLoggingIn}
@@ -49,8 +49,21 @@ const LoginModal = ({ isOpen, closeModal }) => {
 						colorScheme="gray"
 						leftIcon={<FcGoogle size="1.5rem" />}
 						onClick={() => signInUser("google")}
+						size="lg"
 					>
 						Sign In With Google
+					</Button>
+					<Button
+						isLoading={isLoggingIn}
+						width="100%"
+						variant="outline"
+						colorScheme="gray"
+						leftIcon={<FaGithub size="1.5rem" />}
+						onClick={() => signInUser("github")}
+						size="lg"
+						marginTop="15px"
+					>
+						Sign In With Github
 					</Button>
 				</LoginModalBody>
 				<ModalFooter>
