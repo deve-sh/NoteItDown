@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import {
 	Box,
 	Stack,
@@ -8,19 +7,18 @@ import {
 	ButtonGroup,
 } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import {
-	MdAccountCircle as LoginIcon,
-	MdList as ListIcon,
-} from "react-icons/md";
+import { MdAccountCircle as LoginIcon } from "react-icons/md";
 import { FaMoon, FaSun } from "react-icons/fa";
 import useStore from "hooks/useStore";
+
+import UserProfileOptions from "./UserProfileOptions";
 
 const AppHeader = styled(Box)`
 	position: fixed;
 	border-bottom: 0.075rem solid var(--backgroundgrey);
 	padding: var(--mini-spacing);
-    background: var(--white);
-    z-index: 101;
+	background: var(--white);
+	z-index: 101;
 `;
 
 const Logo = styled(Image)`
@@ -45,7 +43,7 @@ const Right = styled(Left)`
 const Header = () => {
 	const stateUser = useStore((state) => state.user);
 	const isDarkModeActive = useStore((store) => store.isDarkModeActive);
-    const toggleDarkMode = useStore((store) => store.toggleDarkMode);
+	const toggleDarkMode = useStore((store) => store.toggleDarkMode);
 
 	return (
 		<AppHeader w="100%">
@@ -58,7 +56,7 @@ const Header = () => {
 						<IconButton
 							colorScheme={isDarkModeActive ? "yellow" : "teal"}
 							variant="ghost"
-                            onClick={toggleDarkMode}
+							onClick={toggleDarkMode}
 						>
 							{isDarkModeActive ? <FaSun /> : <FaMoon />}
 						</IconButton>
@@ -71,15 +69,7 @@ const Header = () => {
 								Login
 							</Button>
 						) : (
-							<Link to="/workspaces">
-								<Button
-									colorScheme="teal"
-									variant="outline"
-									leftIcon={<ListIcon />}
-								>
-									Workspaces
-								</Button>
-							</Link>
+							<UserProfileOptions />
 						)}
 					</ButtonGroup>
 				</Right>
