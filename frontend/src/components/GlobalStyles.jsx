@@ -1,11 +1,11 @@
 import { Global, css } from "@emotion/react";
 
-const GlobalStyles = () => (
+const GlobalStyles = ({ darkMode = false }) => (
 	<Global
 		styles={css`
 			:root {
-				--white: #ffffff;
-				--black: #212121;
+				--white: ${!darkMode ? "#ffffff" : "#212121"};
+				--black: ${!darkMode ? "#212121" : "#ffffff"};
 				--darkgrey: #313131;
 
 				--bordergrey: #cfcfcf;
@@ -16,9 +16,9 @@ const GlobalStyles = () => (
 
 				--line-height: 1.61;
 
-                --standard-spacing: 1rem;
-                --mid-spacing: 0.875rem;
-                --mini-spacing: 0.75rem;
+				--standard-spacing: 1rem;
+				--mid-spacing: 0.875rem;
+				--mini-spacing: 0.75rem;
 			}
 
 			body {
@@ -35,6 +35,11 @@ const GlobalStyles = () => (
 			html {
 				overflow-x: hidden;
 				scroll-behavior: smooth;
+			}
+
+			#root {
+				background: var(--white);
+				color: var(--black);
 			}
 
 			* {

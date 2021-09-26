@@ -16,6 +16,8 @@ import {
 import { FaGithub as GithubIcon } from "react-icons/fa";
 
 const HomePageSection = styled(Container)`
+	background: var(--white);
+	color: var(--black);
 	margin: 0 auto;
 	padding: calc(2 * var(--standard-spacing)) var(--standard-spacing);
 	max-width: 1100px;

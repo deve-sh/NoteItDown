@@ -19,6 +19,8 @@ const AppHeader = styled(Box)`
 	position: fixed;
 	border-bottom: 0.075rem solid var(--backgroundgrey);
 	padding: var(--mini-spacing);
+    background: var(--white);
+    z-index: 101;
 `;
 
 const Logo = styled(Image)`

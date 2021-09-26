@@ -23,6 +23,7 @@ function App() {
 	const setUser = useStore((store) => store.setUser);
 	const isLoading = useStore((store) => store.isLoading);
 	const loaderType = useStore((store) => store.loaderType);
+	const isDarkModeActive = useStore((store) => store.isDarkModeActive);
 
 	useEffect(() => {
 		auth.onAuthStateChanged((user) => {
@@ -51,7 +52,7 @@ function App() {
 		<Router>
 			{isLoading && <FullPageLoader type={loaderType} />}
 			<ToastContainer />
-			<GlobalStyles />
+			<GlobalStyles darkMode={isDarkModeActive} />
 			<ChakraProvider>
 				<Header />
 				<Switch>
