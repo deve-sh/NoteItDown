@@ -13,6 +13,7 @@ import { saveUserDetailsToDB } from "API/auth";
 import GlobalStyles from "components/GlobalStyles";
 import FullPageLoader from "components/FullPageLoader";
 // import ProtectedRoute from "Wrappers/ProtectedRoute";
+import Header from 'components/Header';
 
 // Pages
 import HomePage from "pages";
@@ -52,6 +53,7 @@ function App() {
 			<ToastContainer />
 			<GlobalStyles />
 			<ChakraProvider>
+				<Header loggedIn={stateUser} />
 				<Switch>
 					<Route
 						path="/"

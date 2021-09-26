@@ -1,5 +1,5 @@
 // Homepage
-
+import { Link } from "react-router-dom";
 import {
 	Container,
 	Heading,
@@ -41,7 +41,7 @@ const Homepage = ({ loggedIn = false }) => (
 		<Heading as="h1" marginBottom="10px" marginTop="25px">
 			Note Taking Workspace!
 		</Heading>
-		<Text size="lg" color="gray" marginBottom="10px">
+		<Text fontSize="lg" color="gray" marginBottom="10px">
 			For You And Your Team
 		</Text>
 		<ButtonGroup variant="outline" spacing="4" marginTop="15px">
@@ -54,13 +54,15 @@ const Homepage = ({ loggedIn = false }) => (
 					Login
 				</Button>
 			) : (
-				<Button
-					colorScheme="teal"
-					variant="solid"
-					leftIcon={<ListIcon size="1.25rem" />}
-				>
-					View Your Workspaces
-				</Button>
+				<Link to="/workspaces">
+					<Button
+						colorScheme="teal"
+						variant="solid"
+						leftIcon={<ListIcon size="1.25rem" />}
+					>
+						View Your Workspaces
+					</Button>
+				</Link>
 			)}
 			<Button leftIcon={<GithubIcon size="1.25rem" />}>View On GitHub</Button>
 		</ButtonGroup>
