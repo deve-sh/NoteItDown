@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
+
 import { Avatar, Heading, Text, Button } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { FaGithub } from "react-icons/fa";
@@ -29,6 +31,9 @@ const UserProfile = () => {
 
 	return (
 		<UserProfileContainer>
+			<Helmet>
+				<title>Note It Down - Profile</title>
+			</Helmet>
 			<Avatar src={user?.photoURL} size="2xl" name={user?.displayName} />
 			<Heading size="lg" as="h3" marginTop="10px">
 				{user?.displayName || "Unnamed"}
