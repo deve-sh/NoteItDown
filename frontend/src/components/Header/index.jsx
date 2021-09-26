@@ -6,6 +6,7 @@ import {
 	IconButton,
 	ButtonGroup,
 } from "@chakra-ui/react";
+import { useColorMode } from "@chakra-ui/color-mode";
 import styled from "@emotion/styled";
 import { MdAccountCircle as LoginIcon } from "react-icons/md";
 import { FaMoon, FaSun } from "react-icons/fa";
@@ -17,7 +18,6 @@ const AppHeader = styled(Box)`
 	position: fixed;
 	border-bottom: 0.075rem solid var(--backgroundgrey);
 	padding: var(--mini-spacing);
-	background: var(--white);
 	z-index: 101;
 `;
 
@@ -40,10 +40,16 @@ const Right = styled(Left)`
 	text-align: right;
 `;
 
-const Header = () => {
+const Header = ({ toggleLoginModal = () => null }) => {
 	const stateUser = useStore((state) => state.user);
 	const isDarkModeActive = useStore((store) => store.isDarkModeActive);
 	const toggleDarkMode = useStore((store) => store.toggleDarkMode);
+	const { toggleColorMode } = useColorMode();
+
+	const toggleDarkModeForApp = () => {
+		toggleColorMode();
+		toggleDarkMode(); // Store dark mode in global state as well.
+	};
 
 	return (
 		<AppHeader w="100%" id="app-header">
@@ -56,7 +62,7 @@ const Header = () => {
 						<IconButton
 							colorScheme={isDarkModeActive ? "yellow" : "teal"}
 							variant="ghost"
-							onClick={toggleDarkMode}
+							onClick={toggleDarkModeForApp}
 						>
 							{isDarkModeActive ? <FaSun /> : <FaMoon />}
 						</IconButton>
@@ -65,6 +71,7 @@ const Header = () => {
 								colorScheme="teal"
 								variant="outline"
 								leftIcon={<LoginIcon size="1.375rem" />}
+								onClick={toggleLoginModal}
 							>
 								Login
 							</Button>

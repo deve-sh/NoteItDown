@@ -14,16 +14,14 @@ import { FaGithub as GithubIcon } from "react-icons/fa";
 import { GiBookshelf } from "react-icons/gi";
 
 const HomePageSection = styled(Container)`
-	background: var(--white);
-	color: var(--black);
 	margin: 0 auto;
 	padding: calc(2 * var(--standard-spacing)) var(--standard-spacing);
 	max-width: 1100px;
-	min-height: 95vh;
+	min-height: 85vh;
 `;
 
 const HeroSection = styled(HomePageSection)`
-	min-height: 95vh;
+	min-height: 85vh;
 	display: flex;
 	flex-flow: column;
 	justify-content: center;

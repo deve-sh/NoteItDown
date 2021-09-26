@@ -22,8 +22,6 @@ const GlobalStyles = ({ darkMode = false }) => (
 			}
 
 			body {
-				background: var(--white);
-				color: var(--black);
 				padding: 0;
 				margin: 0;
 				line-height: var(--line-height);
@@ -38,8 +36,6 @@ const GlobalStyles = ({ darkMode = false }) => (
 			}
 
 			#root {
-				background: var(--white);
-				color: var(--black);
 			}
 
 			* {
