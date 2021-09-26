@@ -22,7 +22,6 @@ export async function saveUserDetailsToDB(userDetails) {
 		const userInDB = await userRef.get();
 		if (!userInDB.exists) {
 			const batch = db.batch();
-			console.log(userDetails);
 			batch.set(userRef, {
 				...userDetails,
 				createdAt: serverTimestamp(),
