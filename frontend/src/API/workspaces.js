@@ -15,6 +15,8 @@ export const getUserWorkspaces = async (
 					await db
 						.collection("workspaces")
 						.where("users", "array-contains", userId)
+						.orderBy("createdAt", "desc")
+						.limit(5)
 						.get()
 				).docs.map((doc) => ({ id: doc.id, ...doc.data() }))
 			);
