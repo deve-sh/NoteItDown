@@ -116,7 +116,7 @@ const WorkSpaces = () => {
 				)
 			);
 			toasts.generateSuccess("Successfully updated workspace.");
-			closeWorkspaceCreatorModal();
+			toggleWorkspaceToEdit();
 		});
 	};
 
