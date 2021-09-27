@@ -7,8 +7,11 @@ import {
 	ModalFooter,
 	ModalBody,
 	Button,
+	Text,
+	Container,
 } from "@chakra-ui/react";
 import styled from "@emotion/styled";
+import EmojiPicker from "emoji-picker-react";
 
 import FormControl from "components/FormControl";
 
@@ -25,11 +28,18 @@ const CreateWorkspaceModal = ({
 }) => {
 	const [workspaceInputs, setWorkSpaceInputs] = useState({
 		name: "",
+		identifierEmoji: null,
 	});
 	const onChange = (event) => {
 		setWorkSpaceInputs((inps) => ({
 			...inps,
 			[event.target.name]: event.target.value,
+		}));
+	};
+	const onEmojiSelect = (_, emojiObject) => {
+		setWorkSpaceInputs((inps) => ({
+			...inps,
+			identifierEmoji: emojiObject,
 		}));
 	};
 	return (
@@ -39,7 +49,7 @@ const CreateWorkspaceModal = ({
 				<form
 					onSubmit={(e) => {
 						e.preventDefault();
-						onSubmit(workspaceInputs);
+						onSubmit(JSON.parse(JSON.stringify(workspaceInputs)));
 					}}
 				>
 					<ModalHeader borderBottom="0.075rem solid var(--backgroundgrey)">
@@ -56,6 +66,18 @@ const CreateWorkspaceModal = ({
 							helperText="This name can be changed later of course"
 							disabled={isLoading}
 						/>
+						<br />
+						<Container centerContent>
+							{workspaceInputs?.identifierEmoji?.emoji ? (
+								<Text color="gray" marginBottom="10px">
+									Selected Identifier Emoji:{" "}
+									{workspaceInputs.identifierEmoji.emoji}
+								</Text>
+							) : (
+								""
+							)}
+							<EmojiPicker onEmojiClick={onEmojiSelect} />
+						</Container>
 					</CreateWorkspaceModalBody>
 					<ModalFooter>
 						<Button
