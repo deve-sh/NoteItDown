@@ -16,17 +16,25 @@ import {
 	Button,
 	Stack,
 	Heading,
+	IconButton,
 	useDisclosure as useToggleableModal,
 } from "@chakra-ui/react";
 
-import { createWorkspace, getUserWorkspaces } from "API/workspaces";
+import {
+	createWorkspace,
+	getUserWorkspaces,
+	updateWorkspace,
+} from "API/workspaces";
 
 import toasts from "helpers/toasts";
+import { userHasEditAccessToWorkspace } from "helpers/workspaces";
 import useStore from "hooks/useStore";
 
 import FullPageLoader from "components/FullPageLoader";
 import ContentWrapper from "Wrappers/ContentWrapper";
 import CreateWorkspaceModal from "components/Workspaces/CreateWorkspace";
+import { MdEdit } from "react-icons/md";
+import EditWorkspaceModal from "components/Workspaces/EditWorkspace";
 
 const TableContainer = styled(Table)`
 	max-width: 1100px;
@@ -48,11 +56,31 @@ const WorkSpaces = () => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [isCreatingWorkspace, setIsCreatingWorkspace] = useState(false);
 
+	const [workspaceToEdit, setWorkspaceToEdit] = useState(null);
+	const [isUpdatingWorkspace, setIsUpdatingWorkspace] = useState(false);
+
 	const {
 		isOpen: showWorkspaceCreatorModal,
 		onOpen: openWorkspaceCreatorModal,
 		onClose: closeWorkspaceCreatorModal,
 	} = useToggleableModal();
+
+	const {
+		isOpen: showWorkspaceEditorModal,
+		onOpen: openWorkspaceEditorModal,
+		onClose: closeWorkspaceEditorModal,
+	} = useToggleableModal();
+	const toggleWorkspaceToEdit = (workspaceToStartEditing = null) => {
+		if (showWorkspaceEditorModal || !workspaceToStartEditing) {
+			setWorkspaceToEdit(null);
+			setIsUpdatingWorkspace(false);
+			closeWorkspaceEditorModal();
+		} else {
+			setWorkspaceToEdit(workspaceToStartEditing);
+			setIsUpdatingWorkspace(false);
+			openWorkspaceEditorModal();
+		}
+	};
 
 	const fetchUserWorkspaces = async () => {
 		getUserWorkspaces(user?.id, (err, fetchedWorkspaces) => {
@@ -73,6 +101,25 @@ const WorkSpaces = () => {
 		});
 	};
 
+	const updateUserWorkspace = async (workspaceUpdates = {}) => {
+		setIsUpdatingWorkspace(true);
+		const updates = {
+			name: workspaceUpdates.name,
+			identifierEmoji: workspaceUpdates.identifierEmoji || null,
+		};
+		updateWorkspace(workspaceToEdit.id, updates, (err, updatedWorkspace) => {
+			setIsUpdatingWorkspace(false);
+			if (err) return toasts.generateError(err);
+			setWorkspaces((spaces) =>
+				spaces.map((space) =>
+					space.id === workspaceToEdit.id ? updatedWorkspace : space
+				)
+			);
+			toasts.generateSuccess("Successfully updated workspace.");
+			closeWorkspaceCreatorModal();
+		});
+	};
+
 	useEffect(() => {
 		fetchUserWorkspaces();
 	}, [user]);
@@ -89,6 +136,17 @@ const WorkSpaces = () => {
 				onSubmit={createNewUserWorkspace}
 				isLoading={isCreatingWorkspace}
 			/>
+			{workspaceToEdit ? (
+				<EditWorkspaceModal
+					isOpen={showWorkspaceEditorModal}
+					closeModal={closeWorkspaceEditorModal}
+					onSubmit={updateUserWorkspace}
+					isLoading={isUpdatingWorkspace}
+					workspace={workspaceToEdit}
+				/>
+			) : (
+				""
+			)}
 			<ContentWrapper>
 				<Stack direction="row" alignItems="center">
 					<Left>
@@ -112,6 +170,7 @@ const WorkSpaces = () => {
 							<Th>Workspace Name</Th>
 							<Th>Number Of Users</Th>
 							<Th>Created At</Th>
+							<Th>Options</Th>
 						</Tr>
 					</Thead>
 					<Tbody>
@@ -130,11 +189,24 @@ const WorkSpaces = () => {
 									</Td>
 									<Td>{workspace.nUsers}</Td>
 									<Td>{workspace?.createdAt?.toDate?.()?.toDateString?.()}</Td>
+									<Td>
+										{userHasEditAccessToWorkspace(workspace) ? (
+											<IconButton
+												onClick={() => toggleWorkspaceToEdit(workspace)}
+												colorScheme="blue"
+												variant="ghost"
+											>
+												<MdEdit size="1.25rem" />
+											</IconButton>
+										) : (
+											""
+										)}
+									</Td>
 								</Tr>
 							))
 						) : (
 							<Tr>
-								<Td rowSpan={4} colSpan={3}>
+								<Td rowSpan={4} colSpan={4}>
 									<Container centerContent>
 										<FaList size="5rem" color="gray" />
 										<Text fontSize="md" marginTop="15px" color="gray">

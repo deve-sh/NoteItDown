@@ -64,3 +64,27 @@ export const createWorkspace = async (workspaceInputs, callback) => {
 		return callback(err.message);
 	}
 };
+
+export const updateWorkspace = async (
+	workspaceId,
+	workspaceUpdates,
+	callback
+) => {
+	try {
+		const userId = auth.currentUser?.uid;
+		if (userId) {
+			const batch = db.batch();
+			const workspaceRef = db.collection("workspaces").doc(workspaceId);
+			batch.update(workspaceRef, {
+				...workspaceUpdates,
+				lastUpdatedBy: userId,
+				updatedAt: serverTimestamp(),
+			});
+			await batch.commit();
+			return callback(null, (await workspaceRef.get()).data());
+		} else return callback("User not signed in.");
+	} catch (err) {
+		console.log(err);
+		return callback(err.message);
+	}
+};
