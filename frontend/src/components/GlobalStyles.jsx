@@ -4,8 +4,8 @@ const GlobalStyles = ({ darkMode = false }) => (
 	<Global
 		styles={css`
 			:root {
-				--white: ${!darkMode ? "#ffffff" : "#212121"};
-				--black: ${!darkMode ? "#212121" : "#ffffff"};
+				--white: ${!darkMode ? "#ffffff" : "#1A202C"};
+				--black: ${!darkMode ? "#1A202C" : "#ffffff"};
 				--darkgrey: #313131;
 
 				--bordergrey: #cfcfcf;
