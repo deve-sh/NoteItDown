@@ -120,6 +120,11 @@ const WorkSpaces = () => {
 								<Tr key={workspace.id}>
 									<Td>
 										<Link to={`/workspace/${workspace.id}`}>
+											{workspace?.identifierEmoji?.emoji ? (
+												<>{workspace.identifierEmoji.emoji}&nbsp;</>
+											) : (
+												""
+											)}
 											{workspace.name}
 										</Link>
 									</Td>
