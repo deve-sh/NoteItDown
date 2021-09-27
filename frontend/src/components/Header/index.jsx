@@ -20,6 +20,7 @@ const AppHeader = styled(Box)`
 	border-bottom: 0.075rem solid var(--backgroundgrey);
 	padding: var(--mini-spacing);
 	z-index: 101;
+	background: var(--white);
 `;
 
 const Logo = styled(Image)`
