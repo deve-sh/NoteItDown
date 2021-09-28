@@ -122,5 +122,43 @@ export const addUserToWorkspace = async (
 		});
 		await batch.commit();
 		return callback(null, (await workspaceRef.get()).data());
-	} catch (err) {}
+	} catch (err) {
+		console.log(err);
+		return callback(err.message);
+	}
+};
+
+export const removeUserFromWorkspace = async (
+	workspaceId,
+	userToRemove = "",
+	callback
+) => {
+	try {
+		const userId = auth.currentUser?.uid;
+		if (!userToRemove || userId === userToRemove) return;
+
+		const batch = db.batch();
+		const workspaceRef = db.collection("workspaces").doc(workspaceId);
+		const userRef = db.collection("users").doc(userToRemove);
+
+		const workspace = (await workspaceRef.get()).data();
+		if (!workspace.users?.includes(userToRemove))
+			return callback("User not part of workspace.");
+		const workspaceUpdates = {
+			users: firestore.FieldValue.arrayRemove(userToRemove),
+			admins: firestore.FieldValue.arrayRemove(userToRemove),
+			lastUpdatedBy: userId,
+			updatedAt: serverTimestamp(),
+		};
+		batch.update(workspaceRef, workspaceUpdates);
+		batch.update(userRef, {
+			updatedAt: serverTimestamp(),
+			nWorkspaces: firestore.FieldValue.increment(1),
+		});
+		await batch.commit();
+		return callback(null, (await workspaceRef.get()).data());
+	} catch (err) {
+		console.log(err);
+		return callback(err.message);
+	}
 };
