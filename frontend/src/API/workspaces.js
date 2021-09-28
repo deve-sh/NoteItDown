@@ -88,3 +88,39 @@ export const updateWorkspace = async (
 		return callback(err.message);
 	}
 };
+
+export const addUserToWorkspace = async (
+	workspaceId,
+	options = { userId: "", isAdmin: false },
+	callback
+) => {
+	try {
+		const userId = auth.currentUser?.uid;
+		if (!options?.userId || userId === options?.userId) return;
+
+		const batch = db.batch();
+		const workspaceRef = db.collection("workspaces").doc(workspaceId);
+		const userRef = db.collection("users").doc(options.userId);
+
+		const workspace = (await workspaceRef.get()).data();
+		if (workspace.users?.includes(options.userId))
+			return callback("User already part of workspace.");
+
+		const workspaceUpdates = {
+			users: firestore.FieldValue.arrayUnion(options?.userId),
+			lastUpdatedBy: userId,
+			updatedAt: serverTimestamp(),
+		};
+		if (options.isAdmin)
+			workspaceUpdates.admins = firestore.FieldValue.arrayUnion(
+				options?.userId
+			);
+		batch.update(workspaceRef, workspaceUpdates);
+		batch.update(userRef, {
+			updatedAt: serverTimestamp(),
+			nWorkspaces: firestore.FieldValue.increment(1),
+		});
+		await batch.commit();
+		return callback(null, (await workspaceRef.get()).data());
+	} catch (err) {}
+};
