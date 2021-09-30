@@ -22,18 +22,18 @@ import Header from "components/Header";
 import LoginModal from "components/LoginModal";
 
 // Pages
-const lazyLoadPageGenerator = (path) =>
+const lazyLoadPageGenerator = (importedPath) =>
 	Loadable({
-		loader: () => import(path),
+		loader: () => importedPath,
 		loading: () => <FullPageLoader />,
 	});
 
-const HomePage = lazyLoadPageGenerator("pages");
-const WorkSpaces = lazyLoadPageGenerator("pages/WorkSpaces");
-const Documents = lazyLoadPageGenerator("pages/Documents");
-const UserProfile = lazyLoadPageGenerator("pages/Profile");
-const Login = lazyLoadPageGenerator("pages/Login");
-const WorkspacePage = lazyLoadPageGenerator("pages/WorkspacePage");
+const HomePage = lazyLoadPageGenerator(import("pages"));
+const WorkSpaces = lazyLoadPageGenerator(import("pages/WorkSpaces"));
+const Documents = lazyLoadPageGenerator(import("pages/Documents"));
+const UserProfile = lazyLoadPageGenerator(import("pages/Profile"));
+const Login = lazyLoadPageGenerator(import("pages/Login"));
+const WorkspacePage = lazyLoadPageGenerator(import("pages/WorkspacePage"));
 
 function App() {
 	const stateUser = useStore((state) => state.user);
