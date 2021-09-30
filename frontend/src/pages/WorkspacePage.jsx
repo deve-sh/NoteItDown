@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { Redirect } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, Redirect } from "react-router-dom";
 import {
 	HStack,
 	Box,
@@ -7,15 +7,21 @@ import {
 	Button,
 	ButtonGroup,
 	IconButton,
+	List,
+	ListItem,
 } from "@chakra-ui/react";
 
-import { BiUserPlus } from "react-icons/bi";
+import { BiPlus, BiUserPlus } from "react-icons/bi";
 import { IoTrash } from "react-icons/io5";
 
 import useFirestore from "hooks/useFirestore";
 import useStore from "hooks/useStore";
+import { getDocumentsFromWorkspace } from "API/documents";
+
+import toasts from "helpers/toasts";
 
 import ContentWrapper from "Wrappers/ContentWrapper";
+import NoneFound from "components/NoneFound";
 
 const WorkspacePage = (props) => {
 	const user = useStore((state) => state.user);
@@ -32,6 +38,15 @@ const WorkspacePage = (props) => {
 	useEffect(() => {
 		setLoading(isLoading);
 	}, [setLoading, isLoading]);
+
+	const [workspaceDocuments, setWorkspaceDocuments] = useState([]);
+
+	useEffect(() => {
+		getDocumentsFromWorkspace(workspaceId, 1, (err, documents) => {
+			if (err) return toasts.generateError(err);
+			setWorkspaceDocuments(documents || []);
+		});
+	}, [workspaceId]);
 
 	if (!isLoading && (error || !workspaceData)) return <Redirect to="/" />;
 	return (
@@ -60,6 +75,25 @@ const WorkspacePage = (props) => {
 					)}
 				</Box>
 			</HStack>
+			{workspaceDocuments?.length ? (
+				<List spacing="3">
+					{workspaceDocuments.map((doc) => (
+						<ListItem key={doc.id}>{doc.title}</ListItem>
+					))}
+				</List>
+			) : (
+				<NoneFound label="No Documents Added So far.">
+					<Link to={`/editor/new/${workspaceId}`}>
+						<Button
+							colorScheme="blue"
+							variant="solid"
+							leftIcon={<BiPlus size="1.25rem" />}
+						>
+							Add New Document
+						</Button>
+					</Link>
+				</NoneFound>
+			)}
 		</ContentWrapper>
 	);
 };
