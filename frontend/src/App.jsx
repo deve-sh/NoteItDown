@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import Loadable from "react-loadable";
 import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
 import {
 	ChakraProvider,
@@ -21,12 +22,18 @@ import Header from "components/Header";
 import LoginModal from "components/LoginModal";
 
 // Pages
-import HomePage from "pages";
-import WorkSpaces from "pages/WorkSpaces";
-import Documents from "pages/Documents";
-import UserProfile from "pages/Profile";
-import Login from "pages/Login";
-import WorkspacePage from "pages/WorkspacePage";
+const lazyLoadPageGenerator = (path) =>
+	Loadable({
+		loader: () => import(path),
+		loading: <FullPageLoader />,
+	});
+
+const HomePage = lazyLoadPageGenerator("pages");
+const WorkSpaces = lazyLoadPageGenerator("pages/WorkSpaces");
+const Documents = lazyLoadPageGenerator("pages/Documents");
+const UserProfile = lazyLoadPageGenerator("pages/Profile");
+const Login = lazyLoadPageGenerator("pages/Login");
+const WorkspacePage = lazyLoadPageGenerator("pages/WorkspacePage");
 
 function App() {
 	const stateUser = useStore((state) => state.user);
