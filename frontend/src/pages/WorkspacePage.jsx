@@ -39,6 +39,7 @@ const WorkspacePage = (props) => {
 			<HStack alignItems="center">
 				<Box width="50%">
 					<Heading as="h4" size="lg">
+						{workspaceData?.identifierEmoji?.emoji}
 						{workspaceData?.name}
 					</Heading>
 				</Box>
