@@ -25,7 +25,7 @@ import LoginModal from "components/LoginModal";
 const lazyLoadPageGenerator = (path) =>
 	Loadable({
 		loader: () => import(path),
-		loading: <FullPageLoader />,
+		loading: () => <FullPageLoader />,
 	});
 
 const HomePage = lazyLoadPageGenerator("pages");
