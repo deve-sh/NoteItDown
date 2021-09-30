@@ -1,6 +1,5 @@
 import useSWR from "swr";
 
-import toasts from "../helpers/toasts";
 import db from "../firebase/db";
 
 export const constructDocPath = (pathFragments) => {
@@ -18,8 +17,10 @@ const useFirestore = (...pathFragments) => {
 	const fetcherFunc = () =>
 		constructDocPath(pathFragments)
 			.get()
-			.then((doc) => doc.data())
-			.catch((err) => toasts.generateError(err.message));
+			.then((doc) => {
+				if (doc.exists) return doc.data();
+				else throw new Error("Document Not Found");
+			});
 	const { data, error, ...rest } = useSWR(pathFragments.join("/"), fetcherFunc);
 
 	return { data, error, isLoading: !error && !data, ...rest };
