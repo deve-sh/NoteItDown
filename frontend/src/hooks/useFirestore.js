@@ -1,7 +1,7 @@
 import useSWR from "swr";
-import toasts from "API/toasts";
 
-import db from "../firebase/database";
+import toasts from "../helpers/toasts";
+import db from "../firebase/db";
 
 export const constructDocPath = (pathFragments) => {
 	let ref = null;
