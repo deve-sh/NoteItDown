@@ -78,7 +78,9 @@ const WorkspacePage = (props) => {
 			{workspaceDocuments?.length ? (
 				<List spacing="3">
 					{workspaceDocuments.map((doc) => (
-						<ListItem key={doc.id}>{doc.title}</ListItem>
+						<ListItem key={doc.id}>
+							{doc.identifierEmoji?.emoji} {doc.title}
+						</ListItem>
 					))}
 				</List>
 			) : (
