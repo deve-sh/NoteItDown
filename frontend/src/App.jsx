@@ -26,6 +26,7 @@ import WorkSpaces from "pages/WorkSpaces";
 import Documents from "pages/Documents";
 import UserProfile from "pages/Profile";
 import Login from "pages/Login";
+import WorkspacePage from "pages/WorkspacePage";
 
 function App() {
 	const stateUser = useStore((state) => state.user);
@@ -99,7 +100,7 @@ function App() {
 						<ProtectedRoute path="/workspaces" component={WorkSpaces} />
 						<ProtectedRoute
 							path="/workspace/:workspaceId"
-							component={() => ""}
+							component={WorkspacePage}
 						/>
 						<ProtectedRoute path="/documents" component={Documents} />
 						<ProtectedRoute path="/document/:documentId" component={() => ""} />
