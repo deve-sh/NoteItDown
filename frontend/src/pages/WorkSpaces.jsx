@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { FaList, FaPlus } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import styled from "@emotion/styled";
 import {
 	Table,
@@ -11,14 +11,13 @@ import {
 	Tr,
 	Th,
 	Td,
-	Text,
-	Container,
 	Button,
 	Stack,
 	Heading,
 	IconButton,
 	useDisclosure as useToggleableModal,
 } from "@chakra-ui/react";
+import { MdEdit } from "react-icons/md";
 
 import {
 	createWorkspace,
@@ -33,8 +32,8 @@ import useStore from "hooks/useStore";
 import FullPageLoader from "components/FullPageLoader";
 import ContentWrapper from "Wrappers/ContentWrapper";
 import CreateWorkspaceModal from "components/Workspaces/CreateWorkspace";
-import { MdEdit } from "react-icons/md";
 import EditWorkspaceModal from "components/Workspaces/EditWorkspace";
+import NoneFound from "components/NoneFound";
 
 const TableContainer = styled(Table)`
 	max-width: 1100px;
@@ -207,12 +206,7 @@ const WorkSpaces = () => {
 						) : (
 							<Tr>
 								<Td rowSpan={4} colSpan={4}>
-									<Container centerContent>
-										<FaList size="5rem" color="gray" />
-										<Text fontSize="md" marginTop="15px" color="gray">
-											No Workspaces so far.
-										</Text>
-									</Container>
+									<NoneFound label="No Workspaces so far." />
 								</Td>
 							</Tr>
 						)}
