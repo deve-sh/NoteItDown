@@ -91,7 +91,12 @@ function App() {
 						<Route
 							path="/"
 							exact
-							component={() => <HomePage loggedIn={stateUser} />}
+							component={() => (
+								<HomePage
+									loggedIn={stateUser}
+									openLoginModal={openLoginModal}
+								/>
+							)}
 						/>
 						<Route
 							path="/login"

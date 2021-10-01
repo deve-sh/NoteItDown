@@ -29,7 +29,7 @@ const HeroSection = styled(HomePageSection)`
 	align-items: center;
 `;
 
-const Homepage = ({ loggedIn = false }) => (
+const Homepage = ({ loggedIn = false, openLoginModal = () => null }) => (
 	<HeroSection maxW="container.sm" centerContent>
 		<Helmet>
 			<title>Note It Down</title>
@@ -52,6 +52,7 @@ const Homepage = ({ loggedIn = false }) => (
 					colorScheme="teal"
 					variant="solid"
 					leftIcon={<LoginIcon size="1.25rem" />}
+					onClick={openLoginModal}
 				>
 					Login
 				</Button>
