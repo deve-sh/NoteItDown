@@ -34,6 +34,7 @@ const Documents = lazyLoadPageGenerator(import("pages/Documents"));
 const UserProfile = lazyLoadPageGenerator(import("pages/Profile"));
 const Login = lazyLoadPageGenerator(import("pages/Login"));
 const WorkspacePage = lazyLoadPageGenerator(import("pages/WorkspacePage"));
+const EditorPage = lazyLoadPageGenerator(import("pages/EditorPage"));
 
 function App() {
 	const stateUser = useStore((state) => state.user);
@@ -113,6 +114,10 @@ function App() {
 						<ProtectedRoute
 							path="/workspace/:workspaceId"
 							component={WorkspacePage}
+						/>
+						<ProtectedRoute
+							path="/editor/:mode/:assetId"
+							component={EditorPage}
 						/>
 						<ProtectedRoute path="/documents" component={Documents} />
 						<ProtectedRoute path="/document/:documentId" component={() => ""} />
