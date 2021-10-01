@@ -19,6 +19,7 @@ const FormControl = ({
 	disabled,
 	name,
 	helperText,
+	variant,
 }) => (
 	<ChakraFormControl
 		id={id}
@@ -26,6 +27,7 @@ const FormControl = ({
 		isRequired={required}
 		isReadOnly={disabled}
 		name={name}
+		variant={variant || "outlined"}
 	>
 		<FormLabel>{label}</FormLabel>
 		<Input

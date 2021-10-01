@@ -1,4 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import styled from "@emotion/styled";
+
+import { Input } from "@chakra-ui/react";
 
 // Editor
 import EditorJS from "@editorjs/editorjs";
@@ -18,8 +21,17 @@ import EditorChecklist from "@editorjs/checklist";
 
 import { uploadImage } from "API/editor";
 
+const EditorContainerDiv = styled.div``;
+
+const TitleInput = styled(Input)`
+	margin-bottom: var(--standard-spacing);
+`;
+
 const Editor = ({ readOnly = false, prefilledData = undefined }) => {
 	const editor = useRef(null);
+
+	const [documentTitle, setDocumentTitle] = useState("");
+	const [identifierEmoji, setIdentifierEmoji] = useState("");
 
 	useEffect(() => {
 		editor.current = new EditorJS({
@@ -108,11 +120,11 @@ const Editor = ({ readOnly = false, prefilledData = undefined }) => {
 				},
 			},
 			onReady: () => null,
-			onChange: () => null,
-			data: prefilledData,
+			onChange: () => console.log(editor.current?.blocks),
+			data: prefilledData
 		});
 
-		return () => editor?.destroy;
+		return editor.current?.destroy;
 	}, [prefilledData, readOnly]);
 
 	// const getEditorData = async () => {
@@ -122,7 +134,16 @@ const Editor = ({ readOnly = false, prefilledData = undefined }) => {
 
 	return (
 		<div class="editor-wrapper">
-			<div id="editorjs" />
+			<TitleInput
+				label="Document Title"
+				id="title"
+				value={documentTitle}
+				onChange={(e) => setDocumentTitle(e.target.value)}
+				placeholder="Document Title"
+				variant="plain"
+				required
+			/>
+			<EditorContainerDiv id="editorjs" />
 		</div>
 	);
 };
