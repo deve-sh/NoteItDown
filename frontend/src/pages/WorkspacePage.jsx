@@ -33,7 +33,7 @@ const WorkspacePage = (props) => {
 		data: workspaceData,
 		error,
 		isLoading,
-	} = useFirestore(`workspaces/${workspaceId}` || null);
+	} = useFirestore(workspaceId ? `workspaces/${workspaceId}` : null);
 
 	useEffect(() => {
 		setLoading(isLoading);
