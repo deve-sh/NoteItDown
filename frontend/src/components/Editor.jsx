@@ -112,9 +112,7 @@ const Editor = ({ readOnly = false, prefilledData = undefined }) => {
 			data: prefilledData,
 		});
 
-		return () => {
-			editor.destroy();
-		};
+		return () => editor?.destroy;
 	}, [prefilledData, readOnly]);
 
 	// const getEditorData = async () => {
