@@ -24,7 +24,7 @@ export const getDocumentsFromWorkspace = async (
 	}
 };
 
-export const addDocumentToWorkspace = async (
+export const updateDocument = async (
 	documentId,
 	documentUpdates = {},
 	callback
