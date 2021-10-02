@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from "react";
 import styled from "@emotion/styled";
 
@@ -27,7 +28,11 @@ const TitleInput = styled(Input)`
 	margin-bottom: var(--standard-spacing);
 `;
 
-const Editor = ({ readOnly = false, prefilledData = undefined }) => {
+const Editor = ({
+	readOnly = false,
+	prefilledData = undefined,
+	onReady = () => null,
+}) => {
 	const editor = useRef(null);
 
 	const [documentTitle, setDocumentTitle] = useState("");
@@ -119,18 +124,13 @@ const Editor = ({ readOnly = false, prefilledData = undefined }) => {
 					inlineToolbar: true,
 				},
 			},
-			onReady: () => null,
+			onReady: () => onReady(editor.current),
 			onChange: () => console.log(editor.current?.blocks),
-			data: prefilledData
+			data: prefilledData,
 		});
 
 		return editor.current?.destroy;
 	}, [prefilledData, readOnly]);
-
-	// const getEditorData = async () => {
-	// 	if (editor) return await editor.save();
-	// 	return {};
-	// };
 
 	return (
 		<div class="editor-wrapper">

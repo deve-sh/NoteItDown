@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { Redirect } from "react-router-dom";
 
 import Editor from "components/Editor";
@@ -5,15 +6,17 @@ import ContentWrapper from "Wrappers/ContentWrapper";
 
 import useFirestore from "hooks/useFirestore";
 import useStore from "hooks/useStore";
-import { useEffect } from "react";
 
 const EditorPage = (props) => {
+	const editor = useRef(null);
+
 	const user = useStore((state) => state.user);
 	const setLoading = useStore((store) => store.setLoading);
 
 	let workspaceId, documentId;
-	if (props?.match?.params?.mode === "new")
-		workspaceId = props?.match?.params?.assetId;
+
+	const mode = props?.match?.params?.mode;
+	if (mode === "new") workspaceId = props?.match?.params?.assetId;
 	else documentId = props?.match?.params?.assetId;
 
 	const {
@@ -42,9 +45,15 @@ const EditorPage = (props) => {
 	if (documentId && !documentLoading && (documentError || !documentData))
 		return <Redirect to="/" />;
 
+	const getEditorContent = async () =>
+		(await editor.current?.save?.()) || {
+			blocks: [],
+			time: new Date().getTime(),
+		};
+
 	return (
 		<ContentWrapper>
-			<Editor />
+			<Editor onReady={(editorInstance) => (editor.current = editorInstance)} />
 		</ContentWrapper>
 	);
 };
