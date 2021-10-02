@@ -35,6 +35,7 @@ export const addDocumentToWorkspace = async (
 		const batch = db.batch();
 		batch.set(documentRef, {
 			...documentData,
+			id: documentRef.id,
 			workspace: workspaceId,
 			createdAt: firestore.FieldValue.serverTimestamp(),
 			updatedAt: firestore.FieldValue.serverTimestamp(),
@@ -75,7 +76,10 @@ export const updateDocument = async (
 			lastUpdatedBy: auth.currentUser.uid,
 		});
 
-		return callback(null, (await documentRef.get()).data());
+		return callback(
+			null
+			//(await documentRef.get()).data()	// Revalidate using the useFirestore hook
+		);
 	} catch (err) {
 		console.log(err);
 		return callback(err.message);
