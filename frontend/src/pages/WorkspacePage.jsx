@@ -20,7 +20,11 @@ import { IoTrash } from "react-icons/io5";
 import useFirestore from "hooks/useFirestore";
 import useStore from "hooks/useStore";
 import { getDocumentsFromWorkspace } from "API/documents";
-import { getWorkspaceUsers, removeWorkspace } from "API/workspaces";
+import {
+	getWorkspaceUsers,
+	removeUserFromWorkspace,
+	removeWorkspace,
+} from "API/workspaces";
 
 import toasts from "helpers/toasts";
 
@@ -74,7 +78,7 @@ const WorkspacePage = (props) => {
 		});
 	};
 
-	const openUserListModal = async () => {
+	const openUserListModal = () => {
 		openUserListModalUI();
 		if (!userList) {
 			// Fetch user list
@@ -83,6 +87,24 @@ const WorkspacePage = (props) => {
 				setLoadingUserList(false);
 				if (err) return toasts.generateError(err);
 				setUserList(users);
+			});
+		}
+	};
+
+	const removeUser = (userIdToRemove) => {
+		if (
+			!window.confirm(
+				"Are you sure you want to remove the user from this workspace?"
+			)
+		)
+			return;
+		if (userList?.length) {
+			removeUserFromWorkspace(workspaceId, userIdToRemove, (err) => {
+				if (err) return toasts.generateError(err);
+				setUserList((list) =>
+					(list || []).filter((user) => user.id !== userIdToRemove)
+				);
+				toasts.generateSuccess("Removed user successfully.");
 			});
 		}
 	};
@@ -151,6 +173,8 @@ const WorkspacePage = (props) => {
 				onClose={closeUserListModal}
 				userList={userList}
 				isLoading={isLoadingUserList}
+				showOptions={workspaceData?.admins?.includes(user?.uid)}
+				onUserRemoveClick={removeUser}
 			/>
 		</ContentWrapper>
 	);

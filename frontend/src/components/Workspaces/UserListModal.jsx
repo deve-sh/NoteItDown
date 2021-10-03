@@ -1,3 +1,4 @@
+import auth from "firebase/authentication";
 import {
 	Modal,
 	ModalOverlay,
@@ -15,11 +16,20 @@ import {
 	Td,
 	Avatar,
 	Text,
+	IconButton,
 } from "@chakra-ui/react";
 import { RiKeyFill as AdminIcon } from "react-icons/ri";
+import { MdClose } from "react-icons/md";
 import NoneFound from "components/NoneFound";
 
-const UserListModal = ({ userList, isOpen, onClose, isLoading }) => (
+const UserListModal = ({
+	showOptions = false,
+	userList,
+	isOpen,
+	onClose,
+	isLoading = false,
+	onUserRemoveClick = () => null,
+}) => (
 	<Modal isOpen={isOpen} onClose={onClose} size="xl">
 		<ModalOverlay />
 		<ModalContent>
@@ -53,7 +63,21 @@ const UserListModal = ({ userList, isOpen, onClose, isLoading }) => (
 									<Td>
 										<Text color="gray">{user.email}</Text>
 									</Td>
-									<Td></Td>
+									<Td>
+										{showOptions && user.uid !== auth.currentUser.uid ? (
+											<>
+												<IconButton
+													colorScheme="red"
+													variant="ghost"
+													onClick={() => onUserRemoveClick(user.uid)}
+												>
+													<MdClose />
+												</IconButton>
+											</>
+										) : (
+											""
+										)}
+									</Td>
 								</Tr>
 							))}
 						</Tbody>
