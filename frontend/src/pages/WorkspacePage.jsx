@@ -79,7 +79,7 @@ const WorkspacePage = (props) => {
 				<List spacing="3">
 					{workspaceDocuments.map((doc) => (
 						<ListItem key={doc.id}>
-							{doc.identifierEmoji?.emoji} {doc.title}
+							{doc.identifierEmoji?.emoji || "📄"} {doc.title}
 						</ListItem>
 					))}
 				</List>
