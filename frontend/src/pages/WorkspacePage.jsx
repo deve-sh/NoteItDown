@@ -52,6 +52,7 @@ const WorkspacePage = (props) => {
 	}, [workspaceId]);
 
 	const deleteWorkspace = () => {
+		if (!window.confirm("Are you sure? This action is irreversible!")) return;
 		setLoading(true);
 		removeWorkspace(workspaceId, (err) => {
 			setLoading(false);
