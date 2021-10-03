@@ -1,4 +1,5 @@
 import auth from "firebase/authentication";
+import store from "store";
 import db, { firestore } from "../firebase/db";
 
 const serverTimestamp = firestore.FieldValue.serverTimestamp;
@@ -205,10 +206,18 @@ export const getWorkspaceUsers = async (workspaceId, callback) => {
 		).data();
 
 		const userIds = workspaceData?.users || [];
+		let users = [];
 
-		const users = (
+		const userIdIndex = userIds.indexOf(auth.currentUser.uid);
+		const userIsPartOfWorkspace = userIdIndex !== -1;
+
+		if (userIsPartOfWorkspace) userIds.splice(userIdIndex, 1);
+
+		users = (
 			await db.collection("users").where("uid", "in", userIds).get()
 		).docs.map((doc) => ({ ...doc.data(), id: doc.id, uid: doc.id }));
+
+		if (userIsPartOfWorkspace) users.unshift(store.getState().user);
 
 		return callback(null, users);
 	} catch (err) {
