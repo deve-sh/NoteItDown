@@ -2,7 +2,17 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "@emotion/styled";
 
-import { Input } from "@chakra-ui/react";
+import {
+	Box,
+	Input,
+	HStack,
+	IconButton,
+	Menu,
+	MenuButton,
+	MenuList,
+} from "@chakra-ui/react";
+import EmojiPicker from "emoji-picker-react";
+import { MdSave } from "react-icons/md";
 
 // Editor
 import EditorJS from "@editorjs/editorjs";
@@ -24,7 +34,7 @@ import { uploadImage } from "API/editor";
 
 const EditorContainerDiv = styled.div``;
 
-const TitleInput = styled(Input)`
+const MainInputsStack = styled(HStack)`
 	margin-bottom: var(--standard-spacing);
 `;
 
@@ -32,11 +42,16 @@ const Editor = ({
 	readOnly = false,
 	prefilledData = undefined,
 	onReady = () => null,
+	onSave = () => null,
 }) => {
 	const editor = useRef(null);
 
 	const [documentTitle, setDocumentTitle] = useState("");
-	const [identifierEmoji, setIdentifierEmoji] = useState("");
+	const [identifierEmoji, setIdentifierEmoji] = useState({});
+
+	const onEmojiSelect = (_, emojiObject) => {
+		setIdentifierEmoji(emojiObject);
+	};
 
 	useEffect(() => {
 		editor.current = new EditorJS({
@@ -134,15 +149,34 @@ const Editor = ({
 
 	return (
 		<div class="editor-wrapper">
-			<TitleInput
-				label="Document Title"
-				id="title"
-				value={documentTitle}
-				onChange={(e) => setDocumentTitle(e.target.value)}
-				placeholder="Document Title"
-				variant="plain"
-				required
-			/>
+			<MainInputsStack position="static" alignItems="center">
+				<Box>
+					<Menu>
+						<MenuButton as={IconButton} aria-label="Emoji">
+							{identifierEmoji?.emoji || "📄"}
+						</MenuButton>
+						<MenuList border="none" zIndex="1000">
+							<EmojiPicker onEmojiClick={onEmojiSelect} />
+						</MenuList>
+					</Menu>
+				</Box>
+				<Box flex="9">
+					<Input
+						label="Document Title"
+						id="title"
+						value={documentTitle}
+						onChange={(e) => setDocumentTitle(e.target.value)}
+						placeholder="Document Title"
+						variant="unstyled"
+						required
+					/>
+				</Box>
+				<Box flex="1">
+					<IconButton variant="ghost" onClick={onSave} colorScheme="blue">
+						<MdSave size="1.25rem" />
+					</IconButton>
+				</Box>
+			</MainInputsStack>
 			<EditorContainerDiv id="editorjs" />
 		</div>
 	);
