@@ -14,7 +14,6 @@ const EditorPage = (props) => {
 	const history = useHistory();
 	const editor = useRef(null);
 
-	const user = useStore((state) => state.user);
 	const setLoading = useStore((store) => store.setLoading);
 
 	let workspaceId, documentId;
@@ -82,6 +81,7 @@ const EditorPage = (props) => {
 				onReady={(editorInstance) => (editor.current = editorInstance)}
 				readOnly={mode !== "new"}
 				prefilledData={documentData?.editorData}
+				onSave={saveDocument}
 			/>
 		</ContentWrapper>
 	);
