@@ -9,9 +9,11 @@ import {
 	IconButton,
 	List,
 	ListItem,
+	Text,
 } from "@chakra-ui/react";
 
-import { BiPlus, BiUserPlus } from "react-icons/bi";
+import { BiPlus } from "react-icons/bi";
+import { FiUsers } from "react-icons/fi";
 import { IoTrash } from "react-icons/io5";
 
 import useFirestore from "hooks/useFirestore";
@@ -65,11 +67,15 @@ const WorkspacePage = (props) => {
 	return (
 		<ContentWrapper>
 			<HStack alignItems="center">
-				<Box width="50%">
+				<Box width="50%" as={HStack} display="flex" alignItems="flex-end">
 					<Heading as="h4" size="lg">
 						{workspaceData?.identifierEmoji?.emoji}
 						{workspaceData?.name}
 					</Heading>
+					<Text color="gray" fontSize="sm">
+						{workspaceData?.users?.length || 1} User
+						{workspaceData?.users?.length > 1 ? "(s)" : ""}
+					</Text>
 				</Box>
 				<Box width="50%" textAlign="right">
 					{workspaceData?.admins?.includes(user?.uid) && (
@@ -77,9 +83,9 @@ const WorkspacePage = (props) => {
 							<Button
 								colorScheme="teal"
 								variant="solid"
-								leftIcon={<BiUserPlus size="1.25rem" />}
+								leftIcon={<FiUsers size="1.25rem" />}
 							>
-								Add User
+								Users
 							</Button>
 							<IconButton
 								variant="ghost"
