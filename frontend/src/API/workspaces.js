@@ -162,3 +162,38 @@ export const removeUserFromWorkspace = async (
 		return callback(err.message);
 	}
 };
+
+export const removeWorkspace = async (workspaceId, callback) => {
+	try {
+		const batch = db.batch();
+		const workspaceRef = db.collection("workspaces").doc(workspaceId);
+		const workspaceData = (await workspaceRef.get()).data();
+
+		const users = workspaceData.users || [];
+		const createdBy = workspaceData.createdBy;
+
+		batch.delete(workspaceRef);
+		const workspaceDocuments = (
+			await db
+				.collection("documents")
+				.where("workspace", "==", workspaceId)
+				.get()
+		).docs;
+		for (const workspaceDocument of workspaceDocuments)
+			batch.delete(workspaceDocument.ref);
+		for (const userId of users)
+			batch.update(db.collection("users").doc(userId), {
+				nWorkspaces: firestore.FieldValue.increment(-1),
+				updatedAt: firestore.FieldValue.serverTimestamp(),
+			});
+		batch.update(db.collection("users").doc(createdBy), {
+			nWorkspacesCreated: firestore.FieldValue.increment(-1),
+			updatedAt: firestore.FieldValue.serverTimestamp(),
+		});
+		await batch.commit();
+		return callback(null);
+	} catch (err) {
+		console.log(err);
+		return callback(err.message);
+	}
+};
