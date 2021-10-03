@@ -197,3 +197,22 @@ export const removeWorkspace = async (workspaceId, callback) => {
 		return callback(err.message);
 	}
 };
+
+export const getWorkspaceUsers = async (workspaceId, callback) => {
+	try {
+		const workspaceData = (
+			await db.collection("workspaces").doc(workspaceId).get()
+		).data();
+
+		const userIds = workspaceData?.users || [];
+
+		const users = (
+			await db.collection("users").where("uid", "in", userIds).get()
+		).docs.map((doc) => ({ ...doc.data(), id: doc.id, uid: doc.id }));
+
+		return callback(null, users);
+	} catch (err) {
+		console.log(err);
+		return callback(err.message);
+	}
+};
