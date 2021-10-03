@@ -150,6 +150,7 @@ const WorkspacePage = (props) => {
 				isOpen={isUserListModalOpen}
 				onClose={closeUserListModal}
 				userList={userList}
+				isLoading={isLoadingUserList}
 			/>
 		</ContentWrapper>
 	);
