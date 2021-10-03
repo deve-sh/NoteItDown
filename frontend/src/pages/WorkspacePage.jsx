@@ -26,6 +26,7 @@ import toasts from "helpers/toasts";
 
 import ContentWrapper from "Wrappers/ContentWrapper";
 import NoneFound from "components/NoneFound";
+import UserListModal from "components/Workspaces/UserListModal";
 
 const WorkspacePage = (props) => {
 	const history = useHistory();
@@ -49,7 +50,7 @@ const WorkspacePage = (props) => {
 
 	// For user list.
 	const {
-		isOpen: userListModalOpen,
+		isOpen: isUserListModalOpen,
 		onOpen: openUserListModalUI,
 		onClose: closeUserListModal,
 	} = useDisclosure();
@@ -82,7 +83,6 @@ const WorkspacePage = (props) => {
 				setLoadingUserList(false);
 				if (err) return toasts.generateError(err);
 				setUserList(users);
-				console.log(users);
 			});
 		}
 	};
@@ -146,6 +146,11 @@ const WorkspacePage = (props) => {
 					</Link>
 				</NoneFound>
 			)}
+			<UserListModal
+				isOpen={isUserListModalOpen}
+				onClose={closeUserListModal}
+				userList={userList}
+			/>
 		</ContentWrapper>
 	);
 };

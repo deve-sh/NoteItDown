@@ -24,7 +24,7 @@ const StyledLoaderSkeleton = styled(Skeleton)`
 const FullPageLoader = ({ type = "loader" }) => (
 	<FullPageLoaderContainer>
 		{type === "loader" ? (
-			<Spinner size="xl" color="green.500" />
+			<Spinner size="xl" thickness="4px" color="green.500" />
 		) : (
 			<StyledLoaderSkeleton />
 		)}
