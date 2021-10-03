@@ -30,7 +30,6 @@ const lazyLoadPageGenerator = (importedPath) =>
 
 const HomePage = lazyLoadPageGenerator(import("pages"));
 const WorkSpaces = lazyLoadPageGenerator(import("pages/WorkSpaces"));
-const Documents = lazyLoadPageGenerator(import("pages/Documents"));
 const UserProfile = lazyLoadPageGenerator(import("pages/Profile"));
 const Login = lazyLoadPageGenerator(import("pages/Login"));
 const WorkspacePage = lazyLoadPageGenerator(import("pages/WorkspacePage"));
@@ -119,7 +118,6 @@ function App() {
 							path="/editor/:mode/:assetId"
 							component={EditorPage}
 						/>
-						<ProtectedRoute path="/documents" component={Documents} />
 						<ProtectedRoute path="/document/:documentId" component={() => ""} />
 					</Switch>
 				</AppContentContainer>
