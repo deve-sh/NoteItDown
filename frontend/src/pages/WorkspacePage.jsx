@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link, Redirect, useHistory } from "react-router-dom";
 import {
 	HStack,
 	Box,
@@ -17,6 +17,7 @@ import { IoTrash } from "react-icons/io5";
 import useFirestore from "hooks/useFirestore";
 import useStore from "hooks/useStore";
 import { getDocumentsFromWorkspace } from "API/documents";
+import { removeWorkspace } from "API/workspaces";
 
 import toasts from "helpers/toasts";
 
@@ -24,6 +25,8 @@ import ContentWrapper from "Wrappers/ContentWrapper";
 import NoneFound from "components/NoneFound";
 
 const WorkspacePage = (props) => {
+	const history = useHistory();
+
 	const user = useStore((state) => state.user);
 	const setLoading = useStore((store) => store.setLoading);
 
@@ -48,6 +51,15 @@ const WorkspacePage = (props) => {
 		});
 	}, [workspaceId]);
 
+	const deleteWorkspace = () => {
+		setLoading(true);
+		removeWorkspace(workspaceId, (err) => {
+			setLoading(false);
+			if (err) return toasts.generateError(err);
+			history.push("/workspaces");
+		});
+	};
+
 	if (!isLoading && (error || !workspaceData)) return <Redirect to="/" />;
 	return (
 		<ContentWrapper>
@@ -68,7 +80,11 @@ const WorkspacePage = (props) => {
 							>
 								Add User
 							</Button>
-							<IconButton variant="ghost" colorScheme="red">
+							<IconButton
+								variant="ghost"
+								colorScheme="red"
+								onClick={deleteWorkspace}
+							>
 								<IoTrash />
 							</IconButton>
 						</ButtonGroup>
