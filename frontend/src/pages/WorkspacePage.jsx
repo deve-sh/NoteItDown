@@ -10,6 +10,7 @@ import {
 	List,
 	ListItem,
 	Text,
+	useDisclosure,
 } from "@chakra-ui/react";
 
 import { BiPlus } from "react-icons/bi";
@@ -19,7 +20,7 @@ import { IoTrash } from "react-icons/io5";
 import useFirestore from "hooks/useFirestore";
 import useStore from "hooks/useStore";
 import { getDocumentsFromWorkspace } from "API/documents";
-import { removeWorkspace } from "API/workspaces";
+import { getWorkspaceUsers, removeWorkspace } from "API/workspaces";
 
 import toasts from "helpers/toasts";
 
@@ -46,6 +47,15 @@ const WorkspacePage = (props) => {
 
 	const [workspaceDocuments, setWorkspaceDocuments] = useState([]);
 
+	// For user list.
+	const {
+		isOpen: userListModalOpen,
+		onOpen: openUserListModalUI,
+		onClose: closeUserListModal,
+	} = useDisclosure();
+	const [userList, setUserList] = useState(null);
+	const [isLoadingUserList, setLoadingUserList] = useState(false);
+
 	useEffect(() => {
 		getDocumentsFromWorkspace(workspaceId, 1, (err, documents) => {
 			if (err) return toasts.generateError(err);
@@ -61,6 +71,20 @@ const WorkspacePage = (props) => {
 			if (err) return toasts.generateError(err);
 			history.push("/workspaces");
 		});
+	};
+
+	const openUserListModal = async () => {
+		openUserListModalUI();
+		if (!userList) {
+			// Fetch user list
+			setLoadingUserList(true);
+			getWorkspaceUsers(workspaceId, (err, users) => {
+				setLoadingUserList(false);
+				if (err) return toasts.generateError(err);
+				setUserList(users);
+				console.log(users);
+			});
+		}
 	};
 
 	if (!isLoading && (error || !workspaceData)) return <Redirect to="/" />;
@@ -84,6 +108,7 @@ const WorkspacePage = (props) => {
 								colorScheme="teal"
 								variant="solid"
 								leftIcon={<FiUsers size="1.25rem" />}
+								onClick={openUserListModal}
 							>
 								Users
 							</Button>

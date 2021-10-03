@@ -213,9 +213,10 @@ export const getWorkspaceUsers = async (workspaceId, callback) => {
 
 		if (userIsPartOfWorkspace) userIds.splice(userIdIndex, 1);
 
-		users = (
-			await db.collection("users").where("uid", "in", userIds).get()
-		).docs.map((doc) => ({ ...doc.data(), id: doc.id, uid: doc.id }));
+		if (userIds.length)
+			users = (
+				await db.collection("users").where("uid", "in", userIds).get()
+			).docs.map((doc) => ({ ...doc.data(), id: doc.id, uid: doc.id }));
 
 		if (userIsPartOfWorkspace) users.unshift(store.getState().user);
 
