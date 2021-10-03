@@ -143,6 +143,8 @@ export const removeUserFromWorkspace = async (
 		const userRef = db.collection("users").doc(userToRemove);
 
 		const workspace = (await workspaceRef.get()).data();
+		if (workspace?.createdBy === userToRemove)
+			return callback("Cannot remove creator from workspace.");
 		if (!workspace.users?.includes(userToRemove))
 			return callback("User not part of workspace.");
 		const workspaceUpdates = {
