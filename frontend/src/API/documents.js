@@ -76,10 +76,7 @@ export const updateDocument = async (
 			lastUpdatedBy: auth.currentUser.uid,
 		});
 
-		return callback(
-			null
-			//(await documentRef.get()).data()	// Revalidate using the useFirestore hook
-		);
+		return callback(null, (await documentRef.get()).data());
 	} catch (err) {
 		console.log(err);
 		return callback(err.message);

@@ -30,7 +30,7 @@ const EditorPage = (props) => {
 		data: documentData,
 		error: documentError,
 		isLoading: documentLoading,
-		revalidate: revalidateDocumentData,
+		mutate: setDocumentData,
 	} = useFirestore(documentId ? `documents/${documentId}` : null);
 
 	useEffect(() => {
@@ -54,22 +54,24 @@ const EditorPage = (props) => {
 			time: new Date().getTime(),
 		};
 
-	const saveDocument = async () => {
-		const editorData = await getEditorContent();
+	const saveDocument = async (title, identifierEmoji) => {
+		const editorData = documentData?.editorData
+			? documentData?.editorData
+			: await getEditorContent();
 		if (mode === "new") {
 			addDocumentToWorkspace(
 				workspaceId,
-				{ editorData },
+				{ editorData, level: 1, title, identifierEmoji },
 				(err, documentCreated) => {
 					if (err) return toasts.generateError(err);
 					window.location = `/editor/document/${documentCreated.id}`; // Take the user to the dedicated document page.
 				}
 			);
 		} else {
-			const updates = { editorData };
-			updateDocument(documentId, updates, (err) => {
+			const updates = { editorData, title, identifierEmoji };
+			updateDocument(documentId, updates, (err, updatedDocData) => {
 				if (err) return toasts.generateError(err);
-				revalidateDocumentData();
+				setDocumentData(updatedDocData);
 			});
 		}
 	};

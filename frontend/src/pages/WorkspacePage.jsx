@@ -11,6 +11,7 @@ import {
 	ListItem,
 	Text,
 	useDisclosure,
+	Container,
 } from "@chakra-ui/react";
 
 import { BiPlus } from "react-icons/bi";
@@ -165,29 +166,35 @@ const WorkspacePage = (props) => {
 					)}
 				</Box>
 			</HStack>
-			{workspaceDocuments?.length ? (
-				<List spacing="3">
-					{workspaceDocuments.map((doc) => (
-						<ListItem key={doc.id}>
-							<Link to={`editor/document/${doc.id}`}>
-								{doc.identifierEmoji?.emoji || "📄"} {doc.title}
-							</Link>
-						</ListItem>
-					))}
-				</List>
-			) : (
-				<NoneFound label="No Documents Added So far.">
-					<Link to={`/editor/new/${workspaceId}`}>
-						<Button
-							colorScheme="blue"
-							variant="solid"
-							leftIcon={<BiPlus size="1.25rem" />}
-						>
-							Add New Document
-						</Button>
-					</Link>
-				</NoneFound>
-			)}
+			<Container centerContent>
+				{workspaceDocuments?.length ? (
+					<List
+						spacing="3"
+						textAlign="left"
+						minWidth="650px"
+						marginTop="2.5rem"
+					>
+						{workspaceDocuments.map((doc) => (
+							<ListItem key={doc.id}>
+								<Link to={`/editor/document/${doc.id}`}>
+									{doc.identifierEmoji?.emoji || "📄"} {doc.title}
+								</Link>
+							</ListItem>
+						))}
+					</List>
+				) : (
+					<NoneFound label="No Documents Added So far." />
+				)}
+				<Link style={{ marginTop: "1rem" }} to={`/editor/new/${workspaceId}`}>
+					<Button
+						colorScheme="blue"
+						variant="solid"
+						leftIcon={<BiPlus size="1.25rem" />}
+					>
+						Add New Document
+					</Button>
+				</Link>
+			</Container>
 			<UserListModal
 				isOpen={isUserListModalOpen}
 				onClose={closeUserListModal}

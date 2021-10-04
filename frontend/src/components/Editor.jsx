@@ -176,7 +176,13 @@ const Editor = ({
 					/>
 				</Box>
 				<Box flex="1">
-					<IconButton variant="ghost" onClick={onSave} colorScheme="blue">
+					<IconButton
+						variant="ghost"
+						onClick={() =>
+							onSave(documentTitle, JSON.parse(JSON.stringify(identifierEmoji)))
+						}
+						colorScheme="blue"
+					>
 						<MdSave size="1.25rem" />
 					</IconButton>
 				</Box>
