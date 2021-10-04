@@ -35,6 +35,8 @@ import { uploadImage } from "API/editor";
 const EditorContainerDiv = styled.div``;
 
 const MainInputsStack = styled(HStack)`
+	max-width: 650px;
+	margin: 0 auto;
 	margin-bottom: var(--standard-spacing);
 `;
 
