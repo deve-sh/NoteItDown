@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from "react";
 import styled from "@emotion/styled";
+import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 import {
@@ -15,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 import EmojiPicker from "emoji-picker-react";
 import { MdSave } from "react-icons/md";
+import { BiArrowBack } from "react-icons/bi";
 
 // Editor
 import EditorJS from "@editorjs/editorjs";
@@ -48,6 +50,7 @@ const Editor = ({
 	prefilledData = null,
 	onReady = () => null,
 	onSave = () => null,
+	workspaceId = "",
 }) => {
 	const editor = useRef(null);
 
@@ -152,18 +155,25 @@ const Editor = ({
 				data: prefilledData,
 			});
 
-		return editor.current?.destroy;
+		return readOnly ? () => null : editor.current?.destroy;
 	}, [prefilledData, readOnly]);
 
 	return (
 		<div class="editor-wrapper">
 			<MainInputsStack position="static" alignItems="center">
+				<Box>
+					<Link to={`/workspace/${workspaceId}`}>
+						<IconButton variant="ghost" colorScheme="blue">
+							<BiArrowBack size="1.5rem" />
+						</IconButton>
+					</Link>
+				</Box>
 				{readOnly ? (
 					<>
 						<Helmet>
 							<title>{documentTitle}</title>
 						</Helmet>
-						<Heading as="h2">
+						<Heading as="h2" margin="0" padding="0">
 							{identifierEmoji?.emoji || "📄"} {documentTitle}
 						</Heading>
 					</>
