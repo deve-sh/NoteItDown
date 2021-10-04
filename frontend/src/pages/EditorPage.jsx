@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Redirect, useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 import Editor from "components/Editor";
 import ContentWrapper from "Wrappers/ContentWrapper";
@@ -11,7 +11,6 @@ import useFirestore from "hooks/useFirestore";
 import useStore from "hooks/useStore";
 
 const EditorPage = (props) => {
-	const history = useHistory();
 	const editor = useRef(null);
 
 	const setLoading = useStore((store) => store.setLoading);
@@ -63,7 +62,7 @@ const EditorPage = (props) => {
 				{ editorData },
 				(err, documentCreated) => {
 					if (err) return toasts.generateError(err);
-					history.push(`/editor/document/${documentCreated.id}`); // Take the user to the dedicated document page.
+					window.location = `/editor/document/${documentCreated.id}`; // Take the user to the dedicated document page.
 				}
 			);
 		} else {
