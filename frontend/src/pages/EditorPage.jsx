@@ -76,12 +76,16 @@ const EditorPage = (props) => {
 
 	return (
 		<ContentWrapper>
-			<Editor
-				onReady={(editorInstance) => (editor.current = editorInstance)}
-				readOnly={mode !== "new"}
-				prefilledData={documentData?.editorData}
-				onSave={saveDocument}
-			/>
+			{mode !== "new" && !documentData?.editorData ? (
+				<></>
+			) : (
+				<Editor
+					onReady={(editorInstance) => (editor.current = editorInstance)}
+					readOnly={mode !== "new"}
+					prefilledData={documentData?.editorData}
+					onSave={saveDocument}
+				/>
+			)}
 		</ContentWrapper>
 	);
 };
