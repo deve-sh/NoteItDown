@@ -21,6 +21,7 @@ import useFirestore from "hooks/useFirestore";
 import useStore from "hooks/useStore";
 import { getDocumentsFromWorkspace } from "API/documents";
 import {
+	addUserToWorkspace,
 	getWorkspaceUsers,
 	removeUserFromWorkspace,
 	removeWorkspace,
@@ -44,6 +45,7 @@ const WorkspacePage = (props) => {
 		data: workspaceData,
 		error,
 		isLoading,
+		mutate: setWorkspaceData,
 	} = useFirestore(workspaceId ? `workspaces/${workspaceId}` : null);
 
 	useEffect(() => {
@@ -91,6 +93,19 @@ const WorkspacePage = (props) => {
 		}
 	};
 
+	const addNewUser = (email) => {
+		addUserToWorkspace(
+			workspaceId,
+			{ email, userId: "", isAdmin: false },
+			(err, updatedWorkspaceData, addedUser) => {
+				if (err) return toasts.generateError(err);
+				setUserList((users) => [...users, addedUser]);
+				setWorkspaceData(updatedWorkspaceData);
+				toasts.generateSuccess("Added user successfully.");
+			}
+		);
+	};
+
 	const removeUser = (userIdToRemove) => {
 		if (
 			!window.confirm(
@@ -99,13 +114,18 @@ const WorkspacePage = (props) => {
 		)
 			return;
 		if (userList?.length) {
-			removeUserFromWorkspace(workspaceId, userIdToRemove, (err) => {
-				if (err) return toasts.generateError(err);
-				setUserList((list) =>
-					(list || []).filter((user) => user.id !== userIdToRemove)
-				);
-				toasts.generateSuccess("Removed user successfully.");
-			});
+			removeUserFromWorkspace(
+				workspaceId,
+				userIdToRemove,
+				(err, updatedWorkspaceData) => {
+					if (err) return toasts.generateError(err);
+					setUserList((list) =>
+						(list || []).filter((user) => user.id !== userIdToRemove)
+					);
+					setWorkspaceData(updatedWorkspaceData);
+					toasts.generateSuccess("Removed user successfully.");
+				}
+			);
 		}
 	};
 
@@ -175,6 +195,7 @@ const WorkspacePage = (props) => {
 				isLoading={isLoadingUserList}
 				showOptions={workspaceData?.admins?.includes(user?.uid)}
 				onUserRemoveClick={removeUser}
+				addNewUser={addNewUser}
 			/>
 		</ContentWrapper>
 	);
