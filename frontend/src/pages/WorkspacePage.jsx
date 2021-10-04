@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, Redirect, useHistory } from "react-router-dom";
+import styled from "@emotion/styled";
 import {
 	HStack,
 	Box,
@@ -33,6 +34,19 @@ import toasts from "helpers/toasts";
 import ContentWrapper from "Wrappers/ContentWrapper";
 import NoneFound from "components/NoneFound";
 import UserListModal from "components/Workspaces/UserListModal";
+
+const WorkspaceContentWrapper = styled(ContentWrapper)`
+	max-width: 850px;
+`;
+
+const DocumentLink = styled(Link)`
+	padding: calc(0.5 * var(--standard-spacing));
+	width: 100%;
+	display: block;
+	&:hover {
+		background: var(--backgroundgrey);
+	}
+`;
 
 const WorkspacePage = (props) => {
 	const history = useHistory();
@@ -132,7 +146,7 @@ const WorkspacePage = (props) => {
 
 	if (!isLoading && (error || !workspaceData)) return <Redirect to="/" />;
 	return (
-		<ContentWrapper>
+		<WorkspaceContentWrapper>
 			<HStack alignItems="center">
 				<Box width="50%" as={HStack} display="flex" alignItems="flex-end">
 					<Heading as="h4" size="lg">
@@ -176,9 +190,11 @@ const WorkspacePage = (props) => {
 					>
 						{workspaceDocuments.map((doc) => (
 							<ListItem key={doc.id}>
-								<Link to={`/editor/document/${doc.id}`}>
-									{doc.identifierEmoji?.emoji || "📄"} {doc.title}
-								</Link>
+								<DocumentLink to={`/editor/document/${doc.id}`} target="_blank">
+									<Text fontWeight="500">
+										{doc.identifierEmoji?.emoji || "📄"} {doc.title}
+									</Text>
+								</DocumentLink>
 							</ListItem>
 						))}
 					</List>
@@ -204,7 +220,7 @@ const WorkspacePage = (props) => {
 				onUserRemoveClick={removeUser}
 				addNewUser={addNewUser}
 			/>
-		</ContentWrapper>
+		</WorkspaceContentWrapper>
 	);
 };
 
