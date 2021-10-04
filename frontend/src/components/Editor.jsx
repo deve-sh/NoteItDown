@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from "react";
 import styled from "@emotion/styled";
+import { Helmet } from "react-helmet";
 
 import {
 	Box,
@@ -8,6 +9,7 @@ import {
 	HStack,
 	IconButton,
 	Menu,
+	Heading,
 	MenuButton,
 	MenuList,
 } from "@chakra-ui/react";
@@ -156,38 +158,54 @@ const Editor = ({
 	return (
 		<div class="editor-wrapper">
 			<MainInputsStack position="static" alignItems="center">
-				<Box>
-					<Menu>
-						<MenuButton as={IconButton} aria-label="Emoji">
-							{identifierEmoji?.emoji || "📄"}
-						</MenuButton>
-						<MenuList border="none" zIndex="1000">
-							<EmojiPicker onEmojiClick={onEmojiSelect} />
-						</MenuList>
-					</Menu>
-				</Box>
-				<Box flex="9">
-					<Input
-						label="Document Title"
-						id="title"
-						value={documentTitle}
-						onChange={(e) => setDocumentTitle(e.target.value)}
-						placeholder="Document Title"
-						variant="unstyled"
-						required
-					/>
-				</Box>
-				<Box flex="1">
-					<IconButton
-						variant="ghost"
-						onClick={() =>
-							onSave(documentTitle, JSON.parse(JSON.stringify(identifierEmoji)))
-						}
-						colorScheme="blue"
-					>
-						<MdSave size="1.25rem" />
-					</IconButton>
-				</Box>
+				{readOnly ? (
+					<>
+						<Helmet>
+							<title>{documentTitle}</title>
+						</Helmet>
+						<Heading as="h2">
+							{identifierEmoji?.emoji || "📄"} {documentTitle}
+						</Heading>
+					</>
+				) : (
+					<>
+						<Box>
+							<Menu>
+								<MenuButton as={IconButton} aria-label="Emoji">
+									{identifierEmoji?.emoji || "📄"}
+								</MenuButton>
+								<MenuList border="none" zIndex="1000">
+									<EmojiPicker onEmojiClick={onEmojiSelect} />
+								</MenuList>
+							</Menu>
+						</Box>
+						<Box flex="9">
+							<Input
+								label="Document Title"
+								id="title"
+								value={documentTitle}
+								onChange={(e) => setDocumentTitle(e.target.value)}
+								placeholder="Document Title"
+								variant="unstyled"
+								required
+							/>
+						</Box>
+						<Box flex="1">
+							<IconButton
+								variant="ghost"
+								onClick={() =>
+									onSave(
+										documentTitle,
+										JSON.parse(JSON.stringify(identifierEmoji))
+									)
+								}
+								colorScheme="blue"
+							>
+								<MdSave size="1.25rem" />
+							</IconButton>
+						</Box>
+					</>
+				)}
 			</MainInputsStack>
 			<EditorContainerDiv id="editorjs" />
 		</div>
