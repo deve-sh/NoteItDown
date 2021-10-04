@@ -87,6 +87,7 @@ const EditorPage = (props) => {
 					prefilledData={documentData?.editorData}
 					onSave={saveDocument}
 					documentData={documentData}
+					workspaceId={workspaceId || documentData?.workspace}
 				/>
 			)}
 		</ContentWrapper>
