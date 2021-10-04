@@ -147,7 +147,6 @@ const Editor = ({
 					},
 				},
 				onReady: () => onReady(editor.current),
-				onChange: () => console.log(editor.current?.blocks),
 				data: prefilledData,
 			});
 
