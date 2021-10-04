@@ -92,12 +92,24 @@ export const updateWorkspace = async (
 
 export const addUserToWorkspace = async (
 	workspaceId,
-	options = { userId: "", isAdmin: false },
+	options = { email: "", userId: "", isAdmin: false },
 	callback
 ) => {
 	try {
 		const userId = auth.currentUser?.uid;
-		if (!options?.userId || userId === options?.userId) return;
+		if (
+			(!options?.email && !options?.userId) ||
+			userId === options?.userId ||
+			userId === options?.email
+		)
+			return;
+
+		const user = (
+			await db.collection("users").where("email", "==", options.email).get()
+		).docs[0]?.data?.();
+
+		if (!user) return callback("User not found.");
+		options.userId = user.uid;
 
 		const batch = db.batch();
 		const workspaceRef = db.collection("workspaces").doc(workspaceId);
@@ -122,7 +134,7 @@ export const addUserToWorkspace = async (
 			nWorkspaces: firestore.FieldValue.increment(1),
 		});
 		await batch.commit();
-		return callback(null, (await workspaceRef.get()).data());
+		return callback(null, (await workspaceRef.get()).data(), user);
 	} catch (err) {
 		console.log(err);
 		return callback(err.message);
