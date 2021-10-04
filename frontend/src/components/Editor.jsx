@@ -42,14 +42,17 @@ const MainInputsStack = styled(HStack)`
 
 const Editor = ({
 	readOnly = false,
-	prefilledData = undefined,
+	documentData = null,
+	prefilledData = null,
 	onReady = () => null,
 	onSave = () => null,
 }) => {
 	const editor = useRef(null);
 
-	const [documentTitle, setDocumentTitle] = useState("");
-	const [identifierEmoji, setIdentifierEmoji] = useState({});
+	const [documentTitle, setDocumentTitle] = useState(documentData?.title || "");
+	const [identifierEmoji, setIdentifierEmoji] = useState(
+		documentData?.identifierEmoji || {}
+	);
 
 	const onEmojiSelect = (_, emojiObject) => {
 		setIdentifierEmoji(emojiObject);

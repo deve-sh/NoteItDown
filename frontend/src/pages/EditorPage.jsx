@@ -86,6 +86,7 @@ const EditorPage = (props) => {
 					readOnly={mode !== "new"}
 					prefilledData={documentData?.editorData}
 					onSave={saveDocument}
+					documentData={documentData}
 				/>
 			)}
 		</ContentWrapper>
