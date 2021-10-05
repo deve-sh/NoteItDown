@@ -96,6 +96,7 @@ export const getRecentDocumentsFromWorkspaces = async (
 					.collection("documents")
 					.where("workspace", "in", workspaces)
 					.orderBy("updatedAt", "desc")
+					.limit(5)
 					.get()
 			).docs.map((doc) => ({
 				...doc.data(),

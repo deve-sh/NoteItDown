@@ -9,7 +9,9 @@ const GlobalStyles = ({ darkMode = false }) => (
 				--darkgrey: #313131;
 
 				--bordergrey: #cfcfcf;
-				--backgroundgrey: #efefef;
+				--backgroundgrey: ${!darkMode
+					? "#efefef"
+					: "var(--chakra-colors-gray-600)"};
 
 				--primary: #009688;
 				--secondary: #00695f;
