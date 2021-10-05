@@ -14,7 +14,7 @@ import {
 	MenuList,
 } from "@chakra-ui/react";
 import EmojiPicker from "emoji-picker-react";
-import { MdSave } from "react-icons/md";
+import { MdEdit, MdSave } from "react-icons/md";
 import { BiArrowBack } from "react-icons/bi";
 
 // Editor
@@ -50,6 +50,8 @@ const Editor = ({
 	onReady = () => null,
 	onSave = () => null,
 	workspaceId = "",
+	toggleEditor = () => null,
+	canEditDocument = false,
 }) => {
 	const editor = useRef(null);
 
@@ -172,7 +174,17 @@ const Editor = ({
 						<Heading as="h2" margin="0" padding="0">
 							{identifierEmoji?.emoji || "📄"} {documentTitle}
 						</Heading>
-						<Box></Box>
+						{canEditDocument && (
+							<Box>
+								<IconButton
+									variant="ghost"
+									onClick={toggleEditor}
+									colorScheme="blue"
+								>
+									<MdEdit size="1.25rem" />
+								</IconButton>
+							</Box>
+						)}
 					</>
 				) : (
 					<>

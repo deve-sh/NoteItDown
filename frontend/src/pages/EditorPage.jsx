@@ -15,6 +15,7 @@ import useToggle from "hooks/useToggle";
 const EditorPage = (props) => {
 	const editor = useRef(null);
 
+	const user = useStore((store) => store.user);
 	const setLoading = useStore((store) => store.setLoading);
 
 	let workspaceId, documentId;
@@ -96,6 +97,10 @@ const EditorPage = (props) => {
 					onSave={saveDocument}
 					documentData={documentData}
 					workspaceId={workspaceId || documentData?.workspace}
+					canEditDocument={
+						workspaceData?.admins?.includes(user.uid) ||
+						documentData?.createdBy === user.uid
+					}
 				/>
 			)}
 		</ContentWrapper>
