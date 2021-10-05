@@ -118,7 +118,7 @@ export const addUserToWorkspace = async (
 		const workspace = (await workspaceRef.get()).data();
 		if (workspace.users?.includes(options.userId))
 			return callback("User already part of workspace.");
-		else if(workspace?.users?.length >= 5)
+		else if (workspace?.users?.length >= 5)
 			return callback("Max Number Of Users per workspace reached.");
 
 		const workspaceUpdates = {
@@ -134,6 +134,7 @@ export const addUserToWorkspace = async (
 		batch.update(userRef, {
 			updatedAt: serverTimestamp(),
 			nWorkspaces: firestore.FieldValue.increment(1),
+			workspaces: firestore.FieldValue.arrayUnion(workspaceId),
 		});
 		await batch.commit();
 		return callback(null, (await workspaceRef.get()).data(), user);
@@ -171,6 +172,7 @@ export const removeUserFromWorkspace = async (
 		batch.update(userRef, {
 			updatedAt: serverTimestamp(),
 			nWorkspaces: firestore.FieldValue.increment(1),
+			workspaces: firestore.FieldValue.arrayRemove(workspaceId),
 		});
 		await batch.commit();
 		return callback(null, (await workspaceRef.get()).data());
