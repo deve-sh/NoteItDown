@@ -53,7 +53,7 @@ const RecentDocuments = () => {
 	return (
 		<DocumentsListWrapper>
 			<Helmet>
-				<title>NoteItDown - Recent Documents</title>
+				<title>Note It Down - Recent Documents</title>
 			</Helmet>
 			{recentDocuments?.length ? (
 				<List spacing="3" textAlign="left" minWidth="650px" marginTop="2.5rem">

@@ -84,7 +84,7 @@ const EditorPage = (props) => {
 	return (
 		<ContentWrapper>
 			<Helmet>
-				<title>{documentData?.title || "NoteItDown - Editor"}</title>
+				<title>{documentData?.title || "Note It Down - Editor"}</title>
 			</Helmet>
 			{mode !== "new" && !documentData?.editorData ? (
 				<></>

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, Redirect, useHistory } from "react-router-dom";
+import { Helmet } from "react-helmet";
+
 import styled from "@emotion/styled";
 import {
 	HStack,
@@ -147,6 +149,12 @@ const WorkspacePage = (props) => {
 	if (!isLoading && (error || !workspaceData)) return <Redirect to="/" />;
 	return (
 		<WorkspaceContentWrapper>
+			<Helmet>
+				<title>
+					Note It Down - {workspaceData?.identifierEmoji?.emoji || ""}
+					{workspaceData?.name || ""}
+				</title>
+			</Helmet>
 			<HStack alignItems="center">
 				<Box width="50%" as={HStack} display="flex" alignItems="flex-end">
 					<Heading as="h4" size="lg">
