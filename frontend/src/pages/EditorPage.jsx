@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Redirect } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 import Editor from "components/Editor";
 import ContentWrapper from "Wrappers/ContentWrapper";
@@ -9,6 +10,7 @@ import toasts from "helpers/toasts";
 
 import useFirestore from "hooks/useFirestore";
 import useStore from "hooks/useStore";
+import useToggle from "hooks/useToggle";
 
 const EditorPage = (props) => {
 	const editor = useRef(null);
@@ -36,6 +38,8 @@ const EditorPage = (props) => {
 	useEffect(() => {
 		return () => setLoading(false);
 	}, [setLoading]);
+
+	const [isEditable, toggleEditor] = useToggle(false);
 
 	useEffect(() => {
 		if ((workspaceId && workspaceLoading) || (documentId && documentLoading))
@@ -78,12 +82,16 @@ const EditorPage = (props) => {
 
 	return (
 		<ContentWrapper>
+			<Helmet>
+				<title>{documentData?.title || "NoteItDown - Editor"}</title>
+			</Helmet>
 			{mode !== "new" && !documentData?.editorData ? (
 				<></>
 			) : (
 				<Editor
 					onReady={(editorInstance) => (editor.current = editorInstance)}
-					readOnly={mode !== "new"}
+					readOnly={mode !== "new" && !isEditable}
+					toggleEditor={toggleEditor}
 					prefilledData={documentData?.editorData}
 					onSave={saveDocument}
 					documentData={documentData}

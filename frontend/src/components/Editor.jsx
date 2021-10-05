@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
-import { Helmet } from "react-helmet";
 
 import {
 	Box,
@@ -170,12 +169,10 @@ const Editor = ({
 				</Box>
 				{readOnly ? (
 					<>
-						<Helmet>
-							<title>{documentTitle}</title>
-						</Helmet>
 						<Heading as="h2" margin="0" padding="0">
 							{identifierEmoji?.emoji || "📄"} {documentTitle}
 						</Heading>
+						<Box></Box>
 					</>
 				) : (
 					<>
