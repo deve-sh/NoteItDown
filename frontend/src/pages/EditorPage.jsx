@@ -62,7 +62,7 @@ const EditorPage = (props) => {
 	const saveDocument = async (title, identifierEmoji) => {
 		const editorData =
 			isEditable || !documentData?.editorData
-				? await getEditorContent()
+				? JSON.stringify(await getEditorContent())
 				: documentData?.editorData || {};
 		if (mode === "new") {
 			addDocumentToWorkspace(
@@ -78,7 +78,7 @@ const EditorPage = (props) => {
 			updateDocument(documentId, updates, (err, updatedDocData) => {
 				if (err) return toasts.generateError(err);
 				setDocumentData(updatedDocData);
-				toggleEditor();	// Close editor.
+				toggleEditor(); // Close editor.
 			});
 		}
 	};
@@ -95,7 +95,7 @@ const EditorPage = (props) => {
 					onReady={(editorInstance) => (editor.current = editorInstance)}
 					readOnly={mode !== "new" && !isEditable}
 					toggleEditor={toggleEditor}
-					prefilledData={documentData?.editorData}
+					prefilledData={JSON.parse(documentData?.editorData)}
 					onSave={saveDocument}
 					documentData={documentData}
 					workspaceId={workspaceId || documentData?.workspace}
