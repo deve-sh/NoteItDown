@@ -118,6 +118,8 @@ export const addUserToWorkspace = async (
 		const workspace = (await workspaceRef.get()).data();
 		if (workspace.users?.includes(options.userId))
 			return callback("User already part of workspace.");
+		else if(workspace?.users?.length >= 5)
+			return callback("Max Number Of Users per workspace reached.");
 
 		const workspaceUpdates = {
 			users: firestore.FieldValue.arrayUnion(options?.userId),
