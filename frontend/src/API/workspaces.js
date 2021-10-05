@@ -56,6 +56,7 @@ export const createWorkspace = async (workspaceInputs, callback) => {
 				nWorkspaces: firestore.FieldValue.increment(1),
 				nWorkspacesCreated: firestore.FieldValue.increment(1),
 				updatedAt: serverTimestamp(),
+				workspces: firestore.FieldValue.arrayUnion(workspaceRef.id),
 			});
 			await batch.commit();
 			return callback(null, (await workspaceRef.get()).data());
@@ -204,6 +205,7 @@ export const removeWorkspace = async (workspaceId, callback) => {
 			batch.update(db.collection("users").doc(userId), {
 				nWorkspaces: firestore.FieldValue.increment(-1),
 				updatedAt: firestore.FieldValue.serverTimestamp(),
+				workspaces: firestore.FieldValue.arrayRemove(workspaceRef.id),
 			});
 		batch.update(db.collection("users").doc(createdBy), {
 			nWorkspacesCreated: firestore.FieldValue.increment(-1),
