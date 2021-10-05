@@ -82,3 +82,25 @@ export const updateDocument = async (
 		return callback(err.message);
 	}
 };
+
+export const getRecentDocumentsFromWorkspaces = async (workspaces = [], callback) => {
+	try {
+		if (!workspaces) return callback(null, []);
+		return callback(
+			null,
+			(
+				await db
+					.collection("documents")
+					.where("workspace", "in", workspaces)
+					.orderBy("updatedAt", "desc")
+					.get()
+			).docs.map((doc) => ({
+				...doc.data(),
+				id: doc.id,
+			}))
+		);
+	} catch (err) {
+		console.log(err);
+		return callback(err.message);
+	}
+};
