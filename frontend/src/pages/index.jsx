@@ -67,7 +67,14 @@ const Homepage = ({ loggedIn = false, openLoginModal = () => null }) => (
 					</Button>
 				</Link>
 			)}
-			<Button leftIcon={<GithubIcon size="1.25rem" />}>View On GitHub</Button>
+			<a
+				href={"https://github.com/deve-sh/NoteItDown"}
+				target="_blank"
+				rel="noopener noreferrer"
+				title="View On GitHub"
+			>
+				<Button leftIcon={<GithubIcon size="1.25rem" />}>View On GitHub</Button>
+			</a>
 		</ButtonGroup>
 	</HeroSection>
 );
