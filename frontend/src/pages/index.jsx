@@ -35,9 +35,9 @@ const Homepage = ({ loggedIn = false, openLoginModal = () => null }) => (
 			<title>Note It Down</title>
 		</Helmet>
 		<Image
-			style={{ maxHeight: "30vh" }}
+			style={{ maxHeight: "45vh" }}
 			objectFit="cover"
-			src="/homepage/heroimage.png"
+			src="/homepage/heroimage.svg"
 			alt="Team Note-Taking Workspace"
 		/>
 		<Heading as="h1" marginBottom="10px" marginTop="25px">
