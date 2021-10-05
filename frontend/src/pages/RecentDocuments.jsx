@@ -12,6 +12,7 @@ import useStore from "hooks/useStore";
 
 import ContentWrapper from "Wrappers/ContentWrapper";
 import NoneFound from "components/NoneFound";
+import { useRef } from "react/cjs/react.development";
 
 const DocumentsListWrapper = styled(ContentWrapper)`
 	max-width: 850px;
@@ -30,20 +31,24 @@ const RecentDocuments = () => {
 	const user = useStore((state) => state.user);
 	const setLoading = useStore((store) => store.setLoading);
 
+	const isFetching = useRef(false);
 	const [recentDocuments, setRecentDocuments] = useState([]);
 
 	useEffect(() => {
-		setLoading(true);
-		getRecentDocumentsFromWorkspaces(
-			user?.workspaces || [],
-			(err, documents) => {
-				setLoading(false);
-				if (err) return toasts.generateError(err);
-				console.log(documents);
-				return setRecentDocuments(documents);
-			}
-		);
-	}, [user]);
+		if (!isFetching.current) {
+			isFetching.current = true;
+			setLoading(true);
+			getRecentDocumentsFromWorkspaces(
+				user?.workspaces || [],
+				(err, documents) => {
+					isFetching.current = false;
+					setLoading(false);
+					if (err) return toasts.generateError(err);
+					return setRecentDocuments(documents);
+				}
+			);
+		}
+	}, []);
 
 	return (
 		<DocumentsListWrapper>

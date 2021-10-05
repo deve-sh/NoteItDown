@@ -64,7 +64,6 @@ function App() {
 					photoURL: user.photoURL,
 					isAnonymous: user.isAnonymous,
 				};
-				setUser(userInfo);
 				const userDetailsFromDB = await saveUserDetailsToDB(userInfo);
 				setUser({ ...userInfo, ...userDetailsFromDB });
 			}
