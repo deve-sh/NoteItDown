@@ -50,7 +50,7 @@ function App() {
 	} = useToggleableModal();
 
 	useEffect(() => {
-		auth.onAuthStateChanged((user) => {
+		auth.onAuthStateChanged(async (user) => {
 			if (!user) setUser(null);
 			else {
 				let userInfo = {
@@ -65,7 +65,8 @@ function App() {
 					isAnonymous: user.isAnonymous,
 				};
 				setUser(userInfo);
-				saveUserDetailsToDB(userInfo);
+				const userDetailsFromDB = await saveUserDetailsToDB(userInfo);
+				setUser({ ...userInfo, ...userDetailsFromDB });
 			}
 		});
 

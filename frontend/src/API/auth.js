@@ -50,7 +50,7 @@ export async function saveUserDetailsToDB(userDetails) {
 				updatedAt: serverTimestamp(),
 			});
 
-		return true;
+		return (await userRef.get()).data();
 	} catch (err) {
 		if (process.env.NODE_ENV === "development") console.log(err);
 		return false;
