@@ -83,9 +83,12 @@ export const updateDocument = async (
 	}
 };
 
-export const getRecentDocumentsFromWorkspaces = async (workspaces = [], callback) => {
+export const getRecentDocumentsFromWorkspaces = async (
+	workspaces = [],
+	callback
+) => {
 	try {
-		if (!workspaces) return callback(null, []);
+		if (!workspaces || !workspaces.length) return callback(null, []);
 		return callback(
 			null,
 			(
