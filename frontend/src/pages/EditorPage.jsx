@@ -60,9 +60,10 @@ const EditorPage = (props) => {
 		};
 
 	const saveDocument = async (title, identifierEmoji) => {
-		const editorData = documentData?.editorData
-			? documentData?.editorData
-			: await getEditorContent();
+		const editorData =
+			isEditable || !documentData?.editorData
+				? await getEditorContent()
+				: documentData?.editorData || {};
 		if (mode === "new") {
 			addDocumentToWorkspace(
 				workspaceId,
@@ -77,6 +78,7 @@ const EditorPage = (props) => {
 			updateDocument(documentId, updates, (err, updatedDocData) => {
 				if (err) return toasts.generateError(err);
 				setDocumentData(updatedDocData);
+				toggleEditor();	// Close editor.
 			});
 		}
 	};
