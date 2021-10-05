@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 import styled from "@emotion/styled";
 import { List, ListItem, Text } from "@chakra-ui/react";
@@ -46,6 +47,9 @@ const RecentDocuments = () => {
 
 	return (
 		<DocumentsListWrapper>
+			<Helmet>
+				<title>NoteItDown - Recent Documents</title>
+			</Helmet>
 			{recentDocuments?.length ? (
 				<List spacing="3" textAlign="left" minWidth="650px" marginTop="2.5rem">
 					{recentDocuments.map((doc) => (
