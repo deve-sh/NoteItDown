@@ -48,6 +48,8 @@ const EditorPage = (props) => {
 		else setLoading(false);
 	}, [workspaceId, documentId, workspaceLoading, documentLoading, setLoading]);
 
+	const printDocument = () => window.print();
+
 	if (workspaceId && !workspaceLoading && (workspaceError || !workspaceData))
 		return <Redirect to="/" />;
 	if (documentId && !documentLoading && (documentError || !documentData))
@@ -103,6 +105,7 @@ const EditorPage = (props) => {
 						workspaceData?.users?.includes(user.uid) ||
 						documentData?.createdBy === user.uid
 					}
+					printDocument={printDocument}
 				/>
 			)}
 		</ContentWrapper>

@@ -54,7 +54,7 @@ const Header = ({ openLoginModal = () => null, logoutUser = () => null }) => {
 	};
 
 	return (
-		<AppHeader w="100%" id="app-header">
+		<AppHeader w="100%" id="app-header" className="noprint">
 			<Container direction="row">
 				<Left>
 					<Link to="/">

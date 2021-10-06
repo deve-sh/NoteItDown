@@ -165,7 +165,7 @@ const Editor = ({
 		<div class="editor-wrapper">
 			<MainInputsStack position="static" alignItems="center">
 				<Box>
-					<Link to={`/workspace/${workspaceId}`}>
+					<Link to={`/workspace/${workspaceId}`} className="noprint">
 						<IconButton variant="ghost" colorScheme="blue">
 							<BiArrowBack size="1.5rem" />
 						</IconButton>
@@ -177,7 +177,7 @@ const Editor = ({
 							{identifierEmoji?.emoji || "📄"} {documentTitle}
 						</Heading>
 						{canEditDocument && (
-							<Box>
+							<Box className="noprint">
 								<IconButton
 									variant="ghost"
 									onClick={toggleEditor}
@@ -187,7 +187,7 @@ const Editor = ({
 								</IconButton>
 							</Box>
 						)}
-						<Box flex="1">
+						<Box flex="1" className="noprint">
 							<IconButton
 								variant="ghost"
 								onClick={printDocument}

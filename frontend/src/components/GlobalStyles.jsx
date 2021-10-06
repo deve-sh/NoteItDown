@@ -49,13 +49,19 @@ const GlobalStyles = ({ darkMode = false }) => (
 			}
 
 			/* Editor Overwrites */
-			#editorjs.readonly{
+			#editorjs.readonly {
 				.cdx-input {
 					border: none;
 					display: block;
 					text-align: center;
 					height: auto;
 					overflow: hidden;
+				}
+			}
+
+			@media print {
+				.noprint {
+					display: none;
 				}
 			}
 		`}
