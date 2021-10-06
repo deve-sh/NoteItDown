@@ -47,6 +47,17 @@ const GlobalStyles = ({ darkMode = false }) => (
 			a {
 				text-decoration: none;
 			}
+
+			/* Editor Overwrites */
+			#editorjs.readonly{
+				.cdx-input {
+					border: none;
+					display: block;
+					text-align: center;
+					height: auto;
+					overflow: hidden;
+				}
+			}
 		`}
 	/>
 );

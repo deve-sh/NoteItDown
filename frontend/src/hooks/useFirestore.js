@@ -21,7 +21,14 @@ const useFirestore = (...pathFragments) => {
 				if (doc.exists) return doc.data();
 				else throw new Error("Document Not Found");
 			});
-	const { data, error, ...rest } = useSWR(pathFragments.join("/"), fetcherFunc);
+	const options = {
+		revalidateOnFocus: false,
+	};
+	const { data, error, ...rest } = useSWR(
+		pathFragments.join("/"),
+		fetcherFunc,
+		options
+	);
 
 	return { data, error, isLoading: !error && !data, ...rest };
 };

@@ -226,7 +226,10 @@ const Editor = ({
 					</>
 				)}
 			</MainInputsStack>
-			<EditorContainerDiv id="editorjs" />
+			<EditorContainerDiv
+				id="editorjs"
+				className={readOnly ? "readonly" : ""}
+			/>
 		</div>
 	);
 };
