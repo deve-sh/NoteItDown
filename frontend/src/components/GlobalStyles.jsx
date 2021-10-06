@@ -64,6 +64,12 @@ const GlobalStyles = ({ darkMode = false }) => (
 					display: none;
 				}
 			}
+
+			#editorjs {
+				.ce-code__textarea {
+					font-size: var(--mid-spacing);
+				}
+			}
 		`}
 	/>
 );
