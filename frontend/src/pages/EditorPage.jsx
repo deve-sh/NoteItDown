@@ -100,7 +100,7 @@ const EditorPage = (props) => {
 					documentData={documentData}
 					workspaceId={workspaceId || documentData?.workspace}
 					canEditDocument={
-						workspaceData?.admins?.includes(user.uid) ||
+						workspaceData?.users?.includes(user.uid) ||
 						documentData?.createdBy === user.uid
 					}
 				/>
