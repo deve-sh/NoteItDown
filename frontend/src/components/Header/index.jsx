@@ -58,7 +58,7 @@ const Header = ({ openLoginModal = () => null, logoutUser = () => null }) => {
 			<Container direction="row">
 				<Left>
 					<Link to="/">
-						<Logo src="/logo-transparent.png" alt="Note It Down Logo" />
+						<Logo src="/logo.png" alt="Note It Down Logo" />
 					</Link>
 				</Left>
 				<Right>
