@@ -50,7 +50,7 @@ const GlobalStyles = ({ darkMode = false }) => (
 
 			/* Editor Overwrites */
 			#editorjs.readonly {
-				.cdx-input {
+				.image-tool__caption {
 					border: none;
 					display: block;
 					text-align: center;
