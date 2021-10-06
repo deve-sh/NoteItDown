@@ -16,6 +16,7 @@ import {
 import EmojiPicker from "emoji-picker-react";
 import { MdEdit, MdSave } from "react-icons/md";
 import { BiArrowBack } from "react-icons/bi";
+import { FaFilePdf } from "react-icons/fa";
 
 // Editor
 import EditorJS from "@editorjs/editorjs";
@@ -52,6 +53,7 @@ const Editor = ({
 	workspaceId = "",
 	toggleEditor = () => null,
 	canEditDocument = false,
+	printDocument = () => null,
 }) => {
 	const editor = useRef(null);
 
@@ -171,7 +173,7 @@ const Editor = ({
 				</Box>
 				{readOnly ? (
 					<>
-						<Heading as="h2" margin="0" padding="0">
+						<Heading as="h2" minWidth="70%" flex="9" margin="0" padding="0">
 							{identifierEmoji?.emoji || "📄"} {documentTitle}
 						</Heading>
 						{canEditDocument && (
@@ -185,6 +187,15 @@ const Editor = ({
 								</IconButton>
 							</Box>
 						)}
+						<Box flex="1">
+							<IconButton
+								variant="ghost"
+								onClick={printDocument}
+								colorScheme="red"
+							>
+								<FaFilePdf size="1.25rem" />
+							</IconButton>
+						</Box>
 					</>
 				) : (
 					<>
