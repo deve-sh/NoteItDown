@@ -55,6 +55,7 @@ const EditorPage = (props) => {
 			textAreas[i].style.height = "5px";
 			textAreas[i].style.height = textAreas[i].scrollHeight + "px";
 		}
+		// Removing an additional 300px bottom padding from code editor areas
 		const codeEditorArea = document.getElementsByClassName(
 			"codex-editor__redactor"
 		)[0];

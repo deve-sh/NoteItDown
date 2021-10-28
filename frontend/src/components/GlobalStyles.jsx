@@ -59,6 +59,35 @@ const GlobalStyles = ({ darkMode = false }) => (
 				}
 			}
 
+			#editorjs .ce-header {
+				font-weight: 600;
+				padding: 0.25em 0;
+			}
+
+			#editorjs h1.ce-header {
+				font-size: 3rem;
+			}
+
+			#editorjs h2.ce-header {
+				font-size: 2.5rem;
+			}
+
+			#editorjs h3.ce-header {
+				font-size: 2rem;
+			}
+
+			#editorjs h4.ce-header {
+				font-size: 1.5rem;
+			}
+
+			#editorjs h5.ce-header {
+				font-size: 1.25rem;
+			}
+
+			#editorjs h6.ce-header {
+				font-size: 1rem;
+			}
+
 			@media print {
 				.noprint {
 					display: none;
