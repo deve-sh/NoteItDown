@@ -61,7 +61,8 @@ const GlobalStyles = ({ darkMode = false }) => (
 
 			#editorjs .ce-header {
 				font-weight: 600;
-				padding: 0.25em 0;
+				padding-top: 0.5rem;
+				padding-bottom: 2rem;
 			}
 
 			#editorjs h1.ce-header {
