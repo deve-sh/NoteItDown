@@ -48,7 +48,19 @@ const EditorPage = (props) => {
 		else setLoading(false);
 	}, [workspaceId, documentId, workspaceLoading, documentLoading, setLoading]);
 
-	const printDocument = () => window.print();
+	const printDocument = () => {
+		// First resizing all text-areas for code.
+		const textAreas = document.getElementsByTagName("textarea");
+		for (let i = 0; i < textAreas.length; i++) {
+			textAreas[i].style.height = "5px";
+			textAreas[i].style.height = textAreas[i].scrollHeight + "px";
+		}
+		const codeEditorArea = document.getElementsByClassName(
+			"codex-editor__redactor"
+		)[0];
+		if (codeEditorArea) codeEditorArea.style.paddingBottom = "5px";
+		window.print();
+	};
 
 	if (workspaceId && !workspaceLoading && (workspaceError || !workspaceData))
 		return <Redirect to="/" />;
