@@ -97,7 +97,11 @@ const EditorPage = (props) => {
 					onReady={(editorInstance) => (editor.current = editorInstance)}
 					readOnly={mode !== "new" && !isEditable}
 					toggleEditor={toggleEditor}
-					prefilledData={JSON.parse(documentData?.editorData)}
+					prefilledData={
+						documentData?.editorData
+							? JSON.parse(documentData.editorData)
+							: null
+					}
 					onSave={saveDocument}
 					documentData={documentData}
 					workspaceId={workspaceId || documentData?.workspace}
