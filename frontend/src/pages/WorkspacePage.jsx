@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, Redirect, useHistory } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { ReactSortable } from "react-sortablejs";
 
 import styled from "@emotion/styled";
 import {
@@ -23,7 +24,10 @@ import { IoTrash } from "react-icons/io5";
 
 import useFirestore from "hooks/useFirestore";
 import useStore from "hooks/useStore";
-import { getDocumentsFromWorkspace } from "API/documents";
+import {
+	getDocumentsFromWorkspace,
+	updateDocumentsOrder as updateDocumentsOrderInDatabase,
+} from "API/documents";
 import {
 	addUserToWorkspace,
 	getWorkspaceUsers,
@@ -70,6 +74,7 @@ const WorkspacePage = (props) => {
 	}, [setLoading, isLoading]);
 
 	const [workspaceDocuments, setWorkspaceDocuments] = useState([]);
+	const isUpdatingDocumentOrder = useRef(false);
 
 	// For user list.
 	const {
@@ -146,6 +151,32 @@ const WorkspacePage = (props) => {
 		}
 	};
 
+	const updateDocumentsOrder = async (updatedOrder) => {
+		// Check if the order of the documents updated.
+		if (isUpdatingDocumentOrder.current) return;
+
+		let orderHasUpdated = false;
+		const documentOrderUpdates = [];
+		for (let i = 0; i < updatedOrder.length; i++) {
+			if (workspaceDocuments[i].id !== updatedOrder[i].id) {
+				if (!orderHasUpdated) orderHasUpdated = true;
+				documentOrderUpdates.push({ id: updatedOrder[i].id, position: i });
+			}
+		}
+
+		if (!orderHasUpdated) return;
+
+		// Make a request to the backend to update the 'position' field for the documents.
+		isUpdatingDocumentOrder.current = true;
+		updateDocumentsOrderInDatabase(documentOrderUpdates, (err) => {
+			isUpdatingDocumentOrder.current = false;
+			if (err) return toasts.generateError(err);
+			setWorkspaceDocuments(
+				updatedOrder.map((doc, index) => ({ ...doc, position: index }))
+			);
+		});
+	};
+
 	if (!isLoading && (error || !workspaceData)) return <Redirect to="/" />;
 	return (
 		<WorkspaceContentWrapper>
@@ -196,15 +227,33 @@ const WorkspacePage = (props) => {
 						minWidth="650px"
 						marginTop="2.5rem"
 					>
-						{workspaceDocuments.map((doc) => (
-							<ListItem key={doc.id}>
-								<DocumentLink to={`/editor/document/${doc.id}`} target="_blank">
-									<Text fontWeight="500">
-										{doc.identifierEmoji?.emoji || "📄"} {doc.title}
-									</Text>
-								</DocumentLink>
-							</ListItem>
-						))}
+						<ReactSortable
+							list={workspaceDocuments}
+							setList={updateDocumentsOrder}
+							draggable=".draggable"
+							delayOnTouchStart
+							delay={2}
+							animation={200}
+						>
+							{workspaceDocuments
+								.sort((doc1, doc2) =>
+									"position" in doc1 && "position" in doc2
+										? doc1.position - doc2.position
+										: 0
+								)
+								.map((doc) => (
+									<ListItem key={doc.id} className="draggable">
+										<DocumentLink
+											to={`/editor/document/${doc.id}`}
+											target="_blank"
+										>
+											<Text fontWeight="500">
+												{doc.identifierEmoji?.emoji || "📄"} {doc.title}
+											</Text>
+										</DocumentLink>
+									</ListItem>
+								))}
+						</ReactSortable>
 					</List>
 				) : (
 					<NoneFound label="No Documents Added So far." />

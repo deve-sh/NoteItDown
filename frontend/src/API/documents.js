@@ -108,3 +108,26 @@ export const getRecentDocumentsFromWorkspaces = async (
 		return callback(err.message);
 	}
 };
+
+export const updateDocumentsOrder = async (
+	documentOrderUpdates = [],
+	callback
+) => {
+	try {
+		const batch = db.batch();
+
+		for (let update of documentOrderUpdates) {
+			batch.update(db.collection("documents").doc(update.id), {
+				position: update.position,
+				updatedAt: firestore.FieldValue.serverTimestamp(),
+			});
+		}
+
+		await batch.commit();
+
+		return callback(null);
+	} catch (err) {
+		console.log(err);
+		return callback(err.message);
+	}
+};

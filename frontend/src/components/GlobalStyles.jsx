@@ -100,6 +100,10 @@ const GlobalStyles = ({ darkMode = false }) => (
 					font-size: var(--mid-spacing);
 				}
 			}
+			
+			.draggable {
+				cursor: grabbing;
+			}
 		`}
 	/>
 );
