@@ -20,6 +20,7 @@ The feature list for this app includes:
 - List of users involved in editing a document and a specific block of document is available.
 - Reorderable documents
 - Everything operates seamlessly on the frontend due to the power of Firebase.
+- Secure, noone unauthorized will have access to your stuff since they are guarded by Firebase's security rules.
 
 ##### Creating Workspace
 
