@@ -30,7 +30,7 @@ const DocumentsList = ({
 	updateDocumentsOrder = () => null,
 	draggable = undefined,
 	className = "",
-	showDocumentOptions = false,
+	showDocumentOptions = true,
 }) => (
 	<ChildrenDocumentList spacing="3" className={className}>
 		<ReactSortable
@@ -49,7 +49,13 @@ const DocumentsList = ({
 						: 0
 				)
 				.map((doc) => (
-					<ListItem maxWidth="500px" key={doc.id} className="draggable">
+					<ListItem
+						display="flex"
+						alignItems="center"
+						maxWidth="550px"
+						key={doc.id}
+						className="draggable"
+					>
 						<DocumentLink to={`/editor/document/${doc.id}`} target="_blank">
 							<Text width="90%" fontWeight="500">
 								{doc.identifierEmoji?.emoji || "📄"} {doc.title}
@@ -65,6 +71,19 @@ const DocumentsList = ({
 								</Box>
 							)}
 						</DocumentLink>
+						{showDocumentOptions ? (
+							<Link
+								to={`/editor/new/${doc.workspace}?parentDocumentId=${doc.id}`}
+								title="Create Nested Document"
+								style={{ opacity: 0.5, marginLeft: "0.5rem" }}
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								➕
+							</Link>
+						) : (
+							""
+						)}
 					</ListItem>
 				))}
 		</ReactSortable>
