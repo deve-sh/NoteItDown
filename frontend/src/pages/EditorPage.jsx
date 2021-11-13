@@ -12,6 +12,7 @@ import {
 	addDocumentToWorkspace,
 	getDocumentsFromWorkspace,
 	updateDocument,
+	deleteDocument as deleteDocumentFromDatabase,
 } from "API/documents";
 import { getUsersByIds } from "API/workspaces";
 import toasts from "helpers/toasts";
@@ -212,6 +213,20 @@ const EditorPage = (props) => {
 		});
 	};
 
+	const deleteDocument = async () => {
+		if (
+			mode !== "new" ||
+			!window.confirm(
+				"Are you sure? This action is irreversible. All children documents will also be deleted."
+			)
+		)
+			return;
+		deleteDocumentFromDatabase(documentId, (err) => {
+			if (err) return toasts.generateError(err);
+			window.location.replace("/");
+		});
+	};
+
 	return (
 		<ContentWrapper>
 			<Helmet>
@@ -248,6 +263,7 @@ const EditorPage = (props) => {
 					}
 					printDocument={printDocument}
 					editorUsers={editorUsers}
+					deleteDocument={deleteDocument}
 				/>
 			)}
 			{documentData?.hasChildDocuments &&

@@ -16,7 +16,7 @@ import {
 	MenuList,
 } from "@chakra-ui/react";
 import EmojiPicker from "emoji-picker-react";
-import { MdEdit, MdSave } from "react-icons/md";
+import { MdDelete, MdEdit, MdSave } from "react-icons/md";
 import { BiArrowBack } from "react-icons/bi";
 import { FaFilePdf } from "react-icons/fa";
 
@@ -60,6 +60,7 @@ const Editor = ({
 	onReady = () => null,
 	onSave = () => null,
 	toggleEditor = () => null,
+	deleteDocument = () => null,
 	canEditDocument = false,
 	printDocument = () => null,
 	editorUsers = [],
@@ -241,6 +242,17 @@ const Editor = ({
 									colorScheme="blue"
 								>
 									<MdEdit size="1.25rem" />
+								</IconButton>
+							</Box>
+						)}
+						{canEditDocument && (
+							<Box className="noprint">
+								<IconButton
+									variant="ghost"
+									onClick={deleteDocument}
+									colorScheme="red"
+								>
+									<MdDelete size="1.25rem" />
 								</IconButton>
 							</Box>
 						)}
