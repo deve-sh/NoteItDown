@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { Text } from "@chakra-ui/react";
+import { Text, Button, Box } from "@chakra-ui/react";
+import { BiPlus } from "react-icons/bi";
 
 import Editor from "components/Editor";
 import ContentWrapper from "Wrappers/ContentWrapper";
@@ -261,9 +262,27 @@ const EditorPage = (props) => {
 							updateDocumentsOrder={updateDocumentsOrder}
 							draggable=".draggable"
 							className="limitedwidth"
+							showDocumentOptions={false}
 						/>
 					</>
 				)}
+			{documentData && mode !== "new" ? (
+				<Box className="noprint" marginTop="1rem" textAlign="center">
+					<Link
+						to={`/editor/new/${documentData.workspace}?parentDocumentId=${documentId}`}
+					>
+						<Button
+							colorScheme="blue"
+							variant="solid"
+							leftIcon={<BiPlus size="1.25rem" />}
+						>
+							Add Nested Document
+						</Button>
+					</Link>
+				</Box>
+			) : (
+				""
+			)}
 		</ContentWrapper>
 	);
 };
