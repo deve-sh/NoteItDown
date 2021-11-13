@@ -59,11 +59,11 @@ const Editor = ({
 	prefilledData = null,
 	onReady = () => null,
 	onSave = () => null,
-	workspaceId = "",
 	toggleEditor = () => null,
 	canEditDocument = false,
 	printDocument = () => null,
 	editorUsers = [],
+	backButtonLink = "",
 }) => {
 	const editor = useRef(null);
 	const user = useStore((state) => state.user);
@@ -194,7 +194,7 @@ const Editor = ({
 				alignItems="center"
 			>
 				<Box>
-					<Link to={`/workspace/${workspaceId}`} className="noprint">
+					<Link to={backButtonLink} className="noprint">
 						<IconButton variant="ghost" colorScheme="blue">
 							<BiArrowBack size="1.5rem" />
 						</IconButton>

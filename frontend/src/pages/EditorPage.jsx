@@ -221,6 +221,11 @@ const EditorPage = (props) => {
 				<></>
 			) : (
 				<Editor
+					backButtonLink={
+						documentData?.isChildDocument && documentData?.parentDocument
+							? `/editor/document/${documentData.parentDocument}`
+							: `/workspace/${workspaceId || documentData?.workspace}`
+					}
 					onReady={(editorInstance) => (editor.current = editorInstance)}
 					readOnly={mode !== "new" && !isEditable}
 					toggleEditor={toggleEditor}
