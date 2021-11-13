@@ -10,6 +10,17 @@ Copy your Firebase project config from project settings, convert it to JSON and 
 
 The project is deeply inspired by Notion. Especially its Elegance and simplicity. Thanks to [Chakra UI](https://chakra-ui.com) for making styling so simple.
 
+The feature list for this app includes:
+
+- Sign In With Google and GitHub.
+- Separated Team Workspaces with multiple users
+- Dark Mode
+- Nested Documents (Documents inside documents to structure information better)
+- Block-Based Editing of Documents
+- List of users involved in editing a document and a specific block of document is available.
+- Reorderable documents
+- Everything operates seamlessly on the frontend due to the power of Firebase.
+
 ##### Creating Workspace
 
 ![Creating Workspace](public/homepage/create-workspace.png)
