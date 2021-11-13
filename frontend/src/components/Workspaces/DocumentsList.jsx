@@ -28,7 +28,7 @@ const DocumentLink = styled(Link)`
 const DocumentsList = ({
 	documents = [],
 	updateDocumentsOrder = () => null,
-	deleteDocument = () => null,
+	deleteDocument = null,
 	draggable = undefined,
 	className = "",
 	showDocumentOptions = true,
