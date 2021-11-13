@@ -1,4 +1,4 @@
-import { Text, Box, List, ListItem } from "@chakra-ui/react";
+import { Text, Box, List, ListItem, Button } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 import { ReactSortable } from "react-sortablejs";
@@ -28,6 +28,7 @@ const DocumentLink = styled(Link)`
 const DocumentsList = ({
 	documents = [],
 	updateDocumentsOrder = () => null,
+	deleteDocument = () => null,
 	draggable = undefined,
 	className = "",
 	showDocumentOptions = true,
@@ -72,15 +73,28 @@ const DocumentsList = ({
 							)}
 						</DocumentLink>
 						{showDocumentOptions ? (
-							<Link
-								to={`/editor/new/${doc.workspace}?parentDocumentId=${doc.id}`}
-								title="Create Nested Document"
-								style={{ opacity: 0.5, marginLeft: "0.5rem" }}
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								➕
-							</Link>
+							<>
+								<Link
+									to={`/editor/new/${doc.workspace}?parentDocumentId=${doc.id}`}
+									title="Create Nested Document"
+									style={{ opacity: 0.5, marginLeft: "0.5rem" }}
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									➕
+								</Link>
+								{deleteDocument && (
+									<Button
+										variant="ghost"
+										onClick={deleteDocument}
+										colorScheme="blue"
+										marginLeft="0.5rem"
+										padding={0}
+									>
+										❌
+									</Button>
+								)}
+							</>
 						) : (
 							""
 						)}
