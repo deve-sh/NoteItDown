@@ -119,6 +119,10 @@ function App() {
 							path="/editor/:mode/:assetId"
 							component={EditorPage}
 						/>
+						<ProtectedRoute
+							path="/editor/nested/:mode/:assetId"
+							component={EditorPage}
+						/>
 						<ProtectedRoute path="/documents" component={RecentDocuments} />
 					</Switch>
 				</AppContentContainer>

@@ -47,6 +47,16 @@ export const addDocumentToWorkspace = async (
 				},
 			},
 		});
+		if (documentData.isChildDocument && documentData.parentDocument) {
+			batch.update(
+				db.collection("documents").doc(documentData.parentDocument),
+				{
+					childrenDocuments: firestore.FieldValue.arrayUnion(documentRef.id),
+					hasChildDocuments: true,
+					updatedAt: firestore.FieldValue.serverTimestamp(),
+				}
+			);
+		}
 		batch.update(workspaceRef, {
 			nDocuments: firestore.FieldValue.increment(1),
 			updatedAt: firestore.FieldValue.serverTimestamp(),

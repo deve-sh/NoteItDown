@@ -13,6 +13,7 @@ import toasts from "helpers/toasts";
 import useFirestore from "hooks/useFirestore";
 import useStore from "hooks/useStore";
 import useToggle from "hooks/useToggle";
+import { getQueryParams } from "helpers/getQueryParams";
 
 const EditorPage = (props) => {
 	const editor = useRef(null);
@@ -20,13 +21,17 @@ const EditorPage = (props) => {
 	const user = useStore((store) => store.user);
 	const setLoading = useStore((store) => store.setLoading);
 
+	const isNestedDocument = window.location.href.includes("nested");
+
 	const [editorUsers, setEditorUsers] = useState([]);
 
-	let workspaceId, documentId;
+	let workspaceId, documentId, parentDocumentId;
 
 	const mode = props?.match?.params?.mode;
-	if (mode === "new") workspaceId = props?.match?.params?.assetId;
-	else documentId = props?.match?.params?.assetId;
+	if (mode === "new") {
+		workspaceId = props?.match?.params?.assetId;
+		if (isNestedDocument) parentDocumentId = getQueryParams("parentDocumentId");
+	} else documentId = props?.match?.params?.assetId;
 
 	const {
 		data: workspaceData,
@@ -39,6 +44,11 @@ const EditorPage = (props) => {
 		isLoading: documentLoading,
 		mutate: setDocumentData,
 	} = useFirestore(documentId ? `documents/${documentId}` : null);
+	const {
+		data: parentDocumentData,
+		error: parentDocumentError,
+		isLoading: parentDocumentLoading,
+	} = useFirestore(parentDocumentId ? `documents/${parentDocumentId}` : null);
 
 	useEffect(() => /* Cleanup Loading State */ () => setLoading(false), []);
 
@@ -83,6 +93,12 @@ const EditorPage = (props) => {
 		return <Redirect to="/" />;
 	if (documentId && !documentLoading && (documentError || !documentData))
 		return <Redirect to="/" />;
+	if (
+		parentDocumentId &&
+		!parentDocumentLoading &&
+		(parentDocumentError || !parentDocumentData)
+	)
+		return <Redirect to="/" />;
 
 	const getEditorContent = async () =>
 		(await editor.current?.save?.()) || {
@@ -100,9 +116,21 @@ const EditorPage = (props) => {
 				? JSON.stringify(await getEditorContent())
 				: documentData?.editorData || {};
 		if (mode === "new") {
+			let newDocumentData = {
+				editorData,
+				level: 1,
+				title,
+				identifierEmoji,
+				blocksLastEditedBy,
+			};
+			if (isNestedDocument && parentDocumentData) {
+				newDocumentData.level = (parentDocumentData.level || 1) + 1;
+				newDocumentData.isChildDocument = true;
+				newDocumentData.parentDocument = parentDocumentId;
+			}
 			addDocumentToWorkspace(
 				workspaceId,
-				{ editorData, level: 1, title, identifierEmoji, blocksLastEditedBy },
+				newDocumentData,
 				(err, documentCreated) => {
 					if (err) return toasts.generateError(err);
 					window.location = `/editor/document/${documentCreated.id}`; // Take the user to the dedicated document page.
