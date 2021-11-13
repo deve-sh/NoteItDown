@@ -48,7 +48,7 @@ const EditorPage = (props) => {
 			!editorUsers?.length &&
 			Object.keys(documentData?.editors || {}).length
 		) {
-			const editorUsersIds = Object.keys(documentData?.editors);
+			const editorUsersIds = Object.keys(documentData?.editors).slice(0, 2);
 			getUsersByIds(editorUsersIds, (err, users) => {
 				if (err) return toasts.generateError(err);
 				setEditorUsers(users);
@@ -153,6 +153,7 @@ const EditorPage = (props) => {
 						documentData?.createdBy === user.uid
 					}
 					printDocument={printDocument}
+					editorUsers={editorUsers}
 				/>
 			)}
 		</ContentWrapper>

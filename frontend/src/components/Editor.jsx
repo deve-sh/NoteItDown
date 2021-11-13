@@ -10,6 +10,8 @@ import {
 	IconButton,
 	Menu,
 	Heading,
+	AvatarGroup,
+	Avatar,
 	MenuButton,
 	MenuList,
 } from "@chakra-ui/react";
@@ -43,6 +45,12 @@ const MainInputsStack = styled(HStack)`
 	max-width: 650px;
 	margin: 0 auto;
 	margin-bottom: var(--standard-spacing);
+	padding: var(--standard-spacing) var(--standard-spacing);
+	padding-bottom: 0;
+
+	&.extrawidth {
+		max-width: 900px;
+	}
 `;
 
 const Editor = ({
@@ -55,6 +63,7 @@ const Editor = ({
 	toggleEditor = () => null,
 	canEditDocument = false,
 	printDocument = () => null,
+	editorUsers = [],
 }) => {
 	const editor = useRef(null);
 	const user = useStore((state) => state.user);
@@ -179,7 +188,11 @@ const Editor = ({
 
 	return (
 		<div class="editor-wrapper">
-			<MainInputsStack position="static" alignItems="center">
+			<MainInputsStack
+				className={readOnly ? "extrawidth" : ""}
+				position="static"
+				alignItems="center"
+			>
 				<Box>
 					<Link to={`/workspace/${workspaceId}`} className="noprint">
 						<IconButton variant="ghost" colorScheme="blue">
@@ -189,9 +202,37 @@ const Editor = ({
 				</Box>
 				{readOnly ? (
 					<>
-						<Heading as="h2" minWidth="70%" flex="9" margin="0" padding="0">
+						<Heading as="h2" minWidth="60%" flex="9" margin="0" padding="0">
 							{identifierEmoji?.emoji || "📄"} {documentTitle}
 						</Heading>
+						{editorUsers?.length ? (
+							<AvatarGroup size="sm" max={2}>
+								{editorUsers.map((user) => (
+									<Avatar
+										key={user.uid || user.id}
+										name={user.displayName || user.email}
+										src={user.photoURL}
+										title={`${user.displayName || user.email} at ${
+											documentData?.editors?.[user.uid || user.id]?.lastAt
+												?.toDate?.()
+												?.toDateString?.() +
+											" " +
+											documentData?.editors?.[user.uid || user.id]?.lastAt
+												?.toDate?.()
+												?.toTimeString?.()
+												?.slice(0, 8)
+										}`}
+									/>
+								))}
+								{Object.keys(documentData?.editors || {})?.slice?.(2)?.length
+									? Object.keys(documentData?.editors || {}).map((userId) => (
+											<Avatar key={userId} name={"Another User"} />
+									  ))
+									: ""}
+							</AvatarGroup>
+						) : (
+							""
+						)}
 						{canEditDocument && (
 							<Box className="noprint">
 								<IconButton
