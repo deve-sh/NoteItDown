@@ -35,6 +35,7 @@ import EditorImage from "@editorjs/image";
 import EditorChecklist from "@editorjs/checklist";
 
 import { uploadImage } from "API/editor";
+import useStore from "hooks/useStore";
 
 const EditorContainerDiv = styled.div``;
 
@@ -56,11 +57,14 @@ const Editor = ({
 	printDocument = () => null,
 }) => {
 	const editor = useRef(null);
+	const user = useStore((state) => state.user);
 
 	const [documentTitle, setDocumentTitle] = useState(documentData?.title || "");
 	const [identifierEmoji, setIdentifierEmoji] = useState(
 		documentData?.identifierEmoji || {}
 	);
+
+	const blocksLastEditedBy = useRef(documentData?.blocksLastEditedBy || {});
 
 	const onEmojiSelect = (_, emojiObject) => {
 		setIdentifierEmoji(emojiObject);
@@ -155,6 +159,18 @@ const Editor = ({
 				},
 			},
 			onReady: () => onReady(editor.current),
+			onChange: (editorData) => {
+				const currentlyEditedBlockIndex =
+					editorData?.blocks?.getCurrentBlockIndex();
+				const currentlyEditedBlock = editorData?.blocks?.getBlockByIndex(
+					currentlyEditedBlockIndex
+				);
+				if (currentlyEditedBlock?.id)
+					blocksLastEditedBy.current[currentlyEditedBlock.id] = {
+						user: user.uid || user.id,
+						at: new Date(),
+					};
+			},
 			data: prefilledData,
 		});
 
@@ -226,7 +242,8 @@ const Editor = ({
 								onClick={() =>
 									onSave(
 										documentTitle,
-										JSON.parse(JSON.stringify(identifierEmoji))
+										JSON.parse(JSON.stringify(identifierEmoji)),
+										blocksLastEditedBy.current
 									)
 								}
 								colorScheme="blue"

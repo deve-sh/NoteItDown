@@ -74,6 +74,9 @@ export const updateDocument = async (
 			...documentUpdates,
 			updatedAt: firestore.FieldValue.serverTimestamp(),
 			lastUpdatedBy: auth.currentUser.uid,
+			[`editors.${auth.currentUser.uid}`]: {
+				lastAt: firestore.FieldValue.serverTimestamp(),
+			},
 		});
 
 		return callback(null, (await documentRef.get()).data());

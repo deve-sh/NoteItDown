@@ -74,7 +74,11 @@ const EditorPage = (props) => {
 			time: new Date().getTime(),
 		};
 
-	const saveDocument = async (title, identifierEmoji) => {
+	const saveDocument = async (
+		title,
+		identifierEmoji,
+		blocksLastEditedBy = {}
+	) => {
 		const editorData =
 			isEditable || !documentData?.editorData
 				? JSON.stringify(await getEditorContent())
@@ -82,7 +86,7 @@ const EditorPage = (props) => {
 		if (mode === "new") {
 			addDocumentToWorkspace(
 				workspaceId,
-				{ editorData, level: 1, title, identifierEmoji },
+				{ editorData, level: 1, title, identifierEmoji, blocksLastEditedBy },
 				(err, documentCreated) => {
 					if (err) return toasts.generateError(err);
 					window.location = `/editor/document/${documentCreated.id}`; // Take the user to the dedicated document page.
@@ -90,6 +94,11 @@ const EditorPage = (props) => {
 			);
 		} else {
 			const updates = { editorData, title, identifierEmoji };
+			if (Object.keys(blocksLastEditedBy).length) {
+				for (let blockId of Object.keys(blocksLastEditedBy))
+					updates[`blocksLastEditedBy.${blockId}`] =
+						blocksLastEditedBy[blockId];
+			}
 			updateDocument(documentId, updates, (err, updatedDocData) => {
 				if (err) return toasts.generateError(err);
 				setDocumentData(updatedDocData);
@@ -110,11 +119,16 @@ const EditorPage = (props) => {
 					onReady={(editorInstance) => (editor.current = editorInstance)}
 					readOnly={mode !== "new" && !isEditable}
 					toggleEditor={toggleEditor}
-					prefilledData={
-						documentData?.editorData
-							? JSON.parse(documentData.editorData)
-							: null
-					}
+					prefilledData={(() => {
+						try {
+							return documentData?.editorData
+								? JSON.parse(documentData.editorData)
+								: null;
+						} catch (err) {
+							console.log(err);
+							return null;
+						}
+					})()}
 					onSave={saveDocument}
 					documentData={documentData}
 					workspaceId={workspaceId || documentData?.workspace}
