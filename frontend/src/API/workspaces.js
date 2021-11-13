@@ -56,7 +56,7 @@ export const createWorkspace = async (workspaceInputs, callback) => {
 				nWorkspaces: firestore.FieldValue.increment(1),
 				nWorkspacesCreated: firestore.FieldValue.increment(1),
 				updatedAt: serverTimestamp(),
-				workspces: firestore.FieldValue.arrayUnion(workspaceRef.id),
+				workspaces: firestore.FieldValue.arrayUnion(workspaceRef.id),
 			});
 			await batch.commit();
 			return callback(null, (await workspaceRef.get()).data());

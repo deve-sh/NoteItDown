@@ -85,6 +85,8 @@ const WorkspacePage = (props) => {
 	const [userList, setUserList] = useState(null);
 	const [isLoadingUserList, setLoadingUserList] = useState(false);
 
+	const updateStoreUserList = useStore((state) => state.setUserList);
+
 	useEffect(() => {
 		getDocumentsFromWorkspace(workspaceId, 1, (err, documents) => {
 			if (err) return toasts.generateError(err);
@@ -111,6 +113,7 @@ const WorkspacePage = (props) => {
 				setLoadingUserList(false);
 				if (err) return toasts.generateError(err);
 				setUserList(users);
+				updateStoreUserList(users);
 			});
 		}
 	};
@@ -122,6 +125,7 @@ const WorkspacePage = (props) => {
 			(err, updatedWorkspaceData, addedUser) => {
 				if (err) return toasts.generateError(err);
 				setUserList((users) => [...users, addedUser]);
+				updateStoreUserList([addedUser]);
 				setWorkspaceData(updatedWorkspaceData);
 				toasts.generateSuccess("Added user successfully.");
 			}

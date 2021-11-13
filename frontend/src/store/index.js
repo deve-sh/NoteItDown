@@ -19,9 +19,35 @@ const store = create(
 					...state,
 					isDarkModeActive: !state.isDarkModeActive,
 				})),
+			// Workspace User List
+			userList: [],
+			setUserList: (usersToUpdate = []) =>
+				set((state) => {
+					const updatedUserList = [...(state.userList || [])];
+					for (let user of usersToUpdate) {
+						if (
+							!updatedUserList.find(
+								(userInState) =>
+									(userInState.id || userInState.uid) === (user.uid || user.id)
+							)
+						)
+							updatedUserList.push({
+								...user,
+								createdAt:
+									user.createdAt?.toDate?.()?.toISOString?.() ||
+									new Date(user.createdAt) ||
+									new Date(),
+								updatedAt:
+									user.updatedAt?.toDate?.()?.toISOString?.() ||
+									new Date(user.updatedAt) ||
+									new Date(),
+							});
+					}
+					return { ...state, userList: updatedUserList };
+				}),
 		}),
 		{
-			name: "hiqr-storage",
+			name: "noteitdown-storage",
 		}
 	)
 );
