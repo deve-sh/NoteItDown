@@ -215,7 +215,7 @@ const EditorPage = (props) => {
 
 	const deleteDocument = async () => {
 		if (
-			mode !== "new" ||
+			mode === "new" ||
 			!window.confirm(
 				"Are you sure? This action is irreversible. All children documents will also be deleted."
 			)
@@ -223,7 +223,7 @@ const EditorPage = (props) => {
 			return;
 		deleteDocumentFromDatabase(documentId, (err) => {
 			if (err) return toasts.generateError(err);
-			window.location.replace("/");
+			window.location.replace(`/workspace/${documentData.workspace}`);
 		});
 	};
 
