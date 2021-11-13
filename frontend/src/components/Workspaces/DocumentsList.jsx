@@ -1,4 +1,4 @@
-import { Text, List, ListItem } from "@chakra-ui/react";
+import { Text, Box, List, ListItem } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 import { ReactSortable } from "react-sortablejs";
@@ -16,7 +16,10 @@ const ChildrenDocumentList = styled(List)`
 const DocumentLink = styled(Link)`
 	padding: calc(0.5 * var(--standard-spacing));
 	width: 100%;
-	display: block;
+	max-width: 500px;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
 	&:hover {
 		background: var(--backgroundgrey);
 	}
@@ -27,6 +30,7 @@ const DocumentsList = ({
 	updateDocumentsOrder = () => null,
 	draggable = undefined,
 	className = "",
+	showDocumentOptions = false,
 }) => (
 	<ChildrenDocumentList spacing="3" className={className}>
 		<ReactSortable
@@ -45,11 +49,21 @@ const DocumentsList = ({
 						: 0
 				)
 				.map((doc) => (
-					<ListItem key={doc.id} className="draggable">
+					<ListItem maxWidth="500px" key={doc.id} className="draggable">
 						<DocumentLink to={`/editor/document/${doc.id}`} target="_blank">
-							<Text fontWeight="500">
+							<Text width="90%" fontWeight="500">
 								{doc.identifierEmoji?.emoji || "📄"} {doc.title}
 							</Text>
+							{doc.childrenDocuments?.length > 0 && (
+								<Box
+									flex={1}
+									textAlign="right"
+									width="10%"
+									title="This Document has more documents inside it"
+								>
+									🔗
+								</Box>
+							)}
 						</DocumentLink>
 					</ListItem>
 				))}
