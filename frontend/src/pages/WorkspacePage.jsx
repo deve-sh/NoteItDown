@@ -88,7 +88,7 @@ const WorkspacePage = (props) => {
 	const updateStoreUserList = useStore((state) => state.setUserList);
 
 	useEffect(() => {
-		getDocumentsFromWorkspace(workspaceId, 1, (err, documents) => {
+		getDocumentsFromWorkspace(workspaceId, 1, null, (err, documents) => {
 			if (err) return toasts.generateError(err);
 			setWorkspaceDocuments(documents || []);
 		});

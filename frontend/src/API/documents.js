@@ -4,19 +4,23 @@ import db, { firestore } from "firebase/db";
 export const getDocumentsFromWorkspace = async (
 	workspaceId,
 	level = 1,
+	parentDocument = null,
 	callback
 ) => {
 	try {
+		let fetchingRef = db
+			.collection("documents")
+			.where("workspace", "==", workspaceId)
+			.where("level", "==", level);
+		if (parentDocument)
+			fetchingRef = fetchingRef
+				.where("isChildDocument", "==", true)
+				.where("parentDocument", "==", parentDocument);
 		return callback(
 			null,
-			(
-				await db
-					.collection("documents")
-					.where("workspace", "==", workspaceId)
-					.where("level", "==", level)
-					.orderBy("createdAt", "desc")
-					.get()
-			).docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+			(await fetchingRef.orderBy("createdAt", "desc").get()).docs.map(
+				(doc) => ({ id: doc.id, ...doc.data() })
+			)
 		);
 	} catch (err) {
 		console.log(err);
