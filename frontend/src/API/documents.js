@@ -100,6 +100,43 @@ export const updateDocument = async (
 	}
 };
 
+export const deleteDocument = async (documentId, callback) => {
+	try {
+		const documentRef = db.collection("documents").doc(documentId);
+		const batch = db.batch();
+		const documentData = (await documentRef.get()).data();
+		if (!documentData) return callback("Document not found");
+
+		const workspaceRef = db
+			.collection("workspaces")
+			.doc(documentData.workspace);
+
+		batch.delete(documentRef);
+
+		let nDocumentsToReduce = 1;
+
+		// Delete all child documents too.
+		if (documentData.childrenDocuments?.length) {
+			for (let childDocumentId of documentData.childrenDocuments) {
+				nDocumentsToReduce++;
+				batch.delete(db.collection("documents").doc(childDocumentId));
+			}
+		}
+
+		batch.update(workspaceRef, {
+			nDocuments: firestore.FieldValue.increment(-nDocumentsToReduce),
+			updatedAt: firestore.FieldValue.serverTimestamp(),
+		});
+
+		await batch.commit();
+
+		return callback(null);
+	} catch (err) {
+		console.log(err);
+		return callback(err.message);
+	}
+};
+
 export const getRecentDocumentsFromWorkspaces = async (
 	workspaces = [],
 	callback
