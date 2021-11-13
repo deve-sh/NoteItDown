@@ -2,11 +2,16 @@
 import { useEffect, useRef, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { Text } from "@chakra-ui/react";
 
 import Editor from "components/Editor";
 import ContentWrapper from "Wrappers/ContentWrapper";
 
-import { addDocumentToWorkspace, updateDocument } from "API/documents";
+import {
+	addDocumentToWorkspace,
+	getDocumentsFromWorkspace,
+	updateDocument,
+} from "API/documents";
 import { getUsersByIds } from "API/workspaces";
 import toasts from "helpers/toasts";
 
@@ -14,6 +19,7 @@ import useFirestore from "hooks/useFirestore";
 import useStore from "hooks/useStore";
 import useToggle from "hooks/useToggle";
 import { getQueryParams } from "helpers/getQueryParams";
+import DocumentsList from "components/Workspaces/DocumentsList";
 
 const EditorPage = (props) => {
 	const editor = useRef(null);
@@ -52,6 +58,10 @@ const EditorPage = (props) => {
 		isLoading: parentDocumentLoading,
 	} = useFirestore(parentDocumentId ? `documents/${parentDocumentId}` : null);
 
+	const [childrenDocuments, setChildrenDocuments] = useState([]);
+	const isUpdatingDocumentOrder = useRef(false);
+	const isFetchingChildrenDocuments = useRef(false);
+
 	useEffect(() => /* Cleanup Loading State */ () => setLoading(false), []);
 
 	useEffect(() => {
@@ -75,6 +85,29 @@ const EditorPage = (props) => {
 			setLoading(true);
 		else setLoading(false);
 	}, [workspaceId, documentId, workspaceLoading, documentLoading, setLoading]);
+
+	useEffect(() => {
+		if (
+			mode !== "new" &&
+			documentData?.workspace &&
+			documentData?.childrenDocuments?.length &&
+			!childrenDocuments?.length &&
+			!isFetchingChildrenDocuments.current
+		) {
+			isFetchingChildrenDocuments.current = true;
+			getDocumentsFromWorkspace(
+				documentData.workspace,
+				documentData.level + 1,
+				documentId,
+				(err, documents) => {
+					console.log(err, documents);
+					isFetchingChildrenDocuments.current = false;
+					if (err) return toasts.generateError(err);
+					setChildrenDocuments(documents);
+				}
+			);
+		}
+	}, [documentData]);
 
 	const printDocument = () => {
 		// First resizing all text-areas for code.
@@ -153,6 +186,31 @@ const EditorPage = (props) => {
 		}
 	};
 
+	const updateDocumentsOrder = async (updatedOrder) => {
+		// Check if the order of the documents updated.
+		if (isUpdatingDocumentOrder.current) return;
+
+		let orderHasUpdated = false;
+		const documentOrderUpdates = [];
+		for (let i = 0; i < updatedOrder.length; i++) {
+			if (childrenDocuments[i].id !== updatedOrder[i].id) {
+				if (!orderHasUpdated) orderHasUpdated = true;
+				documentOrderUpdates.push({ id: updatedOrder[i].id, position: i });
+			}
+		}
+		if (!orderHasUpdated) return;
+
+		// Make a request to the backend to update the 'position' field for the documents.
+		isUpdatingDocumentOrder.current = true;
+		updateDocumentsOrder(documentOrderUpdates, (err) => {
+			isUpdatingDocumentOrder.current = false;
+			if (err) return toasts.generateError(err);
+			setChildrenDocuments(
+				updatedOrder.map((doc, index) => ({ ...doc, position: index }))
+			);
+		});
+	};
+
 	return (
 		<ContentWrapper>
 			<Helmet>
@@ -186,6 +244,26 @@ const EditorPage = (props) => {
 					editorUsers={editorUsers}
 				/>
 			)}
+			{documentData?.hasChildDocuments &&
+				documentData?.childrenDocuments?.length > 0 &&
+				childrenDocuments?.length > 0 && (
+					<>
+						<Text
+							fontSize="lg"
+							maxWidth="650px"
+							margin="0 auto"
+							fontWeight={600}
+						>
+							Documents Inside This Collection
+						</Text>
+						<DocumentsList
+							documents={childrenDocuments}
+							updateDocumentsOrder={updateDocumentsOrder}
+							draggable=".draggable"
+							className="limitedwidth"
+						/>
+					</>
+				)}
 		</ContentWrapper>
 	);
 };

@@ -7,6 +7,10 @@ const ChildrenDocumentList = styled(List)`
 	margin: 0 auto;
 	margin-top: 2.5rem;
 	min-width: 650px;
+
+	&.limitedwidth {
+		max-width: 650px;
+	}
 `;
 
 const DocumentLink = styled(Link)`
@@ -22,8 +26,9 @@ const DocumentsList = ({
 	documents = [],
 	updateDocumentsOrder = () => null,
 	draggable = undefined,
+	className = "",
 }) => (
-	<ChildrenDocumentList spacing="3">
+	<ChildrenDocumentList spacing="3" className={className}>
 		<ReactSortable
 			list={documents}
 			setList={updateDocumentsOrder}
@@ -31,6 +36,7 @@ const DocumentsList = ({
 			delayOnTouchStart
 			delay={2}
 			animation={200}
+			disabled={!!!draggable}
 		>
 			{documents
 				.sort((doc1, doc2) =>
