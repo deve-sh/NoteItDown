@@ -21,16 +21,18 @@ const EditorPage = (props) => {
 	const user = useStore((store) => store.user);
 	const setLoading = useStore((store) => store.setLoading);
 
-	const isNestedDocument = window.location.href.includes("nested");
+	// These nested document checks are only valid during creation,
+	// since while editing, it's just a simple database update operation.
+	const parentDocumentId = getQueryParams("parentDocumentId");
+	const isCreatingNestedDocument = !!parentDocumentId;
 
 	const [editorUsers, setEditorUsers] = useState([]);
 
-	let workspaceId, documentId, parentDocumentId;
+	let workspaceId, documentId;
 
 	const mode = props?.match?.params?.mode;
 	if (mode === "new") {
 		workspaceId = props?.match?.params?.assetId;
-		if (isNestedDocument) parentDocumentId = getQueryParams("parentDocumentId");
 	} else documentId = props?.match?.params?.assetId;
 
 	const {
@@ -123,7 +125,7 @@ const EditorPage = (props) => {
 				identifierEmoji,
 				blocksLastEditedBy,
 			};
-			if (isNestedDocument && parentDocumentData) {
+			if (isCreatingNestedDocument && parentDocumentData) {
 				newDocumentData.level = (parentDocumentData.level || 1) + 1;
 				newDocumentData.isChildDocument = true;
 				newDocumentData.parentDocument = parentDocumentId;
