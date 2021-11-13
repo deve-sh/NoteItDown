@@ -229,27 +229,74 @@ export const getWorkspaceUsers = async (workspaceId, callback) => {
 		let users = [];
 
 		const userIdIndex = userIds.indexOf(auth.currentUser.uid);
-		const userIsPartOfWorkspace = userIdIndex !== -1;
+		const userIsCurrentUser = userIdIndex !== -1;
 
-		if (userIsPartOfWorkspace) userIds.splice(userIdIndex, 1);
+		if (userIsCurrentUser) userIds.splice(userIdIndex, 1);
 
-		if (userIds.length)
-			users = (
-				await db.collection("users").where("uid", "in", userIds).get()
-			).docs.map((doc) => ({
-				...doc.data(),
-				id: doc.id,
-				uid: doc.id,
-				isAdmin: workspaceData?.admins?.includes(doc.id),
-			}));
+		if (userIds.length) {
+			let usersNotInStore = [];
+			const userListFromStore = store.getState().userList || [];
+			for (let userId of userIds) {
+				const userInStoreIndex = userListFromStore?.findIndex?.(
+					(user) => (user.uid || user.id) === userId
+				);
+				if (userInStoreIndex !== -1)
+					users.push(userListFromStore[userInStoreIndex]);
+				else usersNotInStore.push(userId);
+			}
 
-		if (userIsPartOfWorkspace)
+			if (usersNotInStore.length) {
+				usersNotInStore = (
+					await db.collection("users").where("uid", "in", userIds).get()
+				).docs.map((doc) => ({
+					...doc.data(),
+					id: doc.id,
+					uid: doc.id,
+					isAdmin: workspaceData?.admins?.includes(doc.id),
+				}));
+				users = [...users, ...usersNotInStore];
+			}
+		}
+
+		if (userIsCurrentUser)
 			users.unshift({
 				...store.getState().user,
 				isAdmin: workspaceData?.admins?.includes(store.getState().user.uid),
 			});
 
 		return callback(null, users);
+	} catch (err) {
+		console.log(err);
+		return callback(err.message);
+	}
+};
+
+export const getUsersByIds = async (userIds = [], callback) => {
+	try {
+		let usersToReturn = [];
+		let usersNotInStore = [];
+		const userListFromStore = store.getState().userList || [];
+		for (let userId of userIds) {
+			const userInStoreIndex = userListFromStore?.findIndex?.(
+				(user) => (user.uid || user.id) === userId
+			);
+			if (userInStoreIndex !== -1)
+				usersToReturn.push(userListFromStore[userInStoreIndex]);
+			else usersNotInStore.push(userId);
+		}
+
+		if (usersNotInStore.length) {
+			usersNotInStore = (
+				await db.collection("users").where("uid", "in", usersNotInStore).get()
+			).docs.map((doc) => ({
+				...doc.data(),
+				id: doc.id,
+				uid: doc.id,
+			}));
+			usersToReturn = [...usersToReturn, ...usersNotInStore];
+		}
+
+		return callback(null, usersToReturn);
 	} catch (err) {
 		console.log(err);
 		return callback(err.message);

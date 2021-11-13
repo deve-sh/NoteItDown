@@ -23,14 +23,13 @@ const store = create(
 			userList: [],
 			setUserList: (usersToUpdate = []) =>
 				set((state) => {
-					const updatedUserList = [...(state.userList || [])];
+					let updatedUserList = [...(state.userList || [])];
 					for (let user of usersToUpdate) {
-						if (
-							!updatedUserList.find(
-								(userInState) =>
-									(userInState.id || userInState.uid) === (user.uid || user.id)
-							)
-						)
+						const userIndexInStore = updatedUserList.findIndex(
+							(userInState) =>
+								(userInState.id || userInState.uid) === (user.uid || user.id)
+						);
+						if (userIndexInStore === -1)
 							updatedUserList.push({
 								...user,
 								createdAt:
@@ -42,6 +41,18 @@ const store = create(
 									new Date(user.updatedAt) ||
 									new Date(),
 							});
+						else
+							updatedUserList[userIndexInStore] = {
+								...user,
+								createdAt:
+									user.createdAt?.toDate?.()?.toISOString?.() ||
+									new Date(user.createdAt) ||
+									new Date(),
+								updatedAt:
+									user.updatedAt?.toDate?.()?.toISOString?.() ||
+									new Date(user.updatedAt) ||
+									new Date(),
+							};
 					}
 					return { ...state, userList: updatedUserList };
 				}),

@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useRef, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
@@ -6,6 +7,7 @@ import Editor from "components/Editor";
 import ContentWrapper from "Wrappers/ContentWrapper";
 
 import { addDocumentToWorkspace, updateDocument } from "API/documents";
+import { getUsersByIds } from "API/workspaces";
 import toasts from "helpers/toasts";
 
 import useFirestore from "hooks/useFirestore";
@@ -17,6 +19,8 @@ const EditorPage = (props) => {
 
 	const user = useStore((store) => store.user);
 	const setLoading = useStore((store) => store.setLoading);
+
+	const [editorUsers, setEditorUsers] = useState([]);
 
 	let workspaceId, documentId;
 
@@ -36,9 +40,21 @@ const EditorPage = (props) => {
 		mutate: setDocumentData,
 	} = useFirestore(documentId ? `documents/${documentId}` : null);
 
+	useEffect(() => /* Cleanup Loading State */ () => setLoading(false), []);
+
 	useEffect(() => {
-		return () => setLoading(false);
-	}, [setLoading]);
+		if (
+			documentData &&
+			!editorUsers?.length &&
+			Object.keys(documentData?.editors || {}).length
+		) {
+			const editorUsersIds = Object.keys(documentData?.editors);
+			getUsersByIds(editorUsersIds, (err, users) => {
+				if (err) return toasts.generateError(err);
+				setEditorUsers(users);
+			});
+		}
+	}, [documentData]);
 
 	const [isEditable, toggleEditor] = useToggle(false);
 
