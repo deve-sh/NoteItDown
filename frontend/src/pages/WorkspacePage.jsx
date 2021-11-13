@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, Redirect, useHistory } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { ReactSortable } from "react-sortablejs";
 
 import styled from "@emotion/styled";
 import {
@@ -11,8 +10,6 @@ import {
 	Button,
 	ButtonGroup,
 	IconButton,
-	List,
-	ListItem,
 	Text,
 	useDisclosure,
 	Container,
@@ -40,18 +37,10 @@ import toasts from "helpers/toasts";
 import ContentWrapper from "Wrappers/ContentWrapper";
 import NoneFound from "components/NoneFound";
 import UserListModal from "components/Workspaces/UserListModal";
+import DocumentsList from "components/Workspaces/DocumentsList";
 
 const WorkspaceContentWrapper = styled(ContentWrapper)`
 	max-width: 850px;
-`;
-
-const DocumentLink = styled(Link)`
-	padding: calc(0.5 * var(--standard-spacing));
-	width: 100%;
-	display: block;
-	&:hover {
-		background: var(--backgroundgrey);
-	}
 `;
 
 const WorkspacePage = (props) => {
@@ -225,40 +214,11 @@ const WorkspacePage = (props) => {
 			</HStack>
 			<Container centerContent>
 				{workspaceDocuments?.length ? (
-					<List
-						spacing="3"
-						textAlign="left"
-						minWidth="650px"
-						marginTop="2.5rem"
-					>
-						<ReactSortable
-							list={workspaceDocuments}
-							setList={updateDocumentsOrder}
-							draggable=".draggable"
-							delayOnTouchStart
-							delay={2}
-							animation={200}
-						>
-							{workspaceDocuments
-								.sort((doc1, doc2) =>
-									"position" in doc1 && "position" in doc2
-										? doc1.position - doc2.position
-										: 0
-								)
-								.map((doc) => (
-									<ListItem key={doc.id} className="draggable">
-										<DocumentLink
-											to={`/editor/document/${doc.id}`}
-											target="_blank"
-										>
-											<Text fontWeight="500">
-												{doc.identifierEmoji?.emoji || "📄"} {doc.title}
-											</Text>
-										</DocumentLink>
-									</ListItem>
-								))}
-						</ReactSortable>
-					</List>
+					<DocumentsList
+						documents={workspaceDocuments}
+						updateDocumentsOrder={updateDocumentsOrder}
+						draggable=".draggable"
+					/>
 				) : (
 					<NoneFound label="No Documents Added So far." />
 				)}

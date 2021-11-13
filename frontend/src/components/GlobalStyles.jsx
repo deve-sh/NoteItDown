@@ -89,9 +89,17 @@ const GlobalStyles = ({ darkMode = false }) => (
 				font-size: 1rem;
 			}
 
+			#editorjs .codex-editor__redactor {
+				padding-bottom: 50px !important;
+			}
+
 			@media print {
 				.noprint {
 					display: none;
+				}
+
+				* {
+					-webkit-print-color-adjust: exact !important;
 				}
 			}
 
@@ -100,7 +108,7 @@ const GlobalStyles = ({ darkMode = false }) => (
 					font-size: var(--mid-spacing);
 				}
 			}
-			
+
 			.draggable {
 				cursor: grabbing;
 			}
