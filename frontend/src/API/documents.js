@@ -246,3 +246,37 @@ export const addDocumentComment = async (
 		return callback(err.message);
 	}
 };
+
+export const deleteDocumentComment = async (
+	commentId,
+	documentId,
+	isReply = false,
+	replyTo = null,
+	callback
+) => {
+	try {
+		const commentsDocRef = db.collection("documentcomments").doc(documentId);
+		const commentsDoc = (await commentsDocRef.get()).data();
+
+		if (!isReply || !replyTo) {
+			if (commentsDoc) {
+				await commentsDocRef.update({
+					updatedAt: firestore.FieldValue.serverTimestamp(),
+					[`comments.${commentId}`]: firestore.FieldValue.delete(),
+				});
+			}
+			return callback("Comments not found.");
+		} else {
+			if (commentsDoc) {
+				await commentsDocRef.update({
+					updatedAt: firestore.FieldValue.serverTimestamp(),
+					[`comments.${replyTo}.replies`]: firestore.FieldValue.delete(),
+				});
+			} else return callback("Comments not found.");
+		}
+		return callback(null, (await commentsDoc.get()).data());
+	} catch (err) {
+		console.log(err);
+		return callback(err.message);
+	}
+};
