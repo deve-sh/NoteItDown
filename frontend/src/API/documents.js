@@ -1,3 +1,4 @@
+import { v4 as uuid } from "uuid";
 import auth from "firebase/authentication";
 import db, { firestore } from "firebase/db";
 
@@ -180,6 +181,66 @@ export const updateDocumentsOrder = async (
 		await batch.commit();
 
 		return callback(null);
+	} catch (err) {
+		console.log(err);
+		return callback(err.message);
+	}
+};
+
+export const getDocumentComments = async (documentId, callback) => {
+	try {
+		const commentsDoc = db.collection("documentcomments").doc(documentId);
+		return callback(null, (await commentsDoc.get()).data());
+	} catch (err) {
+		console.log(err);
+		return callback(err.message);
+	}
+};
+
+export const addDocumentComment = async (
+	commentData = {
+		blockId: undefined,
+		isReply: false,
+		text: "",
+		references: [],
+	},
+	documentId,
+	callback
+) => {
+	try {
+		const commentsDocRef = db.collection("documentcomments").doc(documentId);
+		const commentsDoc = (await commentsDocRef.get()).data();
+
+		const commentId = uuid();
+		commentData.id = commentId;
+		commentData.commentedBy = auth.currentUser.uid;
+		commentData.updatedAt = firestore.FieldValue.serverTimestamp();
+		commentData.createdAt = firestore.FieldValue.serverTimestamp();
+
+		if (!commentData.isReply || !commentData.replyTo) {
+			if (commentsDoc) {
+				await commentsDocRef.update({
+					updatedAt: firestore.FieldValue.serverTimestamp(),
+					[`comments.${commentId}`]: commentData,
+				});
+			} else {
+				await commentsDocRef.set({
+					updatedAt: firestore.FieldValue.serverTimestamp(),
+					createdAt: firestore.FieldValue.serverTimestamp(),
+					comments: {
+						[commentId]: commentData,
+					},
+				});
+			}
+		} else {
+			if (commentsDoc) {
+				await commentsDocRef.update({
+					updatedAt: firestore.FieldValue.serverTimestamp(),
+					[`comments.${commentData.replyTo}.replies`]: commentData,
+				});
+			} else return callback("Comments not found.");
+		}
+		return callback(null, (await commentsDoc.get()).data());
 	} catch (err) {
 		console.log(err);
 		return callback(err.message);
