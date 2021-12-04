@@ -3,8 +3,16 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Redirect, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import styled from "@emotion/styled";
-import { Text, Button, Box, Divider, Heading } from "@chakra-ui/react";
-import { BiPlus } from "react-icons/bi";
+import {
+	Text,
+	Button,
+	Box,
+	Divider,
+	HStack,
+	IconButton,
+	Spinner,
+} from "@chakra-ui/react";
+import { BiPlus, BiSend } from "react-icons/bi";
 
 import Editor from "components/Editor";
 import ContentWrapper from "Wrappers/ContentWrapper";
@@ -15,6 +23,7 @@ import {
 	getDocumentsFromWorkspace,
 	updateDocument,
 	deleteDocument as deleteDocumentFromDatabase,
+	addDocumentComment,
 } from "API/documents";
 import { getUsersByIds } from "API/workspaces";
 import toasts from "helpers/toasts";
@@ -74,6 +83,7 @@ const EditorPage = (props) => {
 		data: comments,
 		error: commentsError,
 		isLoading: commentsLoading,
+		mutate: reloadComments,
 	} = useFirestore(documentId ? `documentcomments/${documentId}` : null);
 
 	const [childrenDocuments, setChildrenDocuments] = useState([]);
@@ -115,6 +125,14 @@ const EditorPage = (props) => {
 			else comment.blocks.splice(blockIndex, 1);
 			return comment;
 		});
+	};
+	const addComment = () => {
+		if (newComment.text) {
+			addDocumentComment(newComment, documentId, (err) => {
+				if (err) return toasts.generateError(err);
+				reloadComments();
+			});
+		}
 	};
 
 	useEffect(() => {
@@ -348,10 +366,24 @@ const EditorPage = (props) => {
 				<Text fontSize="lg" mb={5} fontWeight={600}>
 					Comments
 				</Text>
-				<CommentTextField
-					userOptions={editorUsers || []}
-					onChange={handleNewCommentTextChange}
-				/>
+				<HStack width="100%" alignItems="center">
+					<Box flex={11}>
+						<CommentTextField
+							userOptions={editorUsers || []}
+							onChange={handleNewCommentTextChange}
+						/>
+					</Box>
+					<Box flex={1} textAlign="right">
+						<IconButton colorScheme="blue" onClick={addComment}>
+							<BiSend size="1.5rem" />
+						</IconButton>
+					</Box>
+				</HStack>
+				{commentsLoading && (
+					<Box padding={5} textAlign="center">
+						<Spinner size="xl" color="blue" />
+					</Box>
+				)}
 			</CommentsWrapper>
 		</ContentWrapper>
 	);
