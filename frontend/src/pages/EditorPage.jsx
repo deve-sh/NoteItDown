@@ -17,6 +17,9 @@ import { BiPlus, BiSend } from "react-icons/bi";
 import Editor from "components/Editor";
 import ContentWrapper from "Wrappers/ContentWrapper";
 import DocumentsList from "components/Workspaces/DocumentsList";
+import CommentTextField from "components/Document/CommentTextField";
+import Comments from "components/Document/Comments";
+import NoneFound from "components/NoneFound";
 
 import {
 	addDocumentToWorkspace,
@@ -32,7 +35,6 @@ import useFirestore from "hooks/useFirestore";
 import useStore from "hooks/useStore";
 import useToggle from "hooks/useToggle";
 import { getQueryParams } from "helpers/getQueryParams";
-import CommentTextField from "components/Document/CommentTextField";
 
 const CommentsWrapper = styled.div`
 	max-width: 650px;
@@ -80,8 +82,7 @@ const EditorPage = (props) => {
 		isLoading: parentDocumentLoading,
 	} = useFirestore(parentDocumentId ? `documents/${parentDocumentId}` : null);
 	const {
-		data: comments,
-		error: commentsError,
+		data: commentsDocument,
 		isLoading: commentsLoading,
 		mutate: reloadComments,
 	} = useFirestore(documentId ? `documentcomments/${documentId}` : null);
@@ -379,10 +380,15 @@ const EditorPage = (props) => {
 						</IconButton>
 					</Box>
 				</HStack>
-				{commentsLoading && (
+				{commentsLoading ? (
 					<Box padding={5} textAlign="center">
 						<Spinner size="xl" color="blue" />
 					</Box>
+				) : commentsDocument &&
+				  Object.keys(commentsDocument?.comments).length ? (
+					<Comments commentsData={commentsDocument} />
+				) : (
+					<NoneFound label="No Comments On This Document Yet" />
 				)}
 			</CommentsWrapper>
 		</ContentWrapper>
