@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 
@@ -39,7 +40,26 @@ import EditorChecklist from "@editorjs/checklist";
 import { uploadImage } from "API/editor";
 import useStore from "hooks/useStore";
 
-const EditorContainerDiv = styled.div``;
+const EditorContainerDiv = styled.div`
+	.ce-block {
+		position: relative;
+
+		&:hover > .block-comment-toggler {
+			opacity: 1;
+		}
+	}
+`;
+
+const EditorBlockCommentHandler = styled.span`
+	position: absolute;
+	right: calc(3 * var(--standard-spacing));
+	top: 50%;
+	transform: translateY(-50%);
+	padding: var(--standard-spacing);
+	opacity: 0;
+	transition: 0.25s;
+	cursor: pointer;
+`;
 
 const MainInputsStack = styled(HStack)`
 	max-width: 650px;
@@ -78,6 +98,30 @@ const Editor = ({
 
 	const onEmojiSelect = (_, emojiObject) => {
 		setIdentifierEmoji(emojiObject);
+	};
+
+	const onEditorReady = async (editorRef) => {
+		onReady(editorRef);
+		if (readOnly) {
+			// Setup UI for comments.
+			if (prefilledData?.blocks?.length && editorRef?.blocks?.getById) {
+				for (let block of prefilledData?.blocks) {
+					const blockData = await editorRef?.blocks?.getById(block.id);
+					if (blockData.holder && !["image"].includes(blockData.name)) {
+						// Add an element to block holder
+						const blockCommentHandler = renderToStaticMarkup(
+							<EditorBlockCommentHandler
+								id={`block-comment-${blockData.id}`}
+								className="block-comment-toggler"
+							>
+								💬
+							</EditorBlockCommentHandler>
+						);
+						blockData.holder.innerHTML = `${blockData.holder.innerHTML}${blockCommentHandler}`;
+					}
+				}
+			}
+		}
 	};
 
 	useEffect(() => {
@@ -168,7 +212,7 @@ const Editor = ({
 					inlineToolbar: true,
 				},
 			},
-			onReady: () => onReady(editor.current),
+			onReady: () => onEditorReady(editor.current),
 			onChange: (editorData) => {
 				const currentlyEditedBlockIndex =
 					editorData?.blocks?.getCurrentBlockIndex();

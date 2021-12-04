@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Redirect, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { Text, Button, Box } from "@chakra-ui/react";
@@ -126,6 +126,17 @@ const EditorPage = (props) => {
 		window.print();
 	};
 
+	const prefilledData = useMemo(() => {
+		try {
+			return documentData?.editorData
+				? JSON.parse(documentData.editorData)
+				: null;
+		} catch (err) {
+			console.log(err);
+			return null;
+		}
+	}, [documentData]);
+
 	if (workspaceId && !workspaceLoading && (workspaceError || !workspaceData))
 		return <Redirect to="/" />;
 	if (documentId && !documentLoading && (documentError || !documentData))
@@ -244,16 +255,7 @@ const EditorPage = (props) => {
 					onReady={(editorInstance) => (editor.current = editorInstance)}
 					readOnly={mode !== "new" && !isEditable}
 					toggleEditor={toggleEditor}
-					prefilledData={(() => {
-						try {
-							return documentData?.editorData
-								? JSON.parse(documentData.editorData)
-								: null;
-						} catch (err) {
-							console.log(err);
-							return null;
-						}
-					})()}
+					prefilledData={prefilledData}
 					onSave={saveDocument}
 					documentData={documentData}
 					workspaceId={workspaceId || documentData?.workspace}
