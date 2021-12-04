@@ -21,6 +21,7 @@ The feature list for this app includes:
 - Reorderable documents
 - Everything operates seamlessly on the frontend due to the power of Firebase.
 - Secure, noone unauthorized will have access to your stuff since they are guarded by Firebase's security rules.
+- Comments (**Coming Soon**)
 
 ##### Creating Workspace
 
