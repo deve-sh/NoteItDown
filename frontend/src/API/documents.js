@@ -199,10 +199,10 @@ export const getDocumentComments = async (documentId, callback) => {
 
 export const addDocumentComment = async (
 	commentData = {
-		blockId: undefined,
+		blocks: [],
 		isReply: false,
 		text: "",
-		references: [],
+		mentions: [],
 	},
 	documentId,
 	callback
