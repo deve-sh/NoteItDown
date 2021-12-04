@@ -2,11 +2,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Redirect, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { Text, Button, Box } from "@chakra-ui/react";
+import styled from "@emotion/styled";
+import { Text, Button, Box, Divider, Heading } from "@chakra-ui/react";
 import { BiPlus } from "react-icons/bi";
 
 import Editor from "components/Editor";
 import ContentWrapper from "Wrappers/ContentWrapper";
+import DocumentsList from "components/Workspaces/DocumentsList";
 
 import {
 	addDocumentToWorkspace,
@@ -21,7 +23,16 @@ import useFirestore from "hooks/useFirestore";
 import useStore from "hooks/useStore";
 import useToggle from "hooks/useToggle";
 import { getQueryParams } from "helpers/getQueryParams";
-import DocumentsList from "components/Workspaces/DocumentsList";
+import CommentTextField from "components/Document/CommentTextField";
+
+const CommentsWrapper = styled.div`
+	max-width: 650px;
+	margin: 0 auto;
+	padding: var(--standard-spacing);
+	.rc-mentions-wrapper {
+		display: none;
+	}
+`;
 
 const EditorPage = (props) => {
 	const editor = useRef(null);
@@ -59,6 +70,11 @@ const EditorPage = (props) => {
 		error: parentDocumentError,
 		isLoading: parentDocumentLoading,
 	} = useFirestore(parentDocumentId ? `documents/${parentDocumentId}` : null);
+	const {
+		data: comments,
+		error: commentsError,
+		isLoading: commentsLoading,
+	} = useFirestore(documentId ? `documentcomments/${documentId}` : null);
 
 	const [childrenDocuments, setChildrenDocuments] = useState([]);
 	const isUpdatingDocumentOrder = useRef(false);
@@ -81,6 +97,25 @@ const EditorPage = (props) => {
 	}, [documentData]);
 
 	const [isEditable, toggleEditor] = useToggle(false);
+
+	// Comments Related
+	const [newComment, setNewComment] = useState({
+		text: "",
+		mentions: [],
+		blocks: [],
+	});
+
+	const handleNewCommentTextChange = (text) => {
+		setNewComment((comment) => ({ ...comment, text }));
+	};
+	const handleNewCommentBlockLinking = (blockId) => {
+		setNewComment((comment) => {
+			const blockIndex = comment.blocks.indexOf(blockId);
+			if (blockIndex === -1) comment.blocks.push(blockId);
+			else comment.blocks.splice(blockIndex, 1);
+			return comment;
+		});
+	};
 
 	useEffect(() => {
 		if ((workspaceId && workspaceLoading) || (documentId && documentLoading))
@@ -266,6 +301,7 @@ const EditorPage = (props) => {
 					printDocument={printDocument}
 					editorUsers={editorUsers}
 					deleteDocument={deleteDocument}
+					handleNewCommentBlockLinking={handleNewCommentBlockLinking}
 				/>
 			)}
 			{documentData?.hasChildDocuments &&
@@ -306,6 +342,17 @@ const EditorPage = (props) => {
 			) : (
 				""
 			)}
+			<Divider mt={5} mx="auto" maxWidth="650px" />
+			{/* Comments */}
+			<CommentsWrapper id="comments">
+				<Text fontSize="lg" mb={5} fontWeight={600}>
+					Comments
+				</Text>
+				<CommentTextField
+					userOptions={editorUsers || []}
+					onChange={handleNewCommentTextChange}
+				/>
+			</CommentsWrapper>
 		</ContentWrapper>
 	);
 };
