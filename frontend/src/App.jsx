@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Loadable from "react-loadable";
+import { SWRConfig } from "swr";
 import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
 import {
 	ChakraProvider,
@@ -78,52 +79,61 @@ function App() {
 	};
 
 	return (
-		<Router>
-			{isLoading && <FullPageLoader type={loaderType} />}
-			<ToastContainer />
-			<ChakraProvider>
-				<GlobalStyles darkMode={isDarkModeActive} />
-				{!stateUser && (
-					<LoginModal closeModal={closeLoginModal} isOpen={showLoginModal} />
-				)}
-				<Header openLoginModal={openLoginModal} logoutUser={logoutUser} />
-				<AppContentContainer>
-					<Switch>
-						<Route
-							path="/"
-							exact
-							component={() => (
-								<HomePage
-									loggedIn={stateUser}
-									openLoginModal={openLoginModal}
-								/>
-							)}
-						/>
-						<Route
-							path="/login"
-							component={(prps) => (
-								<Login
-									loggedIn={!!stateUser}
-									openLoginModal={openLoginModal}
-									{...prps}
-								/>
-							)}
-						/>
-						<ProtectedRoute path="/profile" component={UserProfile} />
-						<ProtectedRoute path="/workspaces" component={WorkSpaces} />
-						<ProtectedRoute
-							path="/workspace/:workspaceId"
-							component={WorkspacePage}
-						/>
-						<ProtectedRoute
-							path="/editor/:mode/:assetId"
-							component={EditorPage}
-						/>
-						<ProtectedRoute path="/documents" component={RecentDocuments} />
-					</Switch>
-				</AppContentContainer>
-			</ChakraProvider>
-		</Router>
+		<SWRConfig
+			options={{
+				revalidateOnFocus: true,
+				revalidateOnReconnect: false,
+				dedupingInterval: 10000,
+				loadingTimeout: 10000,
+			}}
+		>
+			<Router>
+				{isLoading && <FullPageLoader type={loaderType} />}
+				<ToastContainer />
+				<ChakraProvider>
+					<GlobalStyles darkMode={isDarkModeActive} />
+					{!stateUser && (
+						<LoginModal closeModal={closeLoginModal} isOpen={showLoginModal} />
+					)}
+					<Header openLoginModal={openLoginModal} logoutUser={logoutUser} />
+					<AppContentContainer>
+						<Switch>
+							<Route
+								path="/"
+								exact
+								component={() => (
+									<HomePage
+										loggedIn={stateUser}
+										openLoginModal={openLoginModal}
+									/>
+								)}
+							/>
+							<Route
+								path="/login"
+								component={(prps) => (
+									<Login
+										loggedIn={!!stateUser}
+										openLoginModal={openLoginModal}
+										{...prps}
+									/>
+								)}
+							/>
+							<ProtectedRoute path="/profile" component={UserProfile} />
+							<ProtectedRoute path="/workspaces" component={WorkSpaces} />
+							<ProtectedRoute
+								path="/workspace/:workspaceId"
+								component={WorkspacePage}
+							/>
+							<ProtectedRoute
+								path="/editor/:mode/:assetId"
+								component={EditorPage}
+							/>
+							<ProtectedRoute path="/documents" component={RecentDocuments} />
+						</Switch>
+					</AppContentContainer>
+				</ChakraProvider>
+			</Router>
+		</SWRConfig>
 	);
 }
 
