@@ -17,7 +17,7 @@ import {
 	MenuList,
 } from "@chakra-ui/react";
 import EmojiPicker from "emoji-picker-react";
-import { MdDelete, MdEdit, MdSave } from "react-icons/md";
+import { MdClear, MdDelete, MdEdit, MdSave } from "react-icons/md";
 import { BiArrowBack } from "react-icons/bi";
 import { FaFilePdf } from "react-icons/fa";
 
@@ -342,7 +342,7 @@ const Editor = ({
 								required
 							/>
 						</Box>
-						<Box flex="1">
+						<HStack spacing="2.5" flex="2">
 							<IconButton
 								variant="ghost"
 								onClick={() =>
@@ -356,7 +356,15 @@ const Editor = ({
 							>
 								<MdSave size="1.25rem" />
 							</IconButton>
-						</Box>
+							<IconButton
+								variant="ghost"
+								onClick={toggleEditor}
+								colorScheme="red"
+								title="Cancel"
+							>
+								<MdClear size="1.25rem" />
+							</IconButton>
+						</HStack>
 					</>
 				)}
 			</MainInputsStack>
