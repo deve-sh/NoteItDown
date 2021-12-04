@@ -132,7 +132,7 @@ const EditorPage = (props) => {
 				? JSON.parse(documentData.editorData)
 				: null;
 		} catch (err) {
-			console.log(err);
+			console.log("Prefilled Data Parsing Error: ", err);
 			return null;
 		}
 	}, [documentData]);
