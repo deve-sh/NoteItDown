@@ -55,10 +55,10 @@ const EditorBlockCommentHandler = styled.span`
 	right: calc(3 * var(--standard-spacing));
 	top: 50%;
 	transform: translateY(-50%);
-	padding: var(--standard-spacing);
 	opacity: 0;
 	transition: 0.25s;
 	cursor: pointer;
+	font-size: calc(1.25 * var(--standard-spacing));
 `;
 
 const MainInputsStack = styled(HStack)`
@@ -108,16 +108,25 @@ const Editor = ({
 				for (let block of prefilledData?.blocks) {
 					const blockData = await editorRef?.blocks?.getById(block.id);
 					if (blockData.holder && !["image"].includes(blockData.name)) {
-						// Add an element to block holder
+						// Create comment toggler element.
 						const blockCommentHandler = renderToStaticMarkup(
-							<EditorBlockCommentHandler
+							<EditorBlockCommentHandler // This is pre-styled component to appear at the right on block hover.
 								id={`block-comment-${blockData.id}`}
 								className="block-comment-toggler"
+								title="Comments Coming Soon"
 							>
 								💬
 							</EditorBlockCommentHandler>
 						);
+						// Add the comment toggler to the right of the element.
 						blockData.holder.innerHTML = `${blockData.holder.innerHTML}${blockCommentHandler}`;
+						// Add an event listener to the block comment toggler just added above.
+						document
+							.getElementById(`block-comment-${blockData.id}`)
+							.addEventListener("click", () => {
+								console.log(blockData.id);
+							});
+						blockData.holder.setAttribute("id", blockData.id); // Add id to the id attribute of the block holder to identify block numbers later.
 					}
 				}
 			}
