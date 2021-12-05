@@ -8,10 +8,11 @@ const CommentInputBlock = ({
 	comment,
 	handleCommentTextChange = () => null,
 	addComment,
+	isReplyField = false,
 }) => (
 	<HStack width="100%" alignItems="center">
 		<Box flex={11}>
-			{comment?.blocks?.length > 0 && (
+			{!isReplyField && comment?.blocks?.length > 0 && (
 				<Text fontSize="sm" color="gray">
 					Your Comment will be linked to the blocks you clicked on.
 					<br />
@@ -23,6 +24,7 @@ const CommentInputBlock = ({
 			<CommentTextField
 				userOptions={editorUsers || []}
 				onChange={handleCommentTextChange}
+				isReplyField={isReplyField}
 			/>
 		</Box>
 		<Box flex={1} textAlign="right">

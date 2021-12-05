@@ -1,5 +1,11 @@
+import { useState, useEffect } from "react";
 import styled from "@emotion/styled";
-import { Box, Text, HStack, Avatar } from "@chakra-ui/react";
+
+import { Box, Text, Divider, HStack, Avatar } from "@chakra-ui/react";
+import CommentInputBlock from "./CommentInputBlock";
+
+import { addDocumentComment } from "API/documents";
+import toasts from "helpers/toasts";
 
 const CommentWrapper = styled(Box)`
 	padding: var(--standard-spacing);
@@ -14,9 +20,40 @@ const CommentBlockLink = styled.a`
 	font-size: calc(0.75 * var(--standard-spacing));
 `;
 
-const Comment = ({ comment }) => {
+const Comment = ({ comment, reloadCommentsList = () => null }) => {
 	const commenterName =
 		comment?.commenter?.displayName || comment?.commenter?.email;
+
+	const [replyComment, setReplyComment] = useState({
+		text: "",
+		mentions: [],
+		isReply: true,
+		replyTo: comment?.id,
+	});
+
+	useEffect(() => {
+		if (comment?.id)
+			setReplyComment((reply) => ({ ...reply, replyTo: comment.id }));
+	}, [comment]);
+
+	const handleNewCommentReplyChange = (text) => {
+		setReplyComment({ ...replyComment, text });
+	};
+
+	const addCommentReply = () => {
+		if (replyComment.text)
+			addDocumentComment(
+				replyComment,
+				comment?.document,
+				comment?.workspace,
+				(err) => {
+					if (err) return toasts.generateError(err);
+					toasts.generateSuccess("Added comment reply successfully.");
+					reloadCommentsList();
+				}
+			);
+	};
+
 	return (
 		<CommentWrapper shadow="md" borderRadius="md">
 			<HStack alignItems="center">
@@ -47,6 +84,13 @@ const Comment = ({ comment }) => {
 						</CommentBlockLink>
 				  ))
 				: ""}
+			<Divider my={3} />
+			<CommentInputBlock
+				handleCommentTextChange={handleNewCommentReplyChange}
+				addComment={addCommentReply}
+				editorUsers={[]}
+				isReplyField
+			/>
 		</CommentWrapper>
 	);
 };
