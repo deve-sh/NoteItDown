@@ -210,8 +210,12 @@ export const addDocumentComment = async (
 ) => {
 	try {
 		const commentsDocRef = db.collection("documentcomments").doc(documentId);
-		const commentsDoc = (await commentsDocRef.get()).data();
-
+		let commentsDoc = null;
+		try {
+			commentsDoc = (await commentsDocRef.get()).data();
+		} catch (err) {
+			// Doesn't exist
+		}
 		const commentId = uuid();
 		commentData.id = commentId;
 		commentData.commentedBy = auth.currentUser.uid;
@@ -248,7 +252,7 @@ export const addDocumentComment = async (
 				});
 			} else return callback("Comments not found.");
 		}
-		return callback(null, (await commentsDoc.get()).data());
+		return callback(null);
 	} catch (err) {
 		console.log(err);
 		return callback(err.message);

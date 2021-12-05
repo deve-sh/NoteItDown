@@ -129,10 +129,15 @@ const EditorPage = (props) => {
 	};
 	const addComment = () => {
 		if (newComment.text) {
-			addDocumentComment(newComment, documentId, workspaceId, (err) => {
-				if (err) return toasts.generateError(err);
-				reloadComments();
-			});
+			addDocumentComment(
+				newComment,
+				documentId,
+				workspaceId || documentData.workspace,
+				(err) => {
+					if (err) return toasts.generateError(err);
+					reloadComments();
+				}
+			);
 		}
 	};
 
