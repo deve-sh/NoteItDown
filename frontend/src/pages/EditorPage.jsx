@@ -120,12 +120,11 @@ const EditorPage = (props) => {
 		setNewComment((comment) => ({ ...comment, text }));
 	};
 	const handleNewCommentBlockLinking = (blockId) => {
-		setNewComment((comment) => {
-			const blockIndex = comment.blocks.indexOf(blockId);
-			if (blockIndex === -1) comment.blocks.push(blockId);
-			else comment.blocks.splice(blockIndex, 1);
-			return comment;
-		});
+		const newCommentBlocksToUpdate = [...newComment.blocks];
+		const blockIndex = newCommentBlocksToUpdate.indexOf(blockId);
+		if (blockIndex === -1) newCommentBlocksToUpdate.push(blockId);
+		else newCommentBlocksToUpdate.splice(blockIndex, 1);
+		setNewComment({ ...newComment, blocks: newCommentBlocksToUpdate });
 	};
 	const addComment = () => {
 		if (newComment.text) {
@@ -375,6 +374,12 @@ const EditorPage = (props) => {
 				</Text>
 				<HStack width="100%" alignItems="center">
 					<Box flex={11}>
+						{newComment?.blocks?.length > 0 && (
+							<>
+								Your Comment will be linked to the blocks you clicked on.
+								<br />
+							</>
+						)}
 						<CommentTextField
 							userOptions={editorUsers || []}
 							onChange={handleNewCommentTextChange}
