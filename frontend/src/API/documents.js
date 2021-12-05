@@ -249,7 +249,7 @@ export const addDocumentComment = async (
 			if (commentsDoc) {
 				await commentsDocRef.update({
 					updatedAt: firestore.FieldValue.serverTimestamp(),
-					[`comments.${commentData.replyTo}.replies`]: commentData,
+					[`comments.${commentData.replyTo}.replies.${commentId}`]: commentData,
 				});
 			} else return callback("Comments not found.");
 		}
