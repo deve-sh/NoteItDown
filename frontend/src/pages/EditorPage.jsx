@@ -135,6 +135,7 @@ const EditorPage = (props) => {
 				workspaceId || documentData.workspace,
 				(err) => {
 					if (err) return toasts.generateError(err);
+					toasts.generateSuccess("Added comment successfully.");
 					reloadComments();
 				}
 			);
