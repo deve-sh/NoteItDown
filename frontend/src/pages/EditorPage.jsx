@@ -128,6 +128,7 @@ const EditorPage = (props) => {
 				(err) => {
 					if (err) return toasts.generateError(err);
 					toasts.generateSuccess("Added comment successfully.");
+					setNewComment({ ...newComment, text: "", blocks: [], mentions: [] });
 					reloadComments();
 				}
 			);

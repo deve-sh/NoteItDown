@@ -51,6 +51,12 @@ const Comment = ({
 				(err) => {
 					if (err) return toasts.generateError(err);
 					toasts.generateSuccess("Added comment reply successfully.");
+					setReplyComment({
+						...replyComment,
+						text: "",
+						blocks: [],
+						mentions: [],
+					});
 					reloadCommentsList();
 				}
 			);
