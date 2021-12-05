@@ -205,6 +205,7 @@ export const addDocumentComment = async (
 		mentions: [],
 	},
 	documentId,
+	workspaceId,
 	callback
 ) => {
 	try {
@@ -214,6 +215,7 @@ export const addDocumentComment = async (
 		const commentId = uuid();
 		commentData.id = commentId;
 		commentData.commentedBy = auth.currentUser.uid;
+		commentData.workspace = workspaceId;
 		commentData.updatedAt = firestore.FieldValue.serverTimestamp();
 		commentData.createdAt = firestore.FieldValue.serverTimestamp();
 		commentData.commenter = {
@@ -231,6 +233,8 @@ export const addDocumentComment = async (
 				await commentsDocRef.set({
 					updatedAt: firestore.FieldValue.serverTimestamp(),
 					createdAt: firestore.FieldValue.serverTimestamp(),
+					workspace: workspaceId,
+					document: documentId,
 					comments: {
 						[commentId]: commentData,
 					},

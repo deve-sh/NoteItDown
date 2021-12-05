@@ -129,7 +129,7 @@ const EditorPage = (props) => {
 	};
 	const addComment = () => {
 		if (newComment.text) {
-			addDocumentComment(newComment, documentId, (err) => {
+			addDocumentComment(newComment, documentId, workspaceId, (err) => {
 				if (err) return toasts.generateError(err);
 				reloadComments();
 			});
