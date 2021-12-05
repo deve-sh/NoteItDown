@@ -29,7 +29,6 @@ const CommentTextField = ({
 			onChange={onChange}
 			transitionName="motion"
 			$isReplyField={isReplyField}
-			className="noprint"
 		>
 			{userOptions?.length
 				? userOptions?.map((user) => (

@@ -10,7 +10,7 @@ const CommentInputBlock = ({
 	addComment,
 	isReplyField = false,
 }) => (
-	<HStack width="100%" alignItems="center">
+	<HStack className="noprint" width="100%" alignItems="center">
 		<Box flex={11}>
 			{!isReplyField && comment?.blocks?.length > 0 && (
 				<Text fontSize="sm" color="gray">
