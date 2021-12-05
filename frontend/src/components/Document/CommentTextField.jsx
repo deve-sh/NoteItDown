@@ -18,16 +18,15 @@ const CommentTextField = ({
 	isReplyField = false,
 	onChange = () => null,
 	commentText = "",
-}) => {
-	return (
-		<CommentTextArea
-			placeholder={isReplyField ? "Write Your Reply" : "Write your comment"}
-			value={commentText}
-			onChange={onChange}
-			transitionName="motion"
-			$isReplyField={isReplyField}
-		/>
-	);
-};
+}) => (
+	<CommentTextArea
+		placeholder={isReplyField ? "Write Your Reply" : "Write your comment"}
+		value={commentText}
+		onChange={onChange}
+		transitionName="motion"
+		$isReplyField={isReplyField}
+		rows={isReplyField ? 1 : undefined}
+	/>
+);
 
 export default CommentTextField;

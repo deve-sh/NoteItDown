@@ -108,8 +108,9 @@ const EditorPage = (props) => {
 		blocks: [],
 	});
 
-	const handleNewCommentTextChange = (text) => {
-		setNewComment((comment) => ({ ...comment, text }));
+	const handleNewCommentTextChange = (event) => {
+		event.persist();
+		setNewComment((comment) => ({ ...comment, text: event.target.value }));
 	};
 	const handleNewCommentBlockLinking = (blockId) => {
 		const newCommentBlocksToUpdate = [...newComment.blocks];

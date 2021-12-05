@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styled from "@emotion/styled";
 
 import { Box, Text, Divider, HStack, Avatar } from "@chakra-ui/react";
@@ -31,19 +31,15 @@ const Comment = ({ comment, reloadCommentsList = () => null }) => {
 		replyTo: comment?.id,
 	});
 
-	useEffect(() => {
-		if (comment?.id)
-			setReplyComment((reply) => ({ ...reply, replyTo: comment.id }));
-	}, [comment]);
-
-	const handleNewCommentReplyChange = (text) => {
-		setReplyComment({ ...replyComment, text });
+	const handleNewCommentReplyChange = (event) => {
+		event.persist();
+		setReplyComment({ ...replyComment, text: event.target.value });
 	};
 
 	const addCommentReply = () => {
 		if (replyComment.text)
 			addDocumentComment(
-				replyComment,
+				{ ...replyComment, isReply: true, replyTo: comment.id },
 				comment?.document,
 				comment?.workspace,
 				(err) => {
@@ -89,6 +85,7 @@ const Comment = ({ comment, reloadCommentsList = () => null }) => {
 				handleCommentTextChange={handleNewCommentReplyChange}
 				addComment={addCommentReply}
 				editorUsers={[]}
+				comment={replyComment}
 				isReplyField
 			/>
 		</CommentWrapper>

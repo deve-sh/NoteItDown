@@ -26,7 +26,7 @@ const CommentInputBlock = ({
 					userOptions={editorUsers || []}
 					onChange={handleCommentTextChange}
 					isReplyField={isReplyField}
-					commentText={comment.text}
+					commentText={comment?.text || ""}
 				/>
 			</Box>
 			<Box flex={1} textAlign="right">
