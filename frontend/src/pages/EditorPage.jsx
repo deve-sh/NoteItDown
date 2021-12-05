@@ -375,10 +375,13 @@ const EditorPage = (props) => {
 				<HStack width="100%" alignItems="center">
 					<Box flex={11}>
 						{newComment?.blocks?.length > 0 && (
-							<>
+							<Text fontSize="sm" color="gray">
 								Your Comment will be linked to the blocks you clicked on.
 								<br />
-							</>
+								Click On Those Block Comment Buttons again to remove them from
+								this comment.
+								<br />
+							</Text>
 						)}
 						<CommentTextField
 							userOptions={editorUsers || []}
