@@ -376,7 +376,10 @@ const EditorPage = (props) => {
 					</Box>
 				) : commentsDocument &&
 				  Object.keys(commentsDocument?.comments).length ? (
-					<Comments commentsData={commentsDocument} />
+					<Comments
+						commentsData={commentsDocument}
+						reloadCommentsList={reloadComments}
+					/>
 				) : (
 					<NoneFound label="No Comments On This Document Yet" />
 				)}

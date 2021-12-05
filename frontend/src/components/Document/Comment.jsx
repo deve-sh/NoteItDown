@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 
 import { Box, Text, Divider, HStack, Avatar } from "@chakra-ui/react";
 import CommentInputBlock from "./CommentInputBlock";
+import Comments from "./Comments";
 
 import { addDocumentComment } from "API/documents";
 import toasts from "helpers/toasts";
@@ -20,7 +21,12 @@ const CommentBlockLink = styled.a`
 	font-size: calc(0.75 * var(--standard-spacing));
 `;
 
-const Comment = ({ comment, reloadCommentsList = () => null }) => {
+const Comment = ({
+	comment,
+	allowReplies = true,
+	reloadCommentsList = () => null,
+	isReply = false,
+}) => {
 	const commenterName =
 		comment?.commenter?.displayName || comment?.commenter?.email;
 
@@ -51,7 +57,7 @@ const Comment = ({ comment, reloadCommentsList = () => null }) => {
 	};
 
 	return (
-		<CommentWrapper shadow="md" borderRadius="md">
+		<CommentWrapper shadow={!isReply ? "md" : "none"} borderRadius="md">
 			<HStack alignItems="center">
 				<HStack flex="1">
 					<Avatar
@@ -80,14 +86,27 @@ const Comment = ({ comment, reloadCommentsList = () => null }) => {
 						</CommentBlockLink>
 				  ))
 				: ""}
-			<Divider my={3} />
-			<CommentInputBlock
-				handleCommentTextChange={handleNewCommentReplyChange}
-				addComment={addCommentReply}
-				editorUsers={[]}
-				comment={replyComment}
-				isReplyField
-			/>
+			{Object.keys(comment?.replies || [])?.length > 0 && (
+				<>
+					<Divider my={3} />
+					<Box mb={3}>
+						<Comments
+							commentsData={{ comments: comment.replies }}
+							isReplyBlock={true}
+							allowReplies={false}
+						/>
+					</Box>
+				</>
+			)}
+			{allowReplies && (
+				<CommentInputBlock
+					handleCommentTextChange={handleNewCommentReplyChange}
+					addComment={addCommentReply}
+					editorUsers={[]}
+					comment={replyComment}
+					isReplyField
+				/>
+			)}
 		</CommentWrapper>
 	);
 };
