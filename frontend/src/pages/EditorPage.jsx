@@ -3,21 +3,12 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Redirect, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import styled from "@emotion/styled";
-import {
-	Text,
-	Button,
-	Box,
-	Divider,
-	HStack,
-	IconButton,
-	Spinner,
-} from "@chakra-ui/react";
-import { BiPlus, BiSend } from "react-icons/bi";
+import { Text, Button, Box, Divider, Spinner } from "@chakra-ui/react";
+import { BiPlus } from "react-icons/bi";
 
 import Editor from "components/Editor";
 import ContentWrapper from "Wrappers/ContentWrapper";
 import DocumentsList from "components/Workspaces/DocumentsList";
-import CommentTextField from "components/Document/CommentTextField";
 import Comments from "components/Document/Comments";
 import NoneFound from "components/NoneFound";
 
@@ -35,6 +26,7 @@ import useFirestore from "hooks/useFirestore";
 import useStore from "hooks/useStore";
 import useToggle from "hooks/useToggle";
 import { getQueryParams } from "helpers/getQueryParams";
+import CommentInputBlock from "components/Document/CommentInputBlock";
 
 const CommentsWrapper = styled.div`
 	max-width: 650px;
@@ -372,28 +364,11 @@ const EditorPage = (props) => {
 				<Text fontSize="lg" mb={5} fontWeight={600}>
 					Comments
 				</Text>
-				<HStack width="100%" alignItems="center">
-					<Box flex={11}>
-						{newComment?.blocks?.length > 0 && (
-							<Text fontSize="sm" color="gray">
-								Your Comment will be linked to the blocks you clicked on.
-								<br />
-								Click On Those Block Comment Buttons again to remove them from
-								this comment.
-								<br />
-							</Text>
-						)}
-						<CommentTextField
-							userOptions={editorUsers || []}
-							onChange={handleNewCommentTextChange}
-						/>
-					</Box>
-					<Box flex={1} textAlign="right">
-						<IconButton colorScheme="blue" onClick={addComment}>
-							<BiSend size="1.5rem" />
-						</IconButton>
-					</Box>
-				</HStack>
+				<CommentInputBlock
+					addComment={addComment}
+					comment={newComment}
+					handleCommentTextChange={handleNewCommentTextChange}
+				/>
 				{commentsLoading ? (
 					<Box padding={5} textAlign="center">
 						<Spinner size="xl" color="blue" />
