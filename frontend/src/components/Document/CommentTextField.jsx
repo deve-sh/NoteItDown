@@ -10,6 +10,7 @@ const CommentTextFieldWrapper = styled(Mentions)`
 		min-height: 15vh;
 		background: var(--white);
 		color: var(--black);
+		margin-top: calc(0.25 * var(--standard-spacing));
 	}
 `;
 
