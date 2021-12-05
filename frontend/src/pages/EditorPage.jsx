@@ -362,29 +362,31 @@ const EditorPage = (props) => {
 			)}
 			<Divider mt={5} mx="auto" maxWidth="650px" />
 			{/* Comments */}
-			<CommentsWrapper id="comments">
-				<Text fontSize="lg" mb={5} fontWeight={600}>
-					Comments
-				</Text>
-				<CommentInputBlock
-					addComment={addComment}
-					comment={newComment}
-					handleCommentTextChange={handleNewCommentTextChange}
-				/>
-				{commentsLoading ? (
-					<Box padding={5} textAlign="center">
-						<Spinner size="xl" color="blue" />
-					</Box>
-				) : commentsDocument &&
-				  Object.keys(commentsDocument?.comments).length ? (
-					<Comments
-						commentsData={commentsDocument}
-						reloadCommentsList={reloadComments}
+			{!isEditable && (
+				<CommentsWrapper id="comments">
+					<Text fontSize="lg" mb={5} fontWeight={600}>
+						Comments
+					</Text>
+					<CommentInputBlock
+						addComment={addComment}
+						comment={newComment}
+						handleCommentTextChange={handleNewCommentTextChange}
 					/>
-				) : (
-					<NoneFound label="No Comments On This Document Yet" />
-				)}
-			</CommentsWrapper>
+					{commentsLoading ? (
+						<Box padding={5} textAlign="center">
+							<Spinner size="xl" color="blue" />
+						</Box>
+					) : commentsDocument &&
+					  Object.keys(commentsDocument?.comments).length ? (
+						<Comments
+							commentsData={commentsDocument}
+							reloadCommentsList={reloadComments}
+						/>
+					) : (
+						<NoneFound label="No Comments On This Document Yet" />
+					)}
+				</CommentsWrapper>
+			)}
 		</ContentWrapper>
 	);
 };
