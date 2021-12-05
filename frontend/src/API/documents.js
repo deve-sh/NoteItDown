@@ -216,6 +216,10 @@ export const addDocumentComment = async (
 		commentData.commentedBy = auth.currentUser.uid;
 		commentData.updatedAt = firestore.FieldValue.serverTimestamp();
 		commentData.createdAt = firestore.FieldValue.serverTimestamp();
+		commentData.commenter = {
+			displayName: auth.currentUser.displayName,
+			email: auth.currentUser.email,
+		};
 
 		if (!commentData.isReply || !commentData.replyTo) {
 			if (commentsDoc) {
