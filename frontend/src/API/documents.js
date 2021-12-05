@@ -219,6 +219,7 @@ export const addDocumentComment = async (
 		const commentId = uuid();
 		commentData.id = commentId;
 		commentData.commentedBy = auth.currentUser.uid;
+		commentData.document = documentId;
 		commentData.workspace = workspaceId;
 		commentData.updatedAt = firestore.FieldValue.serverTimestamp();
 		commentData.createdAt = firestore.FieldValue.serverTimestamp();
