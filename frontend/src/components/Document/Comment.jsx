@@ -7,6 +7,13 @@ const CommentWrapper = styled(Box)`
 	border: 0.075rem solid var(--bordergrey);
 `;
 
+const CommentBlockLink = styled.a`
+	display: block;
+	margin: 0.25rem 0;
+	color: var(--chakra-colors-blue-500);
+	font-size: calc(0.75 * var(--standard-spacing));
+`;
+
 const Comment = ({ comment }) => {
 	const commenterName =
 		comment?.commenter?.displayName || comment?.commenter?.email;
@@ -33,6 +40,13 @@ const Comment = ({ comment }) => {
 				</Box>
 			</HStack>
 			<Text pt={3}>{comment?.text}</Text>
+			{comment?.blocks?.length
+				? comment.blocks.map((blockId, index) => (
+						<CommentBlockLink href={`#${blockId}`} key={blockId}>
+							View Linked Block {index + 1}
+						</CommentBlockLink>
+				  ))
+				: ""}
 		</CommentWrapper>
 	);
 };
