@@ -362,7 +362,7 @@ const EditorPage = (props) => {
 			)}
 			<Divider mt={5} mx="auto" maxWidth="650px" />
 			{/* Comments */}
-			{!isEditable && (
+			{mode !== "new" && !isEditable && (
 				<CommentsWrapper id="comments">
 					<Text fontSize="lg" mb={5} fontWeight={600}>
 						Comments
