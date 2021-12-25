@@ -1,8 +1,8 @@
 # NoteItDown
 
-<div style="text-align:center">
+<p align="center">
     <img src="frontend/public/logo192.png" />
-</div>
+</p>
 
 A Simple Note Taking App For an Entire Team, pre-packaged with support for Google and GitHub logins with Firebase Auth, database as Firestore.
 
@@ -16,6 +16,7 @@ Check out `frontend` directory's README for more.
 - If any one of the admins pays through the payment link, don't disable the subscription. Save the payment details in the `lastSubscriptionPaymentDetails`. The users of the workspace continue using the service without any interruption.
 
 If the subscription payment link isn't paid:
+
 - Run another CRON Job to check for expiry of payment links and the workspaces they are associated with, once the payment link is more than 5 days old and the payment hasn't come through for the link, disable the workspace subscription.
 - On the frontend, mention to the users that the workspace is no longer active and add a pay button to enable the workspace again.
 
