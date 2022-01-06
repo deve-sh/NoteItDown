@@ -30,6 +30,26 @@ const GlobalStyles = ({ darkMode = false }) => (
 				font-family: "Roboto", "Lato", sans-serif;
 				max-width: 100vw;
 				overflow-x: hidden;
+
+				&::-webkit-scrollbar {
+					width: var(--mini-spacing);
+					max-height: calc(0.25 * var(--standard-spacing));
+					height: calc(0.25 * var(--standard-spacing));
+				}
+
+				&::-webkit-scrollbar-track {
+					background: transparent;
+					background-clip: content-box;
+				}
+
+				&::-webkit-scrollbar-thumb {
+					background: var(--bordergrey);
+					border-radius: calc(15 * var(--mini-spacing));
+				}
+
+				&::-webkit-scrollbar-thumb:hover {
+					background: var(--backgroundgrey);
+				}
 			}
 
 			html {

@@ -57,6 +57,26 @@ const EditorContainerDiv = styled.div`
 		line-height: 2;
 		overflow-x: auto;
 
+		&::-webkit-scrollbar {
+			width: var(--mini-spacing);
+			max-height: calc(0.5 * var(--standard-spacing));
+			height: calc(0.5 * var(--standard-spacing));
+		}
+
+		&::-webkit-scrollbar-track {
+			background: transparent;
+			background-clip: content-box;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background: var(--bordergrey);
+			border-radius: calc(15 * var(--mini-spacing));
+		}
+
+		&::-webkit-scrollbar-thumb:hover {
+			background: var(--backgroundgrey);
+		}
+
 		.tc-row {
 			display: flex;
 
