@@ -79,6 +79,7 @@ const EditorContainerDiv = styled.div`
 
 		.tc-row {
 			display: flex;
+			border-left: 1px solid var(--color-border);
 
 			.tc-cell {
 				min-width: 350px;
