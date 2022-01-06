@@ -55,6 +55,7 @@ const EditorContainerDiv = styled.div`
 
 	.tc-table {
 		line-height: 2;
+		overflow-x: auto;
 
 		.tc-row {
 			display: flex;
