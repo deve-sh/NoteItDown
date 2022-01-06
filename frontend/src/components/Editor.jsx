@@ -52,6 +52,19 @@ const EditorContainerDiv = styled.div`
 			opacity: 1;
 		}
 	}
+
+	.tc-table {
+		line-height: 2;
+
+		.tc-row {
+			display: flex;
+
+			.tc-cell {
+				min-width: 350px;
+				max-width: 350px;
+			}
+		}
+	}
 `;
 
 const EditorBlockCommentHandler = styled.a`
